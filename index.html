@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS</title>
+    <title>VELOX AI</title>
     <style>
         body { margin: 0; height: 100vh; display: flex; background: #131314; color: white; font-family: sans-serif; overflow: hidden; }
         .sidebar { width: 280px; background: rgba(255, 255, 255, 0.03); padding: 20px; border-left: 1px solid rgba(255,255,255,0.05); }
@@ -14,11 +14,11 @@
     </style>
 </head>
 <body>
-    <aside class="sidebar"><h2>AdamOS</h2></aside>
+    <aside class="sidebar"><h2>VELOX AI</h2></aside>
     <main class="main">
         <div id="chatBox"></div>
         <div class="input-area">
-            <input type="text" id="userInput" placeholder="اسأل AdamOS...">
+            <input type="text" id="userInput" placeholder="اسأل VELOX...">
             <button id="sendBtn">إرسال</button>
         </div>
     </main>
@@ -29,7 +29,6 @@
             if(!input.value) return;
             chatBox.innerHTML += `<div style="align-self: flex-end; background: #2b2b2b; padding: 10px; border-radius: 10px;">أنت: ${input.value}</div>`;
             input.value = "";
-            // هنا غدير الربط ديالك (بلا ما تخربق لينا التصميم)
         });
     </script>
 </body>
