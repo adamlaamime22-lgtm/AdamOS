@@ -10,17 +10,16 @@
         input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 1em; margin-right: 10px; }
         .avatar { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: #8e44ad; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
         #loginOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#131314; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:10; }
+        button { cursor: pointer; padding: 10px 20px; border-radius: 20px; border: none; background: #8e44ad; color: white; }
     </style>
 </head>
 <body>
 
-<!-- شاشة الدخول الأولى -->
 <div id="loginOverlay">
-    <input type="text" id="nameInput" placeholder="ادخل اسمك للبدء..." style="width:200px; padding:10px; text-align:center;">
+    <input type="text" id="nameInput" placeholder="ادخل اسمك للبدء..." style="width:200px; padding:10px; text-align:center; background: #1e1f20; border: 1px solid #333; color: white; border-radius: 10px;">
     <button onclick="setName()" style="margin-top:10px;">دخول</button>
 </div>
 
-<!-- الواجهة الرئيسية -->
 <div class="avatar" id="userAvatar">?</div>
 <div class="greeting" id="greetingText">مرحبًا، ماذا يدور في ذهنك؟</div>
 <div class="input-box">
@@ -43,13 +42,12 @@
         document.getElementById('userAvatar').innerText = name.charAt(0).toUpperCase();
     }
 
-    // التحقق واش المستخدم مسجل من قبل
     if(localStorage.getItem('userName')) {
         applyUser(localStorage.getItem('userName'));
         document.getElementById('loginOverlay').style.display = 'none';
     }
 
-    function executeAction() { alert("جاري تنفيذ طلبك..."); }
+    function executeAction() { alert("جاري تنفيذ طلبك يا " + localStorage.getItem('userName')); }
 </script>
 
 </body>
