@@ -2,25 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS</title>
+    <title>AdamOS - Secure</title>
     <style>
         body { background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .greeting { font-size: 2em; margin-bottom: 30px; }
         .input-box { background: #1e1f20; border-radius: 30px; padding: 15px 25px; width: 600px; display: flex; align-items: center; border: 1px solid #333; }
         input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 1em; margin-right: 10px; }
-        .avatar { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: #8e44ad; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
-        #loginOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#131314; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:10; }
-        button { cursor: pointer; padding: 10px 20px; border-radius: 20px; border: none; background: #8e44ad; color: white; }
+        .avatar { position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; background: #8e44ad; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em; cursor: pointer; }
+        
+        /* شاشة الدخول (Login) */
+        #loginOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#131314; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:100; }
+        .login-card { background: #1e1f20; padding: 40px; border-radius: 20px; text-align: center; border: 1px solid #333; }
+        button { cursor: pointer; padding: 10px 30px; border-radius: 20px; border: none; background: #8e44ad; color: white; font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
+<!-- شاشة الدخول بكلمة السر -->
 <div id="loginOverlay">
-    <input type="text" id="nameInput" placeholder="ادخل اسمك للبدء..." style="width:200px; padding:10px; text-align:center; background: #1e1f20; border: 1px solid #333; color: white; border-radius: 10px;">
-    <button onclick="setName()" style="margin-top:10px;">دخول</button>
+    <div class="login-card">
+        <h2>AdamOS Login</h2>
+        <input type="text" id="nameInput" placeholder="ادخل اسم المستخدم..." style="padding:10px; display:block; margin-bottom:10px; background:#2c2c2c; border:none; color:white; border-radius:10px;">
+        <input type="password" id="passInput" placeholder="ادخل كلمة السر..." style="padding:10px; display:block; background:#2c2c2c; border:none; color:white; border-radius:10px;">
+        <button onclick="login()">دخول</button>
+    </div>
 </div>
 
-<div class="avatar" id="userAvatar">?</div>
+<!-- الواجهة الرئيسية -->
+<div class="avatar" id="userAvatar" onclick="logout()">?</div>
 <div class="greeting" id="greetingText">مرحبًا، ماذا يدور في ذهنك؟</div>
 <div class="input-box">
     <input type="text" id="userInput" placeholder="اسأل AdamOS...">
@@ -28,10 +37,12 @@
 </div>
 
 <script>
-    function setName() {
+    function login() {
         let name = document.getElementById('nameInput').value;
-        if(name) {
+        let pass = document.getElementById('passInput').value;
+        if(name && pass) {
             localStorage.setItem('userName', name);
+            localStorage.setItem('userPass', pass);
             applyUser(name);
             document.getElementById('loginOverlay').style.display = 'none';
         }
@@ -42,12 +53,18 @@
         document.getElementById('userAvatar').innerText = name.charAt(0).toUpperCase();
     }
 
+    function logout() {
+        localStorage.clear();
+        location.reload();
+    }
+
+    // التحقق من وجود حساب
     if(localStorage.getItem('userName')) {
         applyUser(localStorage.getItem('userName'));
         document.getElementById('loginOverlay').style.display = 'none';
     }
 
-    function executeAction() { alert("جاري تنفيذ طلبك يا " + localStorage.getItem('userName')); }
+    function executeAction() { alert("جاري المعالجة يا " + localStorage.getItem('userName')); }
 </script>
 
 </body>
