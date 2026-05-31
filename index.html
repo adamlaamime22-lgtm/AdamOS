@@ -1,33 +1,61 @@
-<style>
-    .glass-logo {
-        background: rgba(255, 255, 255, 0.05); /* شفافية خفيفة */
-        backdrop-filter: blur(10px); /* خاصية التضبيب ديال الزجاج */
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1); /* إطار رقيق بزاف */
-        padding: 15px 25px;
-        border-radius: 20px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* ظلال باش يبرز */
-        color: #fff;
-        font-family: sans-serif;
-    }
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>AdamOS - Glassmorphism</title>
+    <style>
+        body { margin: 0; height: 100vh; background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%); color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; overflow: hidden; }
 
-    .icon-part {
-        width: 30px;
-        height: 30px;
-        background: #007bff; /* اللون الأزرق اللي فـ image_86c345.png */
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
-    }
-</style>
+        /* Sidebar Glass Effect */
+        .sidebar { 
+            width: 300px; 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(20px); 
+            border-left: 1px solid rgba(255, 255, 255, 0.1); 
+            display: flex; flex-direction: column; padding: 20px; 
+        }
 
-<!-- الواجهة ديال اللوغو بستايل Glassmorphism -->
-<div class="glass-logo">
-    <div class="icon-part">A</div>
-    <span>adam.ai</span>
+        /* Glass Logo (From image_86c345.png style) */
+        .logo-box { 
+            background: rgba(0, 0, 0, 0.4); 
+            padding: 15px; border-radius: 15px; 
+            display: flex; align-items: center; gap: 10px; margin-bottom: 30px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .icon-circle { width: 35px; height: 35px; background: #007bff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+
+        /* Main Area */
+        .main-area { flex: 1; display: flex; flex-direction: column; padding: 40px; position: relative; }
+        .glass-input { 
+            position: absolute; bottom: 40px; width: 80%; 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px); 
+            padding: 20px; border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            display: flex; align-items: center; 
+        }
+        input { flex: 1; background: none; border: none; color: white; padding: 10px; outline: none; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-box">
+        <div class="icon-circle">A</div>
+        <span style="font-weight:bold; font-size: 1.2em;">adam.ai</span>
+    </div>
+    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+        محادثة جديدة +
+    </div>
 </div>
+
+<div class="main-area">
+    <h1 style="font-size: 3em;">مرحباً بك في AdamOS</h1>
+    <div class="glass-input">
+        <input type="text" placeholder="اكتب سؤالك لـ AdamOS...">
+        <div style="background: #007bff; padding: 10px 20px; border-radius: 10px; cursor: pointer;">إرسال</div>
+    </div>
+</div>
+
+</body>
+</html>
