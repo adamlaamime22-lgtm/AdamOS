@@ -2,43 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS - Mirror UI</title>
+    <title>AdamOS - Dark/Light Toggle</title>
     <style>
-        body { margin: 0; display: flex; height: 100vh; background: #0d0d0d; color: #fff; font-family: sans-serif; overflow: hidden; }
+        body { margin: 0; display: flex; height: 100vh; background: #0d0d0d; color: #fff; font-family: sans-serif; transition: 0.3s; }
         
-        /* القائمة الجانبية (Sidebar) - ولات في اليمين دابا */
-        .sidebar { width: 320px; background: #111; border-right: 1px solid #333; display: flex; flex-direction: column; padding: 20px; }
-        .title { color: #00ff9d; font-size: 1.4em; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        /* Light Mode Styles */
+        .light-mode { background: #f4f4f4; color: #333; }
+        .light-mode .sidebar { background: #e0e0e0; }
+        .light-mode .chat-history { background: #ccc !important; }
+        
+        /* Sidebar */
+        .sidebar { width: 320px; background: #111; border-left: 1px solid #333; display: flex; flex-direction: column; padding: 20px; transition: 0.3s; }
+        .title { color: #00ff9d; font-size: 1.4em; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* النويطة الدائرية (نص أبيض ونص كحل) */
+        .toggle-btn { 
+            width: 30px; height: 30px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            background: linear-gradient(to right, #000 50%, #fff 50%); 
+            border: 2px solid #00ff9d;
+        }
+        
         .new-chat { border: 1px solid #00ff9d; color: #00ff9d; padding: 10px; border-radius: 5px; text-align: center; cursor: pointer; margin-bottom: 20px; }
-        .chat-history { background: #1a1a1a; padding: 15px; border-radius: 5px; border: 1px solid #333; }
-
-        /* منطقة العمل (Main) - ولات في اليسار دابا */
+        
+        /* Main Area */
         .main-area { flex: 1; display: flex; flex-direction: column; padding: 40px; position: relative; }
         .logo-box { background: #00ff9d; color: #000; padding: 15px 25px; border-radius: 10px; width: fit-content; font-weight: bold; }
-        
-        /* منطقة الـ Input اللي لتحت */
-        .bottom-input { position: absolute; bottom: 40px; width: 85%; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: flex; align-items: center; }
+        .bottom-input { position: absolute; bottom: 40px; width: 90%; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: flex; align-items: center; }
         input { flex: 1; background: none; border: none; color: white; padding: 10px; outline: none; text-align: right; }
-        .action-btn { background: #00ff9d; padding: 10px 15px; border-radius: 5px; color: black; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="title">ADAMOS ◰</div>
-    <div class="new-chat">+ محادثة جديدة</div>
-    <div class="chat-history">AdamOS</div>
-</div>
-
 <div class="main-area">
     <div class="logo-box">AdamOS</div>
-    
     <div class="bottom-input">
-        <div class="action-btn">➔</div>
+        <div style="background:#00ff9d; padding:10px; border-radius:5px; cursor:pointer;">➔</div>
         <input type="text" placeholder="اسأل AdamOS...">
-        <div style="color: #666; margin-right: 15px;">بحث الويب 🔍</div>
+        <div style="color: #00ff9d; margin-right: 15px;">🔍 بحث الويب</div>
     </div>
 </div>
+
+<div class="sidebar">
+    <div class="title">
+        ADAMOS ◰ 
+        <div class="toggle-btn" onclick="toggleTheme()"></div>
+    </div>
+    <div class="new-chat">+ محادثة جديدة</div>
+    <div class="chat-history" style="background:#1a1a1a; padding:15px; border-radius:5px; border:1px solid #333;">AdamOS</div>
+</div>
+
+<script>
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+    }
+</script>
 
 </body>
 </html>
