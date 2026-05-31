@@ -39,40 +39,32 @@
 </body>
 </html>
 <script>
-    // 1. الوظيفة ديال زر الإرسال (+)
-    document.getElementById('addBtn').addEventListener('click', async () => {
+    // ربط زر الإرسال (+)
+    function sendPrompt() {
         const input = document.getElementById('userInput');
-        const prompt = input.value;
-        if (!prompt) return;
+        if (input.value.trim() !== "") {
+            console.log("VELOX AI: جاري المعالجة لـ " + input.value);
+            // هنا غدير مستقبلاً ربط الـ API ديالك
+            input.value = ""; // مسح النص بعد الإرسال
+        }
+    }
 
-        console.log("VELOX AI كتحلل: " + prompt);
-        input.value = "جاري التفكير..."; // Feedback للمستخدم
-        
-        // هنا غيتم الربط مع الـ API (المخ)
-        // بعد ما نربطوه، غنبدلو الـ input بـ response
+    // ربط الميكروفون
+    function startVoice() {
+        alert("الميكروفون مفعل الآن...");
+    }
+
+    // ربط تبديل الموديل
+    document.querySelector('.model-selector').addEventListener('click', () => {
+        alert("إعدادات الموديل مفتوحة");
     });
 
-    // 2. الوظيفة ديال الميكروفون
-    document.querySelector('.icon-svg').addEventListener('click', () => {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'ar-MA';
-        recognition.start();
-        recognition.onresult = (event) => {
-            document.getElementById('userInput').value = event.results[0][0].transcript;
-        };
-    });
-
-    // 3. الوظيفة ديال السايدبار (الأيقونات)
-    document.querySelectorAll('.sidebar .icon-svg').forEach((icon, index) => {
+    // ربط أيقونات السايدبار
+    document.querySelectorAll('.sidebar .icon-svg').forEach(icon => {
         icon.addEventListener('click', () => {
-            alert("هاد الزر غيحل ليك ميزة رقم " + (index + 1) + " في VELOX AI");
-            // هنا غدير التوجيه لكل صفحة أو ميزة بغيتي
+            console.log("تم الضغط على أيقونة جانبية");
         });
     });
-
-    // 4. الوظيفة ديال Model Selector
-    document.querySelector('.model-selector').addEventListener('click', () => {
-        const model = prompt("اختار الموديل (Flash-Lite / Pro):");
-        if(model) document.querySelector('.model-selector').innerHTML = model + " <span>▼</span>";
-    });
 </script>
+
+    
