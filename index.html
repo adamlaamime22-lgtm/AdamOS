@@ -2,54 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>VELOX AI</title>
+    <title>VELOX</title>
     <style>
-        body { margin: 0; height: 100vh; background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%); color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; overflow: hidden; }
+        body { margin: 0; height: 100vh; background-color: #0d0d0d; color: #fff; font-family: sans-serif; display: flex; }
 
-        /* Sidebar Glass Effect */
+        /* Sidebar (اليمين) */
         .sidebar { 
-            width: 300px; 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(20px); 
-            border-left: 1px solid rgba(255, 255, 255, 0.1); 
-            display: flex; flex-direction: column; padding: 20px; 
+            width: 320px; 
+            background: #0d0d0d; 
+            border-left: 1px solid #222; 
+            display: flex; flex-direction: column; padding: 20px;
+        }
+        
+        .logo-text { font-size: 1.5em; font-weight: bold; margin-bottom: 30px; text-align: center; }
+        
+        .new-chat-btn { 
+            background: #1a1a1a; padding: 15px; border-radius: 8px; 
+            text-align: center; cursor: pointer; border: 1px solid #333;
         }
 
-        /* Logo Container */
-        .logo-container { 
-            padding: 10px; margin-bottom: 30px; 
-            display: flex; align-items: center; justify-content: center;
+        /* Main Area (اليسار) */
+        .main-area { 
+            flex: 1; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
         }
-        .logo-container img { width: 100%; height: auto; max-width: 200px; }
 
-        /* Main Area */
-        .main-area { flex: 1; display: flex; flex-direction: column; padding: 40px; justify-content: center; align-items: center; }
-        .glass-input { 
-            width: 80%; background: rgba(255, 255, 255, 0.05); 
-            backdrop-filter: blur(15px); padding: 20px; border-radius: 20px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; 
+        .welcome-text { font-size: 2em; margin-bottom: 30px; }
+
+        .input-box { 
+            width: 700px; background: #1a1a1a; padding: 15px; 
+            border-radius: 12px; display: flex; align-items: center;
         }
-        input { flex: 1; background: none; border: none; color: white; padding: 10px; outline: none; font-size: 1.1em; }
+        
+        input { 
+            flex: 1; background: none; border: none; color: white; 
+            padding: 10px; outline: none; text-align: right; 
+        }
+        
+        .send-btn { 
+            background: #6f42c1; color: white; border: none; 
+            padding: 10px 20px; border-radius: 8px; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <!-- هنا حطيت اللوغو من image_7cca9f.png -->
-    <div class="logo-container">
-        <img src="image_7cca9f.png" alt="VELOX Logo">
-    </div>
-    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; text-align: center;">
-        محادثة جديدة +
+<div class="main-area">
+    <div class="welcome-text">مرحباً بك في VELOX</div>
+    <div class="input-box">
+        <input type="text" placeholder="اكتب سؤالك لـ VELOX...">
+        <button class="send-btn">إرسال</button>
     </div>
 </div>
 
-<div class="main-area">
-    <h1 style="font-size: 2.5em;">مرحباً بك في VELOX</h1>
-    <div class="glass-input">
-        <input type="text" placeholder="اكتب سؤالك لـ VELOX...">
-        <div style="background: #6f42c1; padding: 10px 20px; border-radius: 10px; cursor: pointer;">إرسال</div>
-    </div>
+<div class="sidebar">
+    <div class="logo-text">VELOX</div>
+    <div class="new-chat-btn">+ محادثة جديدة</div>
 </div>
 
 </body>
