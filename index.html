@@ -2,42 +2,37 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS</title>
+    <title>AdamOS - Modern</title>
     <style>
-        :root {
-            --bg-color: #f0f2f5;
-            --box-bg: #ffffff;
-            --text-color: #333;
-            --accent: #007bff;
-        }
-        .dark-mode {
-            --bg-color: #121212;
-            --box-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --accent: #bb86fc;
-        }
+        :root { --bg-color: #f0f2f5; --box-bg: rgba(255, 255, 255, 0.7); --text-color: #333; }
+        .dark-mode { --bg-color: #0d0d0d; --box-bg: rgba(30, 30, 30, 0.7); --text-color: #fff; }
+        
         body { 
             font-family: 'Segoe UI', sans-serif; 
             display: flex; justify-content: center; align-items: center; 
             height: 100vh; margin: 0; 
             background-color: var(--bg-color); color: var(--text-color);
-            transition: 0.3s;
+            transition: 0.5s;
         }
-        .login-box { 
-            background: var(--box-bg); padding: 30px; 
-            border-radius: 25px; /* هنا فين درنا الزوايا مايلين */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 300px; text-align: center; 
+        .glass-box { 
+            background: var(--box-bg); 
+            backdrop-filter: blur(15px); 
+            padding: 40px; 
+            border-radius: 30px; 
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center; width: 300px;
         }
-        input { width: 85%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 15px; }
-        button { background: var(--accent); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 15px; margin-top: 10px; }
-        .toggle-btn { margin-top: 20px; font-size: 12px; cursor: pointer; color: var(--accent); }
+        input { width: 85%; padding: 12px; margin: 10px 0; border: none; border-radius: 15px; background: rgba(0,0,0,0.05); }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 15px; font-weight: bold; }
+        .clock { font-size: 2.5em; font-weight: bold; margin: 15px 0; }
+        .toggle-btn { margin-top: 20px; font-size: 12px; cursor: pointer; opacity: 0.7; }
     </style>
 </head>
 <body>
 
-<div class="login-box" id="loginForm">
-    <h2>AdamOS Login</h2>
+<!-- واجهة الدخول -->
+<div class="glass-box" id="loginForm">
+    <h2>Login to AdamOS</h2>
     <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
     <br>
@@ -45,40 +40,42 @@
     <div class="toggle-btn" onclick="toggleTheme()">Switch Light/Dark Mode</div>
 </div>
 
-<div id="welcomeScreen" style="display:none;" class="login-box">
-    <h1>Welcome, <span id="displayName"></span></h1>
+<!-- واجهة الـ Dashboard -->
+<div id="dashboard" class="glass-box" style="display:none;">
+    <h1 id="welcomeText"></h1>
+    <div class="clock" id="clock">00:00:00</div>
+    <div id="date"></div>
+    <br>
     <button onclick="logout()">LOGOUT</button>
 </div>
 
 <script>
-    // نظام الألوان
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-    }
+    function toggleTheme() { document.body.classList.toggle('dark-mode'); }
 
-    // نظام تسجيل الدخول
-    if(localStorage.getItem('user')) {
-        showWelcome(localStorage.getItem('user'));
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString();
+        document.getElementById('date').innerText = now.toDateString();
     }
+    setInterval(updateClock, 1000);
+
+    if(localStorage.getItem('user')) { showDashboard(localStorage.getItem('user')); }
 
     function saveUser() {
         let name = document.getElementById('username').value;
         if(name) {
             localStorage.setItem('user', name);
-            showWelcome(name);
+            showDashboard(name);
         }
     }
 
-    function showWelcome(name) {
+    function showDashboard(name) {
         document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('welcomeScreen').style.display = 'block';
-        document.getElementById('displayName').innerText = name;
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('welcomeText').innerText = "Hello, " + name;
     }
 
-    function logout() {
-        localStorage.removeItem('user');
-        location.reload();
-    }
+    function logout() { localStorage.removeItem('user'); location.reload(); }
 </script>
 
 </body>
