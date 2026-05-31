@@ -6,58 +6,33 @@
     <style>
         body { margin: 0; height: 100vh; background-color: #0d0d0d; color: #fff; font-family: sans-serif; display: flex; }
 
-        /* Sidebar (اليمين) */
-        .sidebar { 
-            width: 320px; 
-            background: #0d0d0d; 
-            border-left: 1px solid #222; 
-            display: flex; flex-direction: column; padding: 20px;
-        }
-        
-        .logo-text { font-size: 1.5em; font-weight: bold; margin-bottom: 30px; text-align: center; }
-        
-        .new-chat-btn { 
-            background: #1a1a1a; padding: 15px; border-radius: 8px; 
-            text-align: center; cursor: pointer; border: 1px solid #333;
-        }
+        /* Sidebar (اليسار) */
+        .sidebar { width: 300px; padding: 20px; display: flex; flex-direction: column; }
+        .logo { font-size: 1.8em; font-weight: bold; margin-bottom: 20px; }
+        .new-chat { background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #333; text-align: center; cursor: pointer; }
 
-        /* Main Area (اليسار) */
-        .main-area { 
-            flex: 1; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; 
-        }
-
-        .welcome-text { font-size: 2em; margin-bottom: 30px; }
-
-        .input-box { 
-            width: 700px; background: #1a1a1a; padding: 15px; 
-            border-radius: 12px; display: flex; align-items: center;
-        }
+        /* Main Area (اليمين) */
+        .main-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .welcome { font-size: 2.5em; margin-bottom: 25px; }
         
-        input { 
-            flex: 1; background: none; border: none; color: white; 
-            padding: 10px; outline: none; text-align: right; 
-        }
-        
-        .send-btn { 
-            background: #6f42c1; color: white; border: none; 
-            padding: 10px 20px; border-radius: 8px; cursor: pointer;
-        }
+        .input-box { width: 600px; background: #1a1a1a; padding: 10px; border-radius: 10px; display: flex; align-items: center; }
+        input { flex: 1; background: none; border: none; color: #888; padding: 10px; outline: none; text-align: right; }
+        .send-btn { background: #6f42c1; color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
+<div class="sidebar">
+    <div class="logo">VELOX</div>
+    <div class="new-chat">+ محادثة جديدة</div>
+</div>
+
 <div class="main-area">
-    <div class="welcome-text">مرحباً بك في VELOX</div>
+    <div class="welcome">مرحباً بك في VELOX</div>
     <div class="input-box">
         <input type="text" placeholder="اكتب سؤالك لـ VELOX...">
         <button class="send-btn">إرسال</button>
     </div>
-</div>
-
-<div class="sidebar">
-    <div class="logo-text">VELOX</div>
-    <div class="new-chat-btn">+ محادثة جديدة</div>
 </div>
 
 </body>
