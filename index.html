@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <title>VELOX AI</title>
     <style>
-        /* الستايل اللي قادينا (Glassmorphism) */
-        body { margin: 0; height: 100vh; display: flex; background: #131314; color: white; font-family: sans-serif; }
+        /* الستايل الأساسي والجمالية */
+        body { margin: 0; height: 100vh; display: flex; background: #131314; color: white; font-family: sans-serif; overflow: hidden; }
+        
+        /* السايدبار */
         .sidebar { width: 280px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 20px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid rgba(255,255,255,0.1); }
+        
+        /* المنطقة الرئيسية */
         .main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        .input-box { width: 600px; background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 20px; backdrop-filter: blur(15px); display: flex; align-items: center; gap: 10px; }
+        .input-box { width: 600px; background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 20px; backdrop-filter: blur(15px); display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.2); }
         input { flex: 1; background: none; border: none; color: white; outline: none; font-size: 16px; }
         
         button { cursor: pointer; padding: 10px 15px; border-radius: 8px; border: none; background: #333; color: white; transition: 0.3s; }
@@ -18,21 +22,21 @@
 </head>
 <body>
 
-<div class="sidebar">
+<aside class="sidebar">
+    <h2 style="margin: 0;">VELOX AI</h2>
     <button id="newChatBtn">+ محادثة جديدة</button>
     <div id="historyList" style="color: #aaa; font-size: 0.9em;">سجل المحادثات...</div>
-</div>
+</aside>
 
-<div class="main">
+<main class="main">
     <div class="input-box">
         <button id="micBtn">🎤</button>
         <input type="text" id="userInput" placeholder="اكتب سؤالك لـ VELOX...">
         <button id="sendBtn">إرسال</button>
     </div>
-</div>
+</main>
 
 <script>
-    // ربط البوتونات بالوظائف (Logic)
     document.getElementById('newChatBtn').addEventListener('click', () => {
         alert("بدأنا محادثة جديدة!");
     });
@@ -41,8 +45,7 @@
         let input = document.getElementById('userInput').value;
         if(input.trim() !== "") {
             console.log("السؤال المرسل: " + input);
-            alert("تم إرسال: " + input);
-            document.getElementById('userInput').value = ""; // مسح الخانة بعد الإرسال
+            document.getElementById('userInput').value = "";
         }
     });
 
