@@ -2,37 +2,42 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS - Replit Style</title>
+    <title>AdamOS - Interface</title>
     <style>
-        body { margin: 0; display: flex; height: 100vh; background: #0d0d0d; color: #fff; font-family: sans-serif; }
+        body { margin: 0; display: flex; height: 100vh; background: #0d0d0d; color: #fff; font-family: sans-serif; overflow: hidden; }
         
-        /* اللوحة المركزية */
-        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
-        .logo-box { background: #00ff9d; color: #000; padding: 20px; border-radius: 10px; width: 100px; font-weight: bold; }
-        .input-area { background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
-        .send-btn { background: #00ff9d; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        /* القائمة الجانبية (Sidebar) - جهة اليمين حسب الصورة */
+        .sidebar { width: 320px; background: #111; border-left: 1px solid #333; display: flex; flex-direction: column; padding: 20px; }
+        .title { color: #00ff9d; font-size: 1.4em; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .new-chat { border: 1px solid #00ff9d; color: #00ff9d; padding: 10px; border-radius: 5px; text-align: center; cursor: pointer; margin-bottom: 20px; }
+        .chat-history { background: #1a1a1a; padding: 15px; border-radius: 5px; border: 1px solid #333; }
 
-        /* القائمة الجانبية (Sidebar) */
-        .sidebar { width: 300px; background: #111; border-right: 1px solid #333; padding: 20px; }
-        .sidebar-title { color: #00ff9d; font-size: 1.5em; font-weight: bold; margin-bottom: 20px; }
-        .new-chat-btn { border: 1px solid #00ff9d; color: #00ff9d; padding: 10px; text-align: center; border-radius: 5px; margin-bottom: 20px; cursor: pointer; }
-        .chat-item { background: #1a1a1a; padding: 15px; border-radius: 5px; border: 1px solid #333; }
+        /* منطقة العمل (Main) */
+        .main-area { flex: 1; display: flex; flex-direction: column; padding: 40px; position: relative; }
+        .logo-box { background: #00ff9d; color: #000; padding: 15px 25px; border-radius: 10px; width: fit-content; font-weight: bold; }
+        
+        /* منطقة الـ Input اللي لتحت */
+        .bottom-input { position: absolute; bottom: 40px; width: 90%; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: flex; align-items: center; }
+        input { flex: 1; background: none; border: none; color: white; padding: 10px; outline: none; }
+        .action-btn { background: #00ff9d; padding: 10px 15px; border-radius: 5px; color: black; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="main-content">
+<div class="main-area">
     <div class="logo-box">AdamOS</div>
-    <div class="input-area">
-        <input type="text" placeholder="اسأل AdamOS..." style="background:none; border:none; color:#fff; width:80%;">
-        <button class="send-btn">➔</button>
+    
+    <div class="bottom-input">
+        <div class="action-btn">➔</div>
+        <input type="text" placeholder="اسأل AdamOS...">
+        <div style="color: #666; margin-right: 15px;">بحث الويب 🔍</div>
     </div>
 </div>
 
 <div class="sidebar">
-    <div class="sidebar-title">ADAMOS ◰</div>
-    <div class="new-chat-btn">+ محادثة جديدة</div>
-    <div class="chat-item">AdamOS</div>
+    <div class="title">ADAMOS ◰</div>
+    <div class="new-chat">+ محادثة جديدة</div>
+    <div class="chat-history">AdamOS</div>
 </div>
 
 </body>
