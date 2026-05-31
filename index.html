@@ -15,6 +15,13 @@
         input { flex: 1; background: none; border: none; color: white; outline: none; font-size: 16px; text-align: right; }
         .model-selector { cursor: pointer; display: flex; align-items: center; gap: 5px; color: #4a90e2; font-size: 14px; }
     </style>
+    .icon-svg, .plus-btn, .model-selector {
+    pointer-events: auto; /* كيجبر الزر يستقبل الكليك */
+}
+
+.icon-svg path, .plus-btn path {
+    pointer-events: none; /* كيخلي الكليك يتجاوز الـ path ويوصل للزر اللي حامل الـ svg */
+}
 </head>
 <body>
 
@@ -39,21 +46,23 @@
 </body>
 </html>
 <script>
-    // هاد الكود كيقلب على أي حاجة كليكيتي عليها ويشوف واش هي زر
     document.addEventListener('click', function(e) {
-        // نشوفو واش تكليكا على أيقونة
-        const target = e.target.closest('.icon-svg, .plus-btn, .model-selector');
+        // كنقلبو على العنصر اللي عندو الوظيفة
+        const btn = e.target.closest('.plus-btn, .model-selector, .icon-svg');
         
-        if (target) {
-            if (target.classList.contains('plus-btn')) {
-                const input = document.getElementById('userInput');
-                console.log("إرسال: " + input.value);
-                input.value = "";
-            } else if (target.classList.contains('model-selector')) {
-                alert("تبديل النموذج...");
-            } else {
-                console.log("تم الضغط على أيقونة جانبية أو ميكروفون");
-            }
+        if (!btn) return; // إلا ما كليكييتيش على زر، خرج
+
+        // دابا كنشوفو شكون هو الزر بالضبط
+        if (btn.classList.contains('plus-btn')) {
+            const input = document.getElementById('userInput');
+            alert("VELOX AI: الإرسال مفعل! " + input.value);
+            input.value = "";
+        } 
+        else if (btn.classList.contains('model-selector')) {
+            alert("جاري فتح قائمة الموديلات...");
+        }
+        else {
+            alert("تم الضغط على أيقونة (بحث/ميكروفون/إعدادات)");
         }
     });
 </script>
