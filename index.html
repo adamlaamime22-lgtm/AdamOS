@@ -2,44 +2,48 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS</title>
+    <title>AdamOS - Gemini Style</title>
     <style>
-        body { margin: 0; display: flex; height: 100vh; background: #131314; color: #fff; font-family: sans-serif; }
+        body { margin: 0; display: flex; height: 100vh; background: #131314; color: #e3e3e3; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
         
-        /* Sidebar */
-        .sidebar { width: 80px; background: #131314; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-left: 1px solid #333; }
-        .sidebar div { margin: 20px 0; cursor: pointer; font-size: 1.5em; opacity: 0.7; }
-        .sidebar div:hover { opacity: 1; }
-        .settings-avatar { margin-top: auto; }
+        /* Sidebar (الجنب) */
+        .sidebar { width: 80px; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-left: 1px solid #2c2c2c; }
+        .sidebar div { margin: 25px 0; cursor: pointer; font-size: 1.5em; opacity: 0.8; }
         
-        /* Main Area */
+        /* Main Area (الوسط) */
         .main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .greeting { font-size: 1.8em; margin-bottom: 20px; }
+        .search-box { background: #1e1f20; border-radius: 30px; padding: 15px 25px; width: 600px; display: flex; align-items: center; border: 1px solid #333; }
+        input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 1em; margin-right: 10px; }
         
-        /* Light Mode Classes */
-        .light-mode { background: #f4f4f4; color: #333; }
-        .light-mode .sidebar { background: #e0e0e0; }
+        /* Light Mode */
+        .light-mode { background: #ffffff; color: #333; }
+        .light-mode .sidebar { border-left: 1px solid #ddd; }
+        .light-mode .search-box { background: #f1f3f4; border: 1px solid #ccc; }
+        .light-mode input { color: #333; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div onclick="newChat()">✍️</div>
-    <div onclick="showHistory()">🔍</div>
-    <div onclick="showApps()">▣</div>
+    <div onclick="alert('New Chat')">✍️</div>
+    <div onclick="alert('History')">🔍</div>
+    <div onclick="alert('Grid')">▣</div>
     <div onclick="toggleMode()">🌓</div>
-    <div class="settings-avatar" onclick="alert('Settings')">⚙️</div>
+    <div onclick="alert('Settings')">⚙️</div>
     <div onclick="logout()">🐉</div>
 </div>
 
 <div class="main">
-    <h1 id="greetingText">مرحبًا، ماذا يدور في ذهنك؟</h1>
+    <h1 class="greeting">مرحبًا، ماذا يدور في ذهنك؟</h1>
+    <div class="search-box">
+        <input type="text" placeholder="اسأل AdamOS...">
+        <div style="cursor:pointer;">➔</div>
+    </div>
 </div>
 
 <script>
     function toggleMode() { document.body.classList.toggle('light-mode'); }
-    
-    function newChat() { alert("بدء محادثة جديدة..."); }
-    function showHistory() { alert("عرض تاريخ المحادثات..."); }
     function logout() { localStorage.clear(); location.reload(); }
 </script>
 
