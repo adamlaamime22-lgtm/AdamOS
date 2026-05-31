@@ -9,30 +9,25 @@
         /* Sidebar Glass Effect */
         .sidebar { 
             width: 300px; 
-            background: rgba(255, 255, 255, 0.05); 
+            background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(20px); 
             border-left: 1px solid rgba(255, 255, 255, 0.1); 
             display: flex; flex-direction: column; padding: 20px; 
         }
 
-        /* Glass Logo */
-        .logo-box { 
-            background: rgba(0, 0, 0, 0.4); 
-            padding: 15px; border-radius: 15px; 
-            display: flex; align-items: center; gap: 10px; margin-bottom: 30px; 
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Logo Container */
+        .logo-container { 
+            padding: 10px; margin-bottom: 30px; 
+            display: flex; align-items: center; justify-content: center;
         }
-        .icon-circle { width: 35px; height: 35px; background: #6f42c1; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+        .logo-container img { width: 100%; height: auto; max-width: 200px; }
 
         /* Main Area */
-        .main-area { flex: 1; display: flex; flex-direction: column; padding: 40px; position: relative; }
+        .main-area { flex: 1; display: flex; flex-direction: column; padding: 40px; justify-content: center; align-items: center; }
         .glass-input { 
-            position: absolute; bottom: 40px; width: 80%; 
-            background: rgba(255, 255, 255, 0.05); 
-            backdrop-filter: blur(15px); 
-            padding: 20px; border-radius: 20px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            display: flex; align-items: center; 
+            width: 80%; background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px); padding: 20px; border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; 
         }
         input { flex: 1; background: none; border: none; color: white; padding: 10px; outline: none; font-size: 1.1em; }
     </style>
@@ -40,17 +35,17 @@
 <body>
 
 <div class="sidebar">
-    <div class="logo-box">
-        <div class="icon-circle">V</div>
-        <span style="font-weight:bold; font-size: 1.2em;">VELOX</span>
+    <!-- هنا حطيت اللوغو من image_7cca9f.png -->
+    <div class="logo-container">
+        <img src="image_7cca9f.png" alt="VELOX Logo">
     </div>
-    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; text-align: center;">
         محادثة جديدة +
     </div>
 </div>
 
 <div class="main-area">
-    <h1 style="font-size: 3em;">مرحباً بك في VELOX</h1>
+    <h1 style="font-size: 2.5em;">مرحباً بك في VELOX</h1>
     <div class="glass-input">
         <input type="text" placeholder="اكتب سؤالك لـ VELOX...">
         <div style="background: #6f42c1; padding: 10px 20px; border-radius: 10px; cursor: pointer;">إرسال</div>
