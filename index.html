@@ -2,67 +2,53 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS - Terminal</title>
+    <title>AdamOS - Login</title>
     <style>
-        body { 
-            font-family: 'Courier New', Courier, monospace; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0;
-            background-color: #000000; 
-            color: #00FF00; 
-        }
-        .login-box { 
-            background: #1a1a1a; 
-            padding: 20px; 
-            border-radius: 5px; 
-            border: 2px solid #00FF00;
-            width: 300px; 
-            text-align: center; 
-        }
-        input { 
-            width: 80%; 
-            padding: 10px; 
-            margin: 10px 0; 
-            background: #000; 
-            border: 1px solid #00FF00; 
-            color: #00FF00; 
-            text-align: center;
-        }
-        button { 
-            background: #00FF00; 
-            color: #000; 
-            border: none; 
-            padding: 10px 20px; 
-            cursor: pointer; 
-            font-weight: bold;
-        }
+        body { font-family: 'Courier New', Courier, monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #000; color: #00FF00; }
+        .login-box { background: #1a1a1a; padding: 20px; border-radius: 5px; border: 2px solid #00FF00; width: 300px; text-align: center; }
+        input { width: 80%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #00FF00; color: #00FF00; text-align: center; }
+        button { background: #00FF00; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="login-box" id="loginForm">
     <h2>LOGIN TO AdamOS</h2>
-    <input type="text" id="username" placeholder="Enter Username">
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
     <br>
-    <button onclick="login()">EXECUTE</button>
+    <button onclick="saveUser()">EXECUTE</button>
 </div>
 
 <div id="welcomeScreen" style="display:none;">
     <h1>WELCOME, <span id="displayName"></span></h1>
     <p>AdamOS SYSTEM IS ACTIVE.</p>
+    <button onclick="logout()">LOGOUT</button>
 </div>
 
 <script>
-    function login() {
+    // التأكد واش المستخدم ديجا مسجل
+    if(localStorage.getItem('user')) {
+        showWelcome(localStorage.getItem('user'));
+    }
+
+    function saveUser() {
         let name = document.getElementById('username').value;
         if(name) {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('welcomeScreen').style.display = 'block';
-            document.getElementById('displayName').innerText = name.toUpperCase();
+            localStorage.setItem('user', name); // حفظ الحساب
+            showWelcome(name);
         }
+    }
+
+    function showWelcome(name) {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('welcomeScreen').style.display = 'block';
+        document.getElementById('displayName').innerText = name.toUpperCase();
+    }
+
+    function logout() {
+        localStorage.removeItem('user'); // مسح الحساب
+        location.reload();
     }
 </script>
 
