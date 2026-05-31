@@ -2,32 +2,61 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>AdamOS - Login</title>
+    <title>AdamOS</title>
     <style>
-        body { font-family: 'Courier New', Courier, monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #000; color: #00FF00; }
-        .login-box { background: #1a1a1a; padding: 20px; border-radius: 5px; border: 2px solid #00FF00; width: 300px; text-align: center; }
-        input { width: 80%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #00FF00; color: #00FF00; text-align: center; }
-        button { background: #00FF00; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        :root {
+            --bg-color: #f0f2f5;
+            --box-bg: #ffffff;
+            --text-color: #333;
+            --accent: #007bff;
+        }
+        .dark-mode {
+            --bg-color: #121212;
+            --box-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent: #bb86fc;
+        }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; margin: 0; 
+            background-color: var(--bg-color); color: var(--text-color);
+            transition: 0.3s;
+        }
+        .login-box { 
+            background: var(--box-bg); padding: 30px; 
+            border-radius: 25px; /* هنا فين درنا الزوايا مايلين */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 300px; text-align: center; 
+        }
+        input { width: 85%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 15px; }
+        button { background: var(--accent); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 15px; margin-top: 10px; }
+        .toggle-btn { margin-top: 20px; font-size: 12px; cursor: pointer; color: var(--accent); }
     </style>
 </head>
 <body>
 
 <div class="login-box" id="loginForm">
-    <h2>LOGIN TO AdamOS</h2>
+    <h2>AdamOS Login</h2>
     <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
     <br>
     <button onclick="saveUser()">EXECUTE</button>
+    <div class="toggle-btn" onclick="toggleTheme()">Switch Light/Dark Mode</div>
 </div>
 
-<div id="welcomeScreen" style="display:none;">
-    <h1>WELCOME, <span id="displayName"></span></h1>
-    <p>AdamOS SYSTEM IS ACTIVE.</p>
+<div id="welcomeScreen" style="display:none;" class="login-box">
+    <h1>Welcome, <span id="displayName"></span></h1>
     <button onclick="logout()">LOGOUT</button>
 </div>
 
 <script>
-    // التأكد واش المستخدم ديجا مسجل
+    // نظام الألوان
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+    }
+
+    // نظام تسجيل الدخول
     if(localStorage.getItem('user')) {
         showWelcome(localStorage.getItem('user'));
     }
@@ -35,7 +64,7 @@
     function saveUser() {
         let name = document.getElementById('username').value;
         if(name) {
-            localStorage.setItem('user', name); // حفظ الحساب
+            localStorage.setItem('user', name);
             showWelcome(name);
         }
     }
@@ -43,11 +72,11 @@
     function showWelcome(name) {
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('welcomeScreen').style.display = 'block';
-        document.getElementById('displayName').innerText = name.toUpperCase();
+        document.getElementById('displayName').innerText = name;
     }
 
     function logout() {
-        localStorage.removeItem('user'); // مسح الحساب
+        localStorage.removeItem('user');
         location.reload();
     }
 </script>
