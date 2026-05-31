@@ -21,6 +21,31 @@
     </style>
 </head>
 <body>
+    <script>
+    const inputField = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    // وظيفة الإرسال
+    function sendMessage() {
+        let text = inputField.value;
+        if(text.trim() !== "") {
+            console.log("VELOX استلم: " + text);
+            // هنا غادي يجي الربط مع الـ API مستقبلاً
+            alert("تم إرسال رسالتك لـ VELOX: " + text);
+            inputField.value = "";
+        }
+    }
+
+    // الإرسال بالضغط على الزر
+    sendBtn.addEventListener('click', sendMessage);
+
+    // الإرسال بالضغط على زر Enter في الكلافي
+    inputField.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
 
 <aside class="sidebar">
     <h2 style="margin: 0;">VELOX AI</h2>
