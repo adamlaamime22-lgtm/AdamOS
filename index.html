@@ -2,41 +2,46 @@
 <html lang="ar" dir="rtl">
 <head>
     <style>
-        body { margin: 0; background: #0d0d0d; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { 
+            margin: 0; height: 100vh; display: flex; 
+            background: radial-gradient(circle at top right, #2e1b4e, #0d0d0d);
+            color: white; font-family: sans-serif;
+        }
+
+        /* الـ Sidebar بستايل زجاجي */
+        .sidebar { 
+            width: 280px; background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px); border-left: 1px solid rgba(255,255,255,0.1);
+            padding: 20px; display: flex; flex-direction: column;
+        }
+
+        /* المنطقة الرئيسية */
+        .main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* صندوق الإدخال الزجاجي */
+        .input-box { 
+            width: 600px; background: rgba(255, 255, 255, 0.1); 
+            padding: 15px; border-radius: 20px; 
+            backdrop-filter: blur(15px); display: flex; align-items: center;
+        }
         
-        /* Logo - الفوق */
-        .header { width: 90%; padding: 20px; text-align: left; font-weight: bold; font-size: 1.2em; }
-        
-        /* Main - الوسط */
-        .main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
-        .title { font-size: 2.5em; margin-bottom: 30px; }
-        .box { width: 600px; background: #1a1a1a; padding: 15px; border-radius: 12px; display: flex; align-items: center; border: 1px solid #333; }
-        
-        /* Sidebar - اللي في اليمين */
-        .sidebar { position: fixed; right: 20px; top: 80px; width: 250px; }
-        .new-btn { background: #1a1a1a; padding: 12px; border-radius: 8px; border: 1px solid #333; margin-bottom: 20px; cursor: pointer; text-align: center; }
-        .history { color: #888; font-size: 0.9em; }
+        input { flex: 1; background: none; border: none; color: white; outline: none; font-size: 16px; }
+        .mic { margin-left: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="header">VELOX Logo</div>
-
-<div class="sidebar">
-    <div class="new-btn">+ محادثة جديدة</div>
-    <div class="history">
-        سجل المحادثات:<br><br>
-        • تصميم واجهة VELOX<br>
-        • برمجة الذكاء الاصطناعي
+<div class="main">
+    <div class="input-box">
+        <input type="text" placeholder="اكتب سؤالك...">
+        <span class="mic">🎤</span>
     </div>
 </div>
 
-<div class="main">
-    <div class="title">مرحباً بك في VELOX</div>
-    <div class="box">
-        <span style="margin-left: 10px; cursor: pointer;">🎤</span>
-        <input type="text" placeholder="اكتب سؤالك..." style="width: 100%; background: none; border: none; color: white; outline: none;">
-    </div>
+<div class="sidebar">
+    <div style="font-weight:bold; margin-bottom: 20px;">VELOX AI</div>
+    <div style="background:rgba(255,255,255,0.1); padding:10px; border-radius:10px;">+ محادثة جديدة</div>
+    <div style="margin-top:20px; color:#aaa; font-size: 0.8em;">سجل المحادثات...</div>
 </div>
 
 </body>
