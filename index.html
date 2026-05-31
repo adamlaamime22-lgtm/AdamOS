@@ -9,25 +9,39 @@
         
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); height: 100vh; margin: 0; transition: 0.3s; }
         
-        /* مكان الـ Dashboard في الجنب بحال الـ Agent */
-        .dashboard-container { position: absolute; top: 50px; left: 50px; width: 350px; }
-        .card { background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        /* النافذة الجديدة */
+        .window { 
+            position: absolute; top: 50px; left: 50px; width: 350px;
+            background: var(--card); border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden; 
+        }
+        /* شريط العنوان فيه زر X */
+        .title-bar { 
+            padding: 10px 20px; background: rgba(0,0,0,0.05); 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        .close-btn { cursor: pointer; font-weight: bold; color: red; font-size: 1.2em; }
         
+        .content { padding: 30px; text-align: center; }
         .clock { font-size: 2em; font-weight: bold; margin: 10px 0; }
         button { background: var(--accent); color: white; border: none; padding: 10px 25px; border-radius: 10px; cursor: pointer; }
         
-        /* زر تبديل الألوان في التحت على اليمين */
         .theme-switch { position: fixed; bottom: 30px; right: 30px; cursor: pointer; padding: 10px; background: var(--card); border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-<div class="dashboard-container" id="dashboard">
-    <div class="card">
+<div class="window" id="mainWindow">
+    <div class="title-bar">
+        <span>AdamOS Dashboard</span>
+        <span class="close-btn" onclick="closeWindow()">X</span>
+    </div>
+    <div class="content">
         <h2>Hello, Adam</h2>
         <div class="clock" id="clock">00:00:00</div>
         <div id="date">Sun May 31 2026</div>
-        <br>
+        <br><br>
         <button onclick="logout()">LOGOUT</button>
     </div>
 </div>
@@ -38,6 +52,10 @@
     function toggleTheme() { document.body.classList.toggle('dark-mode'); }
     function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }
     setInterval(updateClock, 1000);
+    
+    // وظيفة إغلاق النافذة
+    function closeWindow() { document.getElementById('mainWindow').style.display = 'none'; }
+    
     function logout() { localStorage.removeItem('user'); location.reload(); }
 </script>
 
