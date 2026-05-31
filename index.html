@@ -6,11 +6,12 @@
     <style>
         body { margin: 0; height: 100vh; background: #0b0c0f; color: #e0e0e0; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         h1 { font-weight: 300; margin-bottom: 30px; }
-        .input-container { width: 600px; background: #1e1f20; padding: 15px 20px; border-radius: 50px; display: flex; align-items: center; gap: 15px; }
-        input { flex: 1; background: none; border: none; color: white; outline: none; font-size: 16px; }
-        .icon { cursor: pointer; color: #aaa; }
-        .model-selector { cursor: pointer; display: flex; align-items: center; gap: 5px; color: #4a90e2; font-size: 14px; }
+        /* التصميم ديال البار اللي طلبتي */
+        .input-container { width: 700px; background: #1e1f20; padding: 15px 25px; border-radius: 50px; display: flex; align-items: center; gap: 15px; }
         .plus-btn { cursor: pointer; font-size: 24px; color: #aaa; }
+        input { flex: 1; background: none; border: none; color: white; outline: none; font-size: 16px; text-align: right; }
+        .model-selector { cursor: pointer; display: flex; align-items: center; gap: 5px; color: #4a90e2; font-size: 14px; white-space: nowrap; }
+        .icon { cursor: pointer; color: #aaa; font-size: 20px; }
     </style>
 </head>
 <body>
@@ -18,21 +19,19 @@
     <h1>على ماذا يجب أن نركّز؟</h1>
 
     <div class="input-container">
-        <span class="icon">🎤</span>
+        <span class="plus-btn" id="addBtn">+</span>
+        <input type="text" id="userInput" placeholder="اسأل VELOX AI...">
         <div class="model-selector">Flash-Lite <span>▼</span></div>
-        <input type="text" id="userInput" placeholder="اسأل Gemini...">
-        <span class="plus-btn" id="sendBtn">+</span>
+        <span class="icon">🎤</span>
     </div>
 
     <script>
-        // هنا غادي نربطو كل زر بـ function
-        document.getElementById('sendBtn').addEventListener('click', () => {
+        // دابا الواجهة واجدة. 
+        // ملي غتبغي نربطو هادشي بـ API، كاين السطر ديال الـ JS واجد هنا لتحت
+        document.getElementById('addBtn').addEventListener('click', () => {
             const prompt = document.getElementById('userInput').value;
-            console.log("جاري البحث عن: " + prompt);
-            // غنحطو هنا الـ API Logic من بعد
+            if(prompt) alert("جاري إرسال: " + prompt + " إلى VELOX AI");
         });
-        
-        // تقدري تزيد دابا functions لكل زر (Mic, Model Selector...)
     </script>
 </body>
 </html>
