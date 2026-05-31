@@ -39,32 +39,21 @@
 </body>
 </html>
 <script>
-    // ربط زر الإرسال (+)
-    function sendPrompt() {
-        const input = document.getElementById('userInput');
-        if (input.value.trim() !== "") {
-            console.log("VELOX AI: جاري المعالجة لـ " + input.value);
-            // هنا غدير مستقبلاً ربط الـ API ديالك
-            input.value = ""; // مسح النص بعد الإرسال
+    // هاد الكود كيقلب على أي حاجة كليكيتي عليها ويشوف واش هي زر
+    document.addEventListener('click', function(e) {
+        // نشوفو واش تكليكا على أيقونة
+        const target = e.target.closest('.icon-svg, .plus-btn, .model-selector');
+        
+        if (target) {
+            if (target.classList.contains('plus-btn')) {
+                const input = document.getElementById('userInput');
+                console.log("إرسال: " + input.value);
+                input.value = "";
+            } else if (target.classList.contains('model-selector')) {
+                alert("تبديل النموذج...");
+            } else {
+                console.log("تم الضغط على أيقونة جانبية أو ميكروفون");
+            }
         }
-    }
-
-    // ربط الميكروفون
-    function startVoice() {
-        alert("الميكروفون مفعل الآن...");
-    }
-
-    // ربط تبديل الموديل
-    document.querySelector('.model-selector').addEventListener('click', () => {
-        alert("إعدادات الموديل مفتوحة");
-    });
-
-    // ربط أيقونات السايدبار
-    document.querySelectorAll('.sidebar .icon-svg').forEach(icon => {
-        icon.addEventListener('click', () => {
-            console.log("تم الضغط على أيقونة جانبية");
-        });
     });
 </script>
-
-    
