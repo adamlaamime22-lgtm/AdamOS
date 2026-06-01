@@ -40,22 +40,27 @@
 </html>
 <script>
     document.addEventListener('click', function(e) {
-        // كنقلبو على العنصر اللي عندو الوظيفة
         const btn = e.target.closest('.plus-btn, .model-selector, .icon-svg');
-        
-        if (!btn) return; // إلا ما كليكييتيش على زر، خرج
+        if (!btn) return;
 
-        // دابا كنشوفو شكون هو الزر بالضبط
+        // دابا كل وحدة غنديرو ليها الخدمة ديالها الحقيقية
         if (btn.classList.contains('plus-btn')) {
+            // هنا غيتم إرسال السؤال للـ API
             const input = document.getElementById('userInput');
-            alert("VELOX AI: الإرسال مفعل! " + input.value);
-            input.value = "";
+            console.log("إرسال للسيرفر: " + input.value);
+            // غنضيفو كود الربط هنا من بعد
         } 
         else if (btn.classList.contains('model-selector')) {
-            alert("جاري فتح قائمة الموديلات...");
+            // هنا غتخرج ليك قائمة الموديلات (Dropdown)
+            console.log("فتح قائمة الموديلات");
         }
         else {
-            alert("تم الضغط على أيقونة (بحث/ميكروفون/إعدادات)");
+            // هنا الميكروفون أو الإعدادات
+            if (btn.querySelector('path').getAttribute('d').includes('M12 14')) {
+                console.log("تفعيل الميكروفون...");
+            } else {
+                console.log("فتح الإعدادات أو البحث...");
+            }
         }
     });
 </script>
