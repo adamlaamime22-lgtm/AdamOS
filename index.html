@@ -38,39 +38,4 @@
 
 </body>
 </html>
-<script>
-    const input = document.getElementById('userInput');
-
-    // 1. الميكروفون الاحترافي
-    function startVoice() {
-        if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
-            alert("المتصفح ديالك ما كيدعمش الميكروفون");
-            return;
-        }
-
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'ar-MA';
-        recognition.continuous = false;
-        
-        recognition.onstart = () => { console.log("الميكروفون نشط..."); };
-        recognition.onresult = (event) => {
-            input.value = event.results[0][0].transcript;
-        };
-        recognition.onerror = (e) => { console.log("خطأ:", e.error); };
-        
-        recognition.start();
-    }
-
-    // 2. الإرسال بـ Enter (مع مسح النص)
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && input.value.trim() !== "") {
-            console.log("إرسال لـ VELOX AI: " + input.value);
-            input.value = ""; // مسح النص
-        }
-    });
-
-    // 3. أوامر السايدبار (تأكد أن الـ HTML ديالك فيه onclick لكل وحدة)
-    function triggerSidebar(action) {
-        console.log("أمر مفعّل: " + action);
-    }
-</script>
+V
