@@ -3,23 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI - ذكاء اصطناعي تفاعلي</title>
-    <!-- خطوط عربية وأيقونات -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Velox AI - مساعدك الذكي</title>
+    <!-- استيراد خط تجوال العربي -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
+        /* =========================================
+           1. الأساسيات والمتغيرات (CSS Variables & Reset)
+           ========================================= */
         :root {
-            --primary-color: #6c5ce7;
-            --secondary-color: #a29bfe;
-            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            --glass-bg: rgba(255, 255, 255, 0.05);
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             --text-color: #ffffff;
-            --input-bg: rgba(0, 0, 0, 0.2);
-            --msg-user-bg: #6c5ce7;
-            --msg-ai-bg: rgba(255, 255, 255, 0.1);
+            --text-secondary: #94a3b8;
+            --user-msg-bg: rgba(99, 102, 241, 0.2);
+            --ai-msg-bg: rgba(255, 255, 255, 0.05);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --font-family: 'Tajawal', sans-serif;
         }
 
         * {
@@ -30,7 +35,7 @@
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: var(--font-family);
             background: var(--bg-gradient);
             color: var(--text-color);
             height: 100vh;
@@ -40,623 +45,737 @@
             align-items: center;
         }
 
-        /* --- تأثير الخلفية المتحركة --- */
-        .background-shapes {
+        /* خلفية زخرفية (Decoration blobs) */
+        .blob {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        .shape {
-            position: absolute;
+            border-radius: 50%;
             filter: blur(80px);
+            z-index: -1;
             opacity: 0.6;
-            animation: float 10s infinite alternate;
         }
-        .shape-1 { background: #6c5ce7; width: 300px; height: 300px; top: -50px; left: -50px; border-radius: 50%; }
-        .shape-2 { background: #00cec9; width: 400px; height: 400px; bottom: -100px; right: -100px; border-radius: 50%; animation-delay: -5s; }
-        
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(30px, 50px); }
-        }
+        .blob-1 { width: 300px; height: 300px; background: #6366f1; top: -50px; left: -50px; }
+        .blob-2 { width: 400px; height: 400px; background: #ec4899; bottom: -100px; right: -100px; }
 
-        /* --- الحاويات الزجاجية --- */
-        .glass-panel {
+        /* =========================================
+           2. التخطيط العام (Layout)
+           ========================================= */
+        #app-container {
+            display: flex;
+            width: 95%;
+            height: 90vh;
+            max-width: 1400px;
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            position: relative;
         }
 
-        /* --- شاشة تسجيل الدخول --- */
-        #auth-screen {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            transition: opacity 0.5s ease;
-        }
-
-        .auth-box {
-            width: 400px;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #a29bfe, #74b9ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .auth-input {
-            width: 100%;
-            padding: 12px 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid var(--glass-border);
-            background: var(--input-bg);
-            color: white;
-            transition: 0.3s;
-        }
-        .auth-input:focus { border-color: var(--primary-color); }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .btn-primary { background: var(--primary-color); color: white; }
-        .btn-google { background: white; color: #333; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-
-        /* --- واجهة الشات الرئيسية --- */
-        #app-screen {
-            width: 90%;
-            height: 90%;
-            display: none; /* مخفي افتراضياً */
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
-        }
-
-        /* القائمة الجانبية (تاريخ المحادثات) */
-        .sidebar {
-            padding: 20px;
+        /* =========================================
+           3. القائمة الجانبية (Sidebar)
+           ========================================= */
+        #sidebar {
+            width: 280px;
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
+            transition: transform 0.3s ease;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
         }
+
+        #sidebar.closed {
+            transform: translateX(100%);
+        }
+
         .sidebar-header {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            padding: 20px;
             border-bottom: 1px solid var(--glass-border);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
+
+        .new-chat-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            width: 100%;
+            font-family: var(--font-family);
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .new-chat-btn:hover { background: var(--primary-hover); }
+
         .history-list {
             flex: 1;
             overflow-y: auto;
-            list-style: none;
-        }
-        .history-item {
             padding: 10px;
+        }
+
+        .history-item {
+            padding: 12px;
             margin-bottom: 8px;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             cursor: pointer;
             transition: 0.2s;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: rgba(255,255,255,0.7);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
+
         .history-item:hover, .history-item.active {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
         }
 
-        /* منطقة المحادثة */
-        .chat-area {
+        .user-profile {
+            padding: 20px;
+            border-top: 1px solid var(--glass-border);
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            align-items: center;
+            gap: 10px;
         }
 
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        /* =========================================
+           4. منطقة الشات (Chat Area)
+           ========================================= */
+        #main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Header */
         .chat-header {
             padding: 15px 20px;
             border-bottom: 1px solid var(--glass-border);
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
+            height: 70px;
         }
 
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        /* تنسيق الرسائل */
-        .message {
-            max-width: 70%;
-            padding: 12px 18px;
-            border-radius: 12px;
-            line-height: 1.5;
-            position: relative;
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .message.user {
-            align-self: flex-end; /* لليمين لأن الاتجاه RTL */
-            background: var(--msg-user-bg);
-            border-bottom-left-radius: 2px;
-        }
-        .message.ai {
-            align-self: flex-start; /* لليسار */
-            background: var(--msg-ai-bg);
-            border-bottom-right-radius: 2px;
-            border: 1px solid var(--glass-border);
-        }
-        .message strong { display: block; font-size: 0.8rem; margin-bottom: 5px; opacity: 0.8; }
-
-        /* منطقة الإدخال */
-        .input-area {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255,255,255,0.05);
-            color: white;
-        }
-        .icon-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+        .toggle-sidebar-btn {
+            background: transparent;
             border: none;
-            background: var(--glass-bg);
             color: white;
             cursor: pointer;
-            transition: 0.3s;
-            border: 1px solid var(--glass-border);
+            font-size: 1.2rem;
+            padding: 5px;
+        }
+
+        /* Messages Area */
+        #messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            line-height: 1.6;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-start;
+            background: var(--user-msg-bg);
+            border-bottom-right-radius: 2px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .message.ai {
+            align-self: flex-end;
+            background: var(--ai-msg-bg);
+            border-bottom-left-radius: 2px;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* أدوات الرسالة (TTS) */
+        .msg-tools {
+            margin-top: 8px;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0.7;
+        }
+        .tts-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .tts-btn:hover { color: white; opacity: 1; }
+
+        /* Input Area */
+        .input-area {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
             align-items: center;
         }
-        .icon-btn:hover { background: var(--primary-color); border-color: var(--primary-color); }
-        .icon-btn.recording { background: #e74c3c; animation: pulse 1.5s infinite; }
 
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
-
-        /* --- Toast Notifications --- */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-        }
-        .toast {
-            background: rgba(0,0,0,0.8);
+        #user-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 15px 45px 15px 15px;
+            border-radius: 25px;
             color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-right: 4px solid var(--primary-color);
-            animation: slideIn 0.3s ease;
+            font-family: var(--font-family);
+            resize: none;
+            height: 50px;
+            max-height: 120px;
+            transition: 0.3s;
         }
-        @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 
-        /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 6px; }
+        #user-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .send-btn:hover { transform: scale(1.05); }
+        .send-btn:disabled { background: #4b5563; cursor: not-allowed; }
+
+        /* Voice Button */
+        .mic-btn {
+            position: absolute;
+            left: 10px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        /* Voice Visual Feedback (Pulse) */
+        .mic-btn.listening {
+            color: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            #app-screen { grid-template-columns: 1fr; }
-            .sidebar { display: none; } /* إخفاء السايدبار في الموبايل للتبسيط */
+            #sidebar { width: 85%; transform: translateX(100%); box-shadow: -5px 0 15px rgba(0,0,0,0.5); }
+            #sidebar.open { transform: translateX(0); }
             .message { max-width: 90%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- خلفية متحركة -->
-    <div class="background-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-    </div>
+    <!-- خلفية جمالية -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-    <!-- حاوية التنبيهات -->
-    <div class="toast-container" id="toast-container"></div>
-
-    <!-- شاشة تسجيل الدخول -->
-    <section id="auth-screen">
-        <div class="auth-box glass-panel">
-            <div class="logo"><i class="fas fa-bolt"></i> Velox AI</div>
-            <p style="margin-bottom: 20px; opacity: 0.7;">سجل دخولك لتجربة الذكاء الاصطناعي</p>
-            
-            <input type="email" id="email" class="auth-input" placeholder="البريد الإلكتروني">
-            <input type="password" id="password" class="auth-input" placeholder="كلمة المرور">
-            
-            <button class="btn btn-primary" onclick="app.auth.loginWithEmail()">
-                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
-            </button>
-            <button class="btn btn-google" onclick="app.auth.loginWithGoogle()">
-                <i class="fab fa-google"></i> الدخول عبر Google
-            </button>
-            <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.5;">
-                * تجربة الوضع الآمن (Mock Mode) مفعلة افتراضياً للتجربة
-            </p>
-        </div>
-    </section>
-
-    <!-- واجهة التطبيق الرئيسية -->
-    <section id="app-screen" class="glass-panel">
+    <div id="app-container">
         <!-- القائمة الجانبية -->
-        <aside class="sidebar">
+        <aside id="sidebar">
             <div class="sidebar-header">
-                <span>Velox AI</span>
-                <button class="icon-btn" style="width:30px; height:30px;" onclick="app.auth.logout()" title="تسجيل خروج">
-                    <i class="fas fa-sign-out-alt"></i>
+                <h2>Velox AI</h2>
+                <!-- زر إغلاق القائمة في الموبايل -->
+                <button class="toggle-sidebar-btn" onclick="App.UI.toggleSidebar()">✕</button>
+            </div>
+            <div style="padding: 10px 20px;">
+                <button class="new-chat-btn" onclick="App.Logic.newChat()">
+                    <span>+</span> محادثة جديدة
                 </button>
             </div>
-            <ul class="history-list" id="history-list">
+            <div class="history-list" id="history-list">
                 <!-- سيتم ملؤها بواسطة JS -->
-            </ul>
-            <button class="btn" style="background: rgba(255,255,255,0.1); font-size: 0.9rem;" onclick="app.chat.newChat()">
-                <i class="fas fa-plus"></i> محادثة جديدة
-            </button>
-        </aside>
-
-        <!-- منطقة المحادثة -->
-        <main class="chat-area">
-            <div class="chat-header">
-                <span id="chat-title">محادثة جديدة</span>
-                <div class="controls">
-                    <button class="icon-btn" id="tts-toggle" onclick="app.speech.toggleTTS()" title="تفعيل القراءة الصوتية">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
+            </div>
+            <div class="user-profile">
+                <div class="avatar" id="user-avatar">G</div>
+                <div>
+                    <div style="font-size: 0.9rem; font-weight: bold;">ضيف</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);" id="guest-id-display">ID: ...</div>
                 </div>
             </div>
+        </aside>
 
-            <div class="chat-messages" id="chat-container">
+        <!-- واجهة الشات الرئيسية -->
+        <main id="main-chat">
+            <header class="chat-header">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="toggle-sidebar-btn" onclick="App.UI.toggleSidebar()">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <h3 id="current-session-title">Velox AI</h3>
+                </div>
+            </header>
+
+            <div id="messages-container">
                 <!-- الرسائل ستظهر هنا -->
                 <div class="message ai">
-                    <strong>Velox AI</strong>
-                    أهلاً بك! أنا Velox AI، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟
+                    مرحباً! أنا Velox AI، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟
                 </div>
             </div>
 
             <div class="input-area">
-                <button class="icon-btn" id="mic-btn" onclick="app.speech.toggleListening()">
-                    <i class="fas fa-microphone"></i>
-                </button>
-                <input type="text" id="user-input" class="chat-input" placeholder="اكتب رسالتك هنا..." onkeypress="if(event.key === 'Enter') app.chat.sendMessage()">
-                <button class="icon-btn" onclick="app.chat.sendMessage()">
-                    <i class="fas fa-paper-plane"></i>
+                <div class="input-wrapper">
+                    <input type="text" id="user-input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+                    <button id="mic-btn" class="mic-btn" title="تسجيل صوتي">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    </button>
+                </div>
+                <button id="send-btn" class="send-btn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                 </button>
             </div>
         </main>
-    </section>
+    </div>
 
-    <!-- Scripts: Firebase SDKs (Mocked for Demo but structured for Real Use) -->
-    <script type="module">
-        // --- MOCK CONFIGURATION FOR DEMO PURPOSES ---
-        // في المشروع الحقيقي، استبدل هذه القيم ببيانات مشروعك من Firebase Console
-        const firebaseConfig = {
-            apiKey: "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",
-            authDomain: "velox-ai-mock.firebaseapp.com",
-            projectId: "velox-ai-mock",
-            storageBucket: "velox-ai-mock.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef"
+    <script>
+        /**
+         * =========================================
+         * Velox AI - Modular JavaScript Architecture
+         * =========================================
+         * يحتوي هذا الملف على جميع الوظائف مقسمة إلى وحدات منطقية.
+         */
+
+        // --- مكان وضع مفتاح API الخاص بك ---
+        const CONFIG = {
+            API_KEY: "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", // <--- ضع المفتاح هنا
+            API_URL: "https://api.openai.com/v1/chat/completions",
+            MODEL: "gpt-3.5-turbo",
+            SYSTEM_PROMPT: "أنت مساعد ذكي ومحترف اسمه Velox AI، تساعد الضيوف باحترافية، إجاباتك تقنية، دقيقة، ومختصرة."
         };
 
-        // --- MODULE 1: UI MANAGER ---
-       // 1. جلب عناصر الـ DOM
-const loginForm = document.querySelector('form'); // تأكد أن الفورم ديالك عندها وسم <form>
-const loginBtn = document.querySelector('#login-btn'); // بدلها بـ ID ديال زر الدخول عندك
-// حماية من أي تداخل
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("Velox AI: النظام جاهز للعمل.");
+        // --- وحدة التخزين والهوية (Storage & Identity Module) ---
+        const Storage = {
+            // توليد أو استرجاع معرف الضيف
+            getGuestId: () => {
+                let guestId = localStorage.getItem('velox_guest_id');
+                if (!guestId) {
+                    guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('velox_guest_id', guestId);
+                }
+                return guestId;
+            },
 
-    // العثور على زر الدخول (تأكد أن الـ ID ديال الزر في HTML هو login-btn)
-    const loginBtn = document.getElementById('login-btn');
-    const loginForm = document.querySelector('form');
+            // توليد لون عشوائي للـ Avatar
+            getAvatarColor: (id) => {
+                const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
+                let hash = 0;
+                for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
+                return colors[Math.abs(hash) % colors.length];
+            },
 
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // الحماية من الـ Reload
-            console.log("تم الضغط على دخول - جاري التوجيه...");
-            
-            // توجيه بسيط للمستعمل
-            window.location.href = 'chat.html'; 
-        });
-    }
-});});
-            showToast(message, type = 'info') {
-                const toast = document.createElement('div');
-                toast.className = 'toast';
-                toast.textContent = message;
-                if(type === 'error') toast.style.borderRightColor = '#e74c3c';
-                this.toastContainer.appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
-            }
+            // حفظ واسترجاع المحادثات
+            saveChat: (guestId, sessionId, title, messages) => {
+                let allChats = JSON.parse(localStorage.getItem('velox_chats') || '{}');
+                if (!allChats[guestId]) allChats[guestId] = [];
+                
+                const existingIndex = allChats[guestId].findIndex(c => c.sessionId === sessionId);
+                const chatData = { sessionId, title, messages, timestamp: Date.now() };
 
-            toggleScreen(isLoggedIn) {
-                if (isLoggedIn) {
-                    this.authScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        this.authScreen.style.display = 'none';
-                        this.appScreen.style.display = 'grid';
-                    }, 500);
+                if (existingIndex > -1) {
+                    allChats[guestId][existingIndex] = chatData;
                 } else {
-                    this.appScreen.style.display = 'none';
-                    this.authScreen.style.display = 'flex';
-                    setTimeout(() => this.authScreen.style.opacity = '1', 50);
+                    allChats[guestId].unshift(chatData); // إضافة للأعلى
+                }
+                
+                localStorage.setItem('velox_chats', JSON.stringify(allChats));
+            },
+
+            getChats: (guestId) => {
+                let allChats = JSON.parse(localStorage.getItem('velox_chats') || '{}');
+                return allChats[guestId] || [];
+            }
+        };
+
+        // --- وحدة الذكاء الاصطناعي (AI Module) ---
+        const AI = {
+            sendMessage: async (messages, onLoading, onSuccess, onError) => {
+                onLoading(true);
+
+                try {
+                    // التحقق من وجود المفتاح
+                    if (CONFIG.API_KEY === "YOUR_OPENAI_API_KEY_HERE" || !CONFIG.API_KEY) {
+                        throw new Error("يرجى وضع مفتاح OpenAI API الخاص بك في كود الجافاسكربت (const CONFIG).");
+                    }
+
+                    const response = await fetch(CONFIG.API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${CONFIG.API_KEY}`
+                        },
+                        body: JSON.stringify({
+                            model: CONFIG.MODEL,
+                            messages: [
+                                { role: "system", content: CONFIG.SYSTEM_PROMPT },
+                                ...messages
+                            ]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error?.message || 'فشل الاتصال بالخادم');
+                    }
+
+                    const data = await response.json();
+                    const aiText = data.choices[0].message.content;
+                    onSuccess(aiText);
+
+                } catch (error) {
+                    onError(error.message);
+                } finally {
+                    onLoading(false);
                 }
             }
+        };
 
-            appendMessage(text, sender) {
-                const div = document.createElement('div');
-                div.className = `message ${sender}`;
-                div.innerHTML = `<strong>${sender === 'user' ? 'أنت' : 'Velox AI'}</strong>${text}`;
-                this.chatContainer.appendChild(div);
-                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-                return div;
-            }
+        // --- وحدة الصوتيات (Voice Module) ---
+        const Voice = {
+            recognition: null,
+            isListening: false,
+            
+            init: (onResult) => {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    Voice.recognition = new SpeechRecognition();
+                    Voice.recognition.lang = 'ar-SA'; // اللغة العربية
+                    Voice.recognition.continuous = false;
+                    Voice.recognition.interimResults = false;
 
-            renderHistory(history) {
-                this.historyList.innerHTML = '';
-                history.forEach(item => {
-                    const li = document.createElement('li');
-                    li.className = 'history-item';
-                    li.textContent = item.title || 'محادثة سابقة';
-                    li.onclick = () => app.chat.loadSession(item.id);
-                    this.historyList.appendChild(li);
-                });
-            }
-
-            clearChat() {
-                this.chatContainer.innerHTML = '';
-            }
-        }// توليد معرف فريد للضيف
-function getGuestId() {
-    let guestId = localStorage.getItem('velox_guest_id');
-    if (!guestId) {
-        guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('velox_guest_id', guestId);
-    }
-    return guestId;
-}
-
-// توليد لون عشوائي للـ Avatar
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
-    return color;
-}
-
-            onLoginSuccess() {
-                this.ui.toggleScreen(true);
-                // تحميل السجل (محاكاة)
-                app.store.loadHistory(); 
-            }
-        }
-
-        // --- MODULE 3: SPEECH SERVICE ---
-        // Web Speech API
-        class SpeechService {
-            constructor() {
-                this.recognition = null;
-                this.synth = window.speechSynthesis;
-                this.isListening = false;
-                this.ttsEnabled = true;
-                
-                if ('webkitSpeechRecognition' in window) {
-                    this.recognition = new webkitSpeechRecognition();
-                    this.recognition.lang = 'ar-SA';
-                    this.recognition.continuous = false;
-                    this.recognition.interimResults = false;
-
-                    this.recognition.onstart = () => {
-                        this.isListening = true;
-                        document.getElementById('mic-btn').classList.add('recording');
+                    Voice.recognition.onstart = () => {
+                        Voice.isListening = true;
+                        App.UI.updateMicState(true);
                     };
-                    this.recognition.onend = () => {
-                        this.isListening = false;
-                        document.getElementById('mic-btn').classList.remove('recording');
+
+                    Voice.recognition.onend = () => {
+                        Voice.isListening = false;
+                        App.UI.updateMicState(false);
                     };
-                    this.recognition.onresult = (event) => {
+
+                    Voice.recognition.onresult = (event) => {
                         const transcript = event.results[0][0].transcript;
-                        document.getElementById('user-input').value = transcript;
-                        app.chat.sendMessage(); // إرسال تلقائي بعد التحدث
+                        onResult(transcript);
                     };
                 } else {
-                    console.warn("Web Speech API not supported");
+                    console.warn("متصفحك لا يدعم خاصية تحويل الصوت لنص.");
+                    document.getElementById('mic-btn').style.display = 'none';
+                }
+            },
+
+            toggle: () => {
+                if (!Voice.recognition) return;
+                if (Voice.isListening) Voice.recognition.stop();
+                else Voice.recognition.start();
+            },
+
+            speak: (text) => {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel(); // إيقاف أي قراءة سابقة
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'ar-SA';
+                    utterance.rate = 1;
+                    window.speechSynthesis.speak(utterance);
                 }
             }
-
-            toggleListening() {
-                if (!this.recognition) return alert('متصفحك لا يدعم خاصية الكلام');
-                if (this.isListening) this.recognition.stop();
-                else this.recognition.start();
-            }
-
-            speak(text) {
-                if (!this.ttsEnabled) return;
-                this.synth.cancel(); // إيقاف أي كلام سابق
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ar-SA';
-                this.synth.speak(utterance);
-            }
-
-            toggleTTS() {
-                this.ttsEnabled = !this.ttsEnabled;
-                const icon = document.querySelector('#tts-toggle i');
-                icon.className = this.ttsEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
-                app.ui.showToast(this.ttsEnabled ? 'تم تفعيل القراءة الصوتية' : 'تم إيقاف القراءة الصوتية');
-            }
-        }
-
-        // --- MODULE 4: AI MANAGER ---
-        // الاتصال بـ OpenAI (محاكاة للآمن Cloud Function)
-        class AIManager {
-            constructor() {}
-
-            async sendMessage(text) {
-                // في الواقع، هنا يتم استدعاء Firebase Cloud Function
-                // const functionUrl = 'https://us-central1-velox-ai.cloudfunctions.net/chat';
-                
-                // محاكاة استجابة الذكاء الاصطناعي
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        // ردود بسيطة للمحاكاة
-                        const responses = [
-                            "هذا سؤال مثير للاهتمام! Velox AI هنا للمساعدة.",
-                            "بناءً على طلبك، يمكنني القيام بذلك برمجياً.",
-                            "أنا مجرد محاكاة حالياً، ولكن في النسخة الكاملة سأستخدم GPT-3.5.",
-                            "هل يمكنك توضيح المزيد من التفاصيل؟"
-                        ];
-                        const randomRes = responses[Math.floor(Math.random() * responses.length)];
-                        resolve(randomRes);
-                    }, 1500);
-                });
-            }
-        }
-
-        // --- MODULE 5: STORE MANAGER ---
-        // Firestore (Mocked)
-        class StoreManager {
-            constructor() {
-                this.mockHistory = [
-                    { id: 1, title: 'شرح Firebase', messages: [] },
-                    { id: 2, title: 'تصميم Glassmorphism', messages: [] }
-                ];
-            }
-
-            async saveMessage(role, text) {
-                // محاكاة الحفظ في Firestore
-                console.log(`[Firestore] Saving: ${role} - ${text}`);
-                // في الواقع: await addDoc(collection(db, "chats", currentChatId, "messages"), { role, text, timestamp });
-            }
-
-            async saveSession(title) {
-                const newId = Date.now();
-                this.mockHistory.unshift({ id: newId, title: title, messages: [] });
-                app.ui.renderHistory(this.mockHistory);
-            }
-
-            loadHistory() {
-                app.ui.renderHistory(this.mockHistory);
-            }
-            
-            newChat() {
-                app.ui.clearChat();
-                app.ui.appendMessage('أهلاً بك! أنا Velox AI، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟', 'ai');
-            }
-        }
-
-        // --- MAIN APP CONTROLLER ---
-        class App {
-            constructor() {
-                this.ui = new UIManager();
-                this.auth = new AuthService(this.ui);
-                this.speech = new SpeechService();
-                this.ai = new AIManager();
-                this.store = new StoreManager();
-            }
-        }
-
-        // تهيئة التطبيق وربطه بالـ Window لاستخدامه في HTML Events
-        const app = new App();
-        window.app = app;
-
-        // تعريف منطق الشات في الـ Controller
-        app.chat = {
-            currentChatId: null,
-            
-            async sendMessage() {
-                const input = document.getElementById('user-input');
-                const text = input.value.trim();
-                
-                if (!text) return;
-
-                // عرض رسالة المستخدم
-                app.ui.appendMessage(text, 'user');
-                input.value = '';
-                
-                // حفظ في التاريخ
-                await app.store.saveMessage('user', text);
-                if(!this.currentChatId) {
-                    app.store.saveSession(text.substring(0, 20) + '...');
-                    this.currentChatId = 'new';
-                }
-
-                // مؤشر الكتابة (بسيط)
-                const loadingId = 'loading-' + Date.now();
-                const loadingDiv = document.createElement('div');
-                loadingDiv.className = 'message ai';
-                loadingDiv.id = loadingId;
-                loadingDiv.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Velox AI يفكر...';
-                app.ui.chatContainer.appendChild(loadingDiv);
-
-                async function getAIResponse(userMessage) {
-    const API_KEY = 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
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: userMessage }]
-        })
-    });
-
-    const data = await response.json();
-    return data.choices[0].message.content; // هنا فين كيجي الجواب الحقيقي
-}
-
-            newChat: () => app.store.newChat(),
-            loadSession: (id) => app.ui.showToast(`تحميل الجلسة ${id}... (محاكاة)`)
         };
+
+        // --- وحدة المنطق والتطبيق الرئيسي (Main App Logic) ---
+        const App = {
+            state: {
+                guestId: null,
+                sessionId: null,
+                messages: [], // مصفوفة الرسائل الحالية للجلسة
+                isLoading: false
+            },
+
+            init: () => {
+                // 1. إعداد الهوية
+                App.state.guestId = Storage.getGuestId();
+                const avatarColor = Storage.getAvatarColor(App.state.guestId);
+                
+                // تحديث الواجهة بالهوية
+                document.getElementById('guest-id-display').innerText = `ID: ${App.state.guestId.substr(-6)}`;
+                const avatarEl = document.getElementById('user-avatar');
+                avatarEl.style.backgroundColor = avatarColor;
+                avatarEl.innerText = App.state.guestId.charAt(5).toUpperCase(); // حرف عشوائي
+
+                // 2. بدء جلسة جديدة
+                App.Logic.newChat();
+
+                // 3. تهيئة الأحداث (Event Listeners)
+                App.UI.bindEvents();
+
+                // 4. تهيئة الصوتيات
+                Voice.init((text) => {
+                    document.getElementById('user-input').value = text;
+                    App.Logic.handleSend();
+                });
+
+                // 5. تحميل القائمة الجانبية
+                App.UI.renderHistory();
+            },
+
+            Logic: {
+                newChat: () => {
+                    // حفظ الجلسة الحالية إذا كانت تحتوي على رسائل
+                    if (App.state.messages.length > 0) {
+                        const title = App.state.messages[0].content.substring(0, 30) + '...';
+                        Storage.saveChat(App.state.guestId, App.state.sessionId, title, App.state.messages);
+                    }
+
+                    // بدء جلسة جديدة
+                    App.state.sessionId = 'session_' + Date.now();
+                    App.state.messages = [];
+                    App.UI.clearChat();
+                    App.UI.renderHistory();
+                    
+                    // ترحيب افتراضي
+                    App.UI.addMessage("مرحباً بك مجدداً! أنا Velox AI.", 'ai');
+                },
+
+                loadChat: (sessionId) => {
+                    const chats = Storage.getChats(App.state.guestId);
+                    const chat = chats.find(c => c.sessionId === sessionId);
+                    if (chat) {
+                        App.state.sessionId = chat.sessionId;
+                        App.state.messages = chat.messages;
+                        App.UI.clearChat();
+                        chat.messages.forEach(msg => {
+                            App.UI.addMessageToDOM(msg.content, msg.role, false); // false = don't save again
+                        });
+                        // إغلاق السايدبار في الموبايل بعد الاختيار
+                        if (window.innerWidth <= 768) {
+                            document.getElementById('sidebar').classList.remove('open');
+                        }
+                    }
+                },
+
+                handleSend: async () => {
+                    const input = document.getElementById('user-input');
+                    const text = input.value.trim();
+
+                    if (!text || App.state.isLoading) return;
+
+                    // 1. إضافة رسالة المستخدم
+                    App.UI.addMessage(text, 'user');
+                    input.value = '';
+
+                    // 2. الاتصال بـ API
+                    await AI.sendMessage(
+                        App.state.messages,
+                        (loading) => App.UI.setLoading(loading), // onLoading
+                        (aiText) => { // onSuccess
+                            App.UI.addMessage(aiText, 'ai');
+                            // حفظ تلقائي
+                            const title = App.state.messages[0].content.substring(0, 30) + '...';
+                            Storage.saveChat(App.state.guestId, App.state.sessionId, title, App.state.messages);
+                            App.UI.renderHistory(); // تحديث العناوين
+                        },
+                        (errorMsg) => { // onError
+                            App.UI.addMessage(`⚠️ خطأ: ${errorMsg}`, 'ai');
+                        }
+                    );
+                }
+            },
+
+            UI: {
+                toggleSidebar: () => {
+                    const sidebar = document.getElementById('sidebar');
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.toggle('open');
+                    } else {
+                        sidebar.classList.toggle('closed');
+                    }
+                },
+
+                updateMicState: (isListening) => {
+                    const btn = document.getElementById('mic-btn');
+                    if (isListening) btn.classList.add('listening');
+                    else btn.classList.remove('listening');
+                },
+
+                addMessage: (text, role) => {
+                    // إضافة للحالة المحلية
+                    App.state.messages.push({ role: role, content: text });
+                    // عرض في الواجهة
+                    App.UI.addMessageToDOM(text, role, true);
+                },
+
+                addMessageToDOM: (text, role, scroll = true) => {
+                    const container = document.getElementById('messages-container');
+                    const div = document.createElement('div');
+                    div.className = `message ${role}`;
+                    div.innerText = text;
+
+                    // زر القراءة الصوتية للردود فقط
+                    if (role === 'ai') {
+                        const tools = document.createElement('div');
+                        tools.className = 'msg-tools';
+                        const ttsBtn = document.createElement('button');
+                        ttsBtn.className = 'tts-btn';
+                        ttsBtn.innerHTML = '🔊 استماع';
+                        ttsBtn.onclick = () => Voice.speak(text);
+                        tools.appendChild(ttsBtn);
+                        div.appendChild(tools);
+                    }
+
+                    container.appendChild(div);
+                    if (scroll) container.scrollTop = container.scrollHeight;
+                },
+
+                clearChat: () => {
+                    document.getElementById('messages-container').innerHTML = '';
+                },
+
+                setLoading: (isLoading) => {
+                    App.state.isLoading = isLoading;
+                    const sendBtn = document.getElementById('send-btn');
+                    if (isLoading) {
+                        const originalContent = sendBtn.innerHTML;
+                        sendBtn.innerHTML = '<div class="spinner"></div>';
+                        sendBtn.dataset.original = originalContent;
+                        sendBtn.disabled = true;
+                    } else {
+                        sendBtn.innerHTML = sendBtn.dataset.original || '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>';
+                        sendBtn.disabled = false;
+                    }
+                },
+
+                renderHistory: () => {
+                    const list = document.getElementById('history-list');
+                    const chats = Storage.getChats(App.state.guestId);
+                    list.innerHTML = '';
+
+                    chats.forEach(chat => {
+                        const item = document.createElement('div');
+                        item.className = `history-item ${chat.sessionId === App.state.sessionId ? 'active' : ''}`;
+                        item.innerText = chat.title || 'محادثة جديدة';
+                        item.onclick = () => App.Logic.loadChat(chat.sessionId);
+                        list.appendChild(item);
+                    });
+                },
+
+                bindEvents: () => {
+                    const sendBtn = document.getElementById('send-btn');
+                    const micBtn = document.getElementById('mic-btn');
+                    const input = document.getElementById('user-input');
+
+                    // إرسال عند الضغط على الزر
+                    sendBtn.addEventListener('click', App.Logic.handleSend);
+
+                    // تفعيل الميكروفون
+                    micBtn.addEventListener('click', Voice.toggle);
+
+                    // إرسال عند الضغط على Enter (دون Shift)
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault(); // منع سطر جديد
+                            App.Logic.handleSend();
+                        }
+                    });
+                }
+            }
+        };
+
+        // تشغيل التطبيق عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', App.init);
 
     </script>
 </body>
