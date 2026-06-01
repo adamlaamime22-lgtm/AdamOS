@@ -433,13 +433,17 @@
          */
 
         // --- مكان وضع مفتاح API الخاص بك ---
-        const CONFIG = {
-            API_KEY: "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", // <--- ضع المفتاح هنا
-            API_URL: "https://api.openai.com/v1/chat/completions",
-            MODEL: "gpt-3.5-turbo",
-            SYSTEM_PROMPT: "أنت مساعد ذكي ومحترف اسمه Velox AI، تساعد الضيوف باحترافية، إجاباتك تقنية، دقيقة، ومختصرة."
-        };
-
+       const CONFIG = {
+    // هنا غتحط المفتاح ديالك، ولكن بشرط (شوف تحت)
+    API_KEY: "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", 
+    
+    // الحل باش يتحيد الخطأ: غنستعملو Proxy بسيط
+    // كنصحك تستعمل هذا الرابط كوسيط باش المتصفح يقدر يهضر مع OpenAI
+    API_URL: "https://corsproxy.io/?https://api.openai.com/v1/chat/completions",
+    
+    MODEL: "gpt-3.5-turbo",
+    SYSTEM_PROMPT: "أنت مساعد ذكي ومحترف اسمه Velox AI..."
+};
         // --- وحدة التخزين والهوية (Storage & Identity Module) ---
         const Storage = {
             // توليد أو استرجاع معرف الضيف
