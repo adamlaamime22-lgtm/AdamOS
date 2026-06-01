@@ -457,7 +457,19 @@
                 recognition.start();
             }
         }
+// هادي هي الدالة اللي كتدير الخدمة ملي كتبرك على Send
+async function handleSend() {
+    // 1. أظهر الـ "Typing Indicator" (الكود اللي عندك في الصورة)
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.insertAdjacentHTML('beforeend', loadingHTML);
 
+    // 2. دابا صيفط الطلب للـ AI
+    const aiAnswer = await fetchAIResponse(userInput);
+
+    // 3. مسح الـ "Typing Indicator" وحط جواب الـ AI في بلاصتو
+    document.getElementById(loadingId).remove();
+    displayMessage(aiAnswer);
+}
         // --- 6. Send Message Logic ---
         function sendMessage() {
             const input = document.getElementById('message-input');
