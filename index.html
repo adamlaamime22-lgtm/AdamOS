@@ -518,7 +518,8 @@
                     const aiText = data.choices[0].message.content;
                     onSuccess(aiText);
 
-                } catch (error) {
+                }
+                catch (error) {
                     onError(error.message);
                 } finally {
                     onLoading(false);
