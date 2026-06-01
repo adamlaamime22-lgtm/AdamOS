@@ -646,25 +646,24 @@
                 loadingDiv.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Velox AI يفكر...';
                 app.ui.chatContainer.appendChild(loadingDiv);
 
-                try {
-                    // الاتصال بالذكاء الاصطناعي
-                    const response = await app.ai.sendMessage(text);
-                    
-                    // إزالة مؤشر التحميل وعرض الرد
-                    document.getElementById(loadingId).remove();
-                    app.ui.appendMessage(response, 'ai');
-                    
-                    // نطق الرد
-                    app.speech.speak(response);
-                    
-                    // حفظ الرد
-                    await app.store.saveMessage('ai', response);
+                async function getAIResponse(userMessage) {
+    const API_KEY = ديالك'; // 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// Key صحيح
 
-                } catch (error) {
-                    document.getElementById(loadingId).remove();
-                    app.ui.showToast('حدث خطأ في الاتصال', 'error');
-                }
-            },
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: userMessage }]
+        })
+    });
+
+    const data = await response.json();
+    return data.choices[0].message.content; // هنا فين كيجي الجواب الحقيقي
+}
 
             newChat: () => app.store.newChat(),
             loadSession: (id) => app.ui.showToast(`تحميل الجلسة ${id}... (محاكاة)`)
