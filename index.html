@@ -2,55 +2,674 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Velox AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velox AI - ذكاء اصطناعي تفاعلي</title>
+    <!-- خطوط عربية وأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --text-color: #ffffff;
+            --input-bg: rgba(0, 0, 0, 0.2);
+            --msg-user-bg: #6c5ce7;
+            --msg-ai-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- تأثير الخلفية المتحركة --- */
+        .background-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .shape {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 10s infinite alternate;
+        }
+        .shape-1 { background: #6c5ce7; width: 300px; height: 300px; top: -50px; left: -50px; border-radius: 50%; }
+        .shape-2 { background: #00cec9; width: 400px; height: 400px; bottom: -100px; right: -100px; border-radius: 50%; animation-delay: -5s; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 50px); }
+        }
+
+        /* --- الحاويات الزجاجية --- */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* --- شاشة تسجيل الدخول --- */
+        #auth-screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+
+        .auth-box {
+            width: 400px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #a29bfe, #74b9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: var(--input-bg);
+            color: white;
+            transition: 0.3s;
+        }
+        .auth-input:focus { border-color: var(--primary-color); }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-google { background: white; color: #333; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* --- واجهة الشات الرئيسية --- */
+        #app-screen {
+            width: 90%;
+            height: 90%;
+            display: none; /* مخفي افتراضياً */
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        /* القائمة الجانبية (تاريخ المحادثات) */
+        .sidebar {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            list-style: none;
+        }
+        .history-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: rgba(255,255,255,0.7);
+        }
+        .history-item:hover, .history-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        /* منطقة المحادثة */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* تنسيق الرسائل */
+        .message {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 12px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .message.user {
+            align-self: flex-end; /* لليمين لأن الاتجاه RTL */
+            background: var(--msg-user-bg);
+            border-bottom-left-radius: 2px;
+        }
+        .message.ai {
+            align-self: flex-start; /* لليسار */
+            background: var(--msg-ai-bg);
+            border-bottom-right-radius: 2px;
+            border: 1px solid var(--glass-border);
+        }
+        .message strong { display: block; font-size: 0.8rem; margin-bottom: 5px; opacity: 0.8; }
+
+        /* منطقة الإدخال */
+        .input-area {
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+        .icon-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: var(--glass-bg);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .icon-btn:hover { background: var(--primary-color); border-color: var(--primary-color); }
+        .icon-btn.recording { background: #e74c3c; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
+
+        /* --- Toast Notifications --- */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        .toast {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-right: 4px solid var(--primary-color);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #app-screen { grid-template-columns: 1fr; }
+            .sidebar { display: none; } /* إخفاء السايدبار في الموبايل للتبسيط */
+            .message { max-width: 90%; }
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white p-5">
-    <div class="max-w-3xl mx-auto">
-        <h1 class="text-3xl font-bold mb-5 text-center">Velox AI - المخ الحقيقي</h1>
-        <div id="chat-box" class="h-96 bg-gray-800 p-4 rounded-lg overflow-y-auto mb-4 border border-gray-700"></div>
-        <div class="flex gap-2">
-            <input id="user-input" type="text" class="flex-1 bg-gray-700 p-2 rounded" placeholder="اسأل Velox...">
-            <button id="send-btn" class="bg-blue-600 px-4 py-2 rounded">إرسال</button>
-        </div>
+<body>
+
+    <!-- خلفية متحركة -->
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
     </div>
 
-    <script>
-        const chatBox = document.getElementById('chat-box');
-        const input = document.getElementById('user-input');
-        const btn = document.getElementById('send-btn');
+    <!-- حاوية التنبيهات -->
+    <div class="toast-container" id="toast-container"></div>
 
-        // هنا حط الـ API KEY ديالك (ضروري)
-        const API_KEY = "sk-..."; 
+    <!-- شاشة تسجيل الدخول -->
+    <section id="auth-screen">
+        <div class="auth-box glass-panel">
+            <div class="logo"><i class="fas fa-bolt"></i> Velox AI</div>
+            <p style="margin-bottom: 20px; opacity: 0.7;">سجل دخولك لتجربة الذكاء الاصطناعي</p>
+            
+            <input type="email" id="email" class="auth-input" placeholder="البريد الإلكتروني">
+            <input type="password" id="password" class="auth-input" placeholder="كلمة المرور">
+            
+            <button class="btn btn-primary" onclick="app.auth.loginWithEmail()">
+                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            </button>
+            <button class="btn btn-google" onclick="app.auth.loginWithGoogle()">
+                <i class="fab fa-google"></i> الدخول عبر Google
+            </button>
+            <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.5;">
+                * تجربة الوضع الآمن (Mock Mode) مفعلة افتراضياً للتجربة
+            </p>
+        </div>
+    </section>
 
-        async function sendMessage() {
-            const text = input.value;
-            if (!text) return;
+    <!-- واجهة التطبيق الرئيسية -->
+    <section id="app-screen" class="glass-panel">
+        <!-- القائمة الجانبية -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span>Velox AI</span>
+                <button class="icon-btn" style="width:30px; height:30px;" onclick="app.auth.logout()" title="تسجيل خروج">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+            <ul class="history-list" id="history-list">
+                <!-- سيتم ملؤها بواسطة JS -->
+            </ul>
+            <button class="btn" style="background: rgba(255,255,255,0.1); font-size: 0.9rem;" onclick="app.chat.newChat()">
+                <i class="fas fa-plus"></i> محادثة جديدة
+            </button>
+        </aside>
 
-            chatBox.innerHTML += `<div class="mb-2 text-right"><b>أنت:</b> ${text}</div>`;
-            input.value = '';
+        <!-- منطقة المحادثة -->
+        <main class="chat-area">
+            <div class="chat-header">
+                <span id="chat-title">محادثة جديدة</span>
+                <div class="controls">
+                    <button class="icon-btn" id="tts-toggle" onclick="app.speech.toggleTTS()" title="تفعيل القراءة الصوتية">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
 
-            try {
-                const res = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-3.5-turbo",
-                        messages: [{role: "user", content: text}]
-                    })
+            <div class="chat-messages" id="chat-container">
+                <!-- الرسائل ستظهر هنا -->
+                <div class="message ai">
+                    <strong>Velox AI</strong>
+                    أهلاً بك! أنا Velox AI، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟
+                </div>
+            </div>
+
+            <div class="input-area">
+                <button class="icon-btn" id="mic-btn" onclick="app.speech.toggleListening()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <input type="text" id="user-input" class="chat-input" placeholder="اكتب رسالتك هنا..." onkeypress="if(event.key === 'Enter') app.chat.sendMessage()">
+                <button class="icon-btn" onclick="app.chat.sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </main>
+    </section>
+
+    <!-- Scripts: Firebase SDKs (Mocked for Demo but structured for Real Use) -->
+    <script type="module">
+        // --- MOCK CONFIGURATION FOR DEMO PURPOSES ---
+        // في المشروع الحقيقي، استبدل هذه القيم ببيانات مشروعك من Firebase Console
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-MOCK-KEY-DO-NOT-USE-IN-PRODUCTION",
+            authDomain: "velox-ai-mock.firebaseapp.com",
+            projectId: "velox-ai-mock",
+            storageBucket: "velox-ai-mock.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        // --- MODULE 1: UI MANAGER ---
+        // مسؤول عن التعامل مع DOM والرسائل البصرية
+        class UIManager {
+            constructor() {
+                this.toastContainer = document.getElementById('toast-container');
+                this.authScreen = document.getElementById('auth-screen');
+                this.appScreen = document.getElementById('app-screen');
+                this.chatContainer = document.getElementById('chat-container');
+                this.historyList = document.getElementById('history-list');
+                this.userInput = document.getElementById('user-input');
+            }
+
+            showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                if(type === 'error') toast.style.borderRightColor = '#e74c3c';
+                this.toastContainer.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+
+            toggleScreen(isLoggedIn) {
+                if (isLoggedIn) {
+                    this.authScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        this.authScreen.style.display = 'none';
+                        this.appScreen.style.display = 'grid';
+                    }, 500);
+                } else {
+                    this.appScreen.style.display = 'none';
+                    this.authScreen.style.display = 'flex';
+                    setTimeout(() => this.authScreen.style.opacity = '1', 50);
+                }
+            }
+
+            appendMessage(text, sender) {
+                const div = document.createElement('div');
+                div.className = `message ${sender}`;
+                div.innerHTML = `<strong>${sender === 'user' ? 'أنت' : 'Velox AI'}</strong>${text}`;
+                this.chatContainer.appendChild(div);
+                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+                return div;
+            }
+
+            renderHistory(history) {
+                this.historyList.innerHTML = '';
+                history.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'history-item';
+                    li.textContent = item.title || 'محادثة سابقة';
+                    li.onclick = () => app.chat.loadSession(item.id);
+                    this.historyList.appendChild(li);
                 });
-                const data = await res.json();
-                const reply = data.choices[0].message.content;
-                chatBox.innerHTML += `<div class="mb-2 text-left bg-gray-700 p-2 rounded"><b>Velox AI:</b> ${reply}</div>`;
-            } catch (e) {
-                chatBox.innerHTML += `<div class="text-red-500">خطأ: تأكد من الـ API Key</div>`;
+            }
+
+            clearChat() {
+                this.chatContainer.innerHTML = '';
             }
         }
 
-        btn.onclick = sendMessage;
+        // --- MODULE 2: AUTH SERVICE ---
+        // محاكاة لـ Firebase Auth
+        class AuthService {
+            constructor(ui) {
+                this.ui = ui;
+                this.user = null;
+            }
+
+            async loginWithEmail() {
+                const email = document.getElementById('email').value;
+                const pass = document.getElementById('password').value;
+                
+                if(!email || !pass) return this.ui.showToast('الرجاء ملء جميع الحقول', 'error');
+
+                // محاكاة تسجيل الدخول
+                this.ui.showToast('جاري تسجيل الدخول...', 'info');
+                await new Promise(r => setTimeout(r, 1000)); // Simulate network delay
+                
+                this.user = { email: email, uid: 'user_123' };
+                this.ui.showToast(`مرحباً بك، ${email}`);
+                this.onLoginSuccess();
+            }
+
+            async loginWithGoogle() {
+                this.ui.showToast('جاري الاتصال بـ Google...', 'info');
+                await new Promise(r => setTimeout(r, 1000));
+                this.user = { email: 'google_user@gmail.com', uid: 'google_123' };
+                this.onLoginSuccess();
+            }
+
+            logout() {
+                this.user = null;
+                this.ui.toggleScreen(false);
+                this.ui.showToast('تم تسجيل الخروج');
+            }
+
+            onLoginSuccess() {
+                this.ui.toggleScreen(true);
+                // تحميل السجل (محاكاة)
+                app.store.loadHistory(); 
+            }
+        }
+
+        // --- MODULE 3: SPEECH SERVICE ---
+        // Web Speech API
+        class SpeechService {
+            constructor() {
+                this.recognition = null;
+                this.synth = window.speechSynthesis;
+                this.isListening = false;
+                this.ttsEnabled = true;
+                
+                if ('webkitSpeechRecognition' in window) {
+                    this.recognition = new webkitSpeechRecognition();
+                    this.recognition.lang = 'ar-SA';
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+
+                    this.recognition.onstart = () => {
+                        this.isListening = true;
+                        document.getElementById('mic-btn').classList.add('recording');
+                    };
+                    this.recognition.onend = () => {
+                        this.isListening = false;
+                        document.getElementById('mic-btn').classList.remove('recording');
+                    };
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        document.getElementById('user-input').value = transcript;
+                        app.chat.sendMessage(); // إرسال تلقائي بعد التحدث
+                    };
+                } else {
+                    console.warn("Web Speech API not supported");
+                }
+            }
+
+            toggleListening() {
+                if (!this.recognition) return alert('متصفحك لا يدعم خاصية الكلام');
+                if (this.isListening) this.recognition.stop();
+                else this.recognition.start();
+            }
+
+            speak(text) {
+                if (!this.ttsEnabled) return;
+                this.synth.cancel(); // إيقاف أي كلام سابق
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ar-SA';
+                this.synth.speak(utterance);
+            }
+
+            toggleTTS() {
+                this.ttsEnabled = !this.ttsEnabled;
+                const icon = document.querySelector('#tts-toggle i');
+                icon.className = this.ttsEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+                app.ui.showToast(this.ttsEnabled ? 'تم تفعيل القراءة الصوتية' : 'تم إيقاف القراءة الصوتية');
+            }
+        }
+
+        // --- MODULE 4: AI MANAGER ---
+        // الاتصال بـ OpenAI (محاكاة للآمن Cloud Function)
+        class AIManager {
+            constructor() {}
+
+            async sendMessage(text) {
+                // في الواقع، هنا يتم استدعاء Firebase Cloud Function
+                // const functionUrl = 'https://us-central1-velox-ai.cloudfunctions.net/chat';
+                
+                // محاكاة استجابة الذكاء الاصطناعي
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // ردود بسيطة للمحاكاة
+                        const responses = [
+                            "هذا سؤال مثير للاهتمام! Velox AI هنا للمساعدة.",
+                            "بناءً على طلبك، يمكنني القيام بذلك برمجياً.",
+                            "أنا مجرد محاكاة حالياً، ولكن في النسخة الكاملة سأستخدم GPT-3.5.",
+                            "هل يمكنك توضيح المزيد من التفاصيل؟"
+                        ];
+                        const randomRes = responses[Math.floor(Math.random() * responses.length)];
+                        resolve(randomRes);
+                    }, 1500);
+                });
+            }
+        }
+
+        // --- MODULE 5: STORE MANAGER ---
+        // Firestore (Mocked)
+        class StoreManager {
+            constructor() {
+                this.mockHistory = [
+                    { id: 1, title: 'شرح Firebase', messages: [] },
+                    { id: 2, title: 'تصميم Glassmorphism', messages: [] }
+                ];
+            }
+
+            async saveMessage(role, text) {
+                // محاكاة الحفظ في Firestore
+                console.log(`[Firestore] Saving: ${role} - ${text}`);
+                // في الواقع: await addDoc(collection(db, "chats", currentChatId, "messages"), { role, text, timestamp });
+            }
+
+            async saveSession(title) {
+                const newId = Date.now();
+                this.mockHistory.unshift({ id: newId, title: title, messages: [] });
+                app.ui.renderHistory(this.mockHistory);
+            }
+
+            loadHistory() {
+                app.ui.renderHistory(this.mockHistory);
+            }
+            
+            newChat() {
+                app.ui.clearChat();
+                app.ui.appendMessage('أهلاً بك! أنا Velox AI، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟', 'ai');
+            }
+        }
+
+        // --- MAIN APP CONTROLLER ---
+        class App {
+            constructor() {
+                this.ui = new UIManager();
+                this.auth = new AuthService(this.ui);
+                this.speech = new SpeechService();
+                this.ai = new AIManager();
+                this.store = new StoreManager();
+            }
+        }
+
+        // تهيئة التطبيق وربطه بالـ Window لاستخدامه في HTML Events
+        const app = new App();
+        window.app = app;
+
+        // تعريف منطق الشات في الـ Controller
+        app.chat = {
+            currentChatId: null,
+            
+            async sendMessage() {
+                const input = document.getElementById('user-input');
+                const text = input.value.trim();
+                
+                if (!text) return;
+
+                // عرض رسالة المستخدم
+                app.ui.appendMessage(text, 'user');
+                input.value = '';
+                
+                // حفظ في التاريخ
+                await app.store.saveMessage('user', text);
+                if(!this.currentChatId) {
+                    app.store.saveSession(text.substring(0, 20) + '...');
+                    this.currentChatId = 'new';
+                }
+
+                // مؤشر الكتابة (بسيط)
+                const loadingId = 'loading-' + Date.now();
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'message ai';
+                loadingDiv.id = loadingId;
+                loadingDiv.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Velox AI يفكر...';
+                app.ui.chatContainer.appendChild(loadingDiv);
+
+                try {
+                    // الاتصال بالذكاء الاصطناعي
+                    const response = await app.ai.sendMessage(text);
+                    
+                    // إزالة مؤشر التحميل وعرض الرد
+                    document.getElementById(loadingId).remove();
+                    app.ui.appendMessage(response, 'ai');
+                    
+                    // نطق الرد
+                    app.speech.speak(response);
+                    
+                    // حفظ الرد
+                    await app.store.saveMessage('ai', response);
+
+                } catch (error) {
+                    document.getElementById(loadingId).remove();
+                    app.ui.showToast('حدث خطأ في الاتصال', 'error');
+                }
+            },
+
+            newChat: () => app.store.newChat(),
+            loadSession: (id) => app.ui.showToast(`تحميل الجلسة ${id}... (محاكاة)`)
+        };
+
     </script>
 </body>
 </html>
