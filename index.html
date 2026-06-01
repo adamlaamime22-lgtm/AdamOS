@@ -378,7 +378,7 @@
         // --- MOCK CONFIGURATION FOR DEMO PURPOSES ---
         // في المشروع الحقيقي، استبدل هذه القيم ببيانات مشروعك من Firebase Console
         const firebaseConfig = {
-            apiKey: "AIzaSyD-MOCK-KEY-DO-NOT-USE-IN-PRODUCTION",
+            apiKey: "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",
             authDomain: "velox-ai-mock.firebaseapp.com",
             projectId: "velox-ai-mock",
             storageBucket: "velox-ai-mock.appspot.com",
@@ -463,7 +463,6 @@
                 // محاكاة تسجيل الدخول
                 this.ui.showToast('جاري تسجيل الدخول...', 'info');
                 await new Promise(r => setTimeout(r, 1000)); // Simulate network delay
-                
                 this.user = { email: email, uid: 'user_123' };
                 this.ui.showToast(`مرحباً بك، ${email}`);
                 this.onLoginSuccess();
