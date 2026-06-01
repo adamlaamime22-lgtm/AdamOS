@@ -1,21 +1,18 @@
-// --- المتغيرات الأساسية ---
 let currentBotId = 'general';
 const messagesContainer = document.getElementById('messages-container');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const typingIndicator = document.getElementById('typing-indicator');
 
-// --- تهيئة التطبيق ---
 function init() {
     renderSidebar();
     adjustTextareaHeight();
 }
 
-// --- عرض القائمة الجانبية ---
 function renderSidebar() {
     const list = document.querySelector('.bots-list');
+    if (!list) return;
     list.innerHTML = '';
-    
     bots.forEach(bot => {
         const item = document.createElement('div');
         item.className = `bot-item ${bot.id === currentBotId ? 'active' : ''}`;
@@ -33,43 +30,33 @@ function renderSidebar() {
     });
 }
 
-// --- تبديل البوت ---
 function switchBot(id) {
     currentBotId = id;
     const bot = bots.find(b => b.id === id);
     document.getElementById('header-name').textContent = bot.name;
     document.querySelector('#header-avatar i').className = `fa-solid ${bot.icon}`;
-    document.querySelector('#header-avatar').style.background = `linear-gradient(135deg, ${bot.color}, #fff)`;
-    document.querySelector('#header-avatar').style.color = '#000';
     renderSidebar();
     document.getElementById('sidebar').classList.remove('open');
     clearChat(false);
-    addMessage('bot', `تم تفعيل وضع <strong>${bot.name}</strong>. ${bot.role}`);
+    addMessage('bot', `تم تفعيل وضع ${bot.name}. ${bot.role}`);
 }
 
-// --- إضافة رسالة للشات ---
 function addMessage(sender, text) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${sender}`;
     const avatarIcon = sender === 'user' ? 'fa-user' : bots.find(b => b.id === currentBotId).icon;
     msgDiv.innerHTML = `
-        <div class="msg-avatar">
-            <i class="fa-solid ${avatarIcon}"></i>
-        </div>
+        <div class="msg-avatar"><i class="fa-solid ${avatarIcon}"></i></div>
         <div class="msg-content">${formatText(text)}</div>
     `;
     messagesContainer.appendChild(msgDiv);
     scrollToBottom();
 }
 
-// --- تنسيق النص ---
 function formatText(text) {
-    if (text.includes('```')) {
-        text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-    }
+    text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/\n/g, '<br>');
-    return text;
+    return text.replace(/\n/g, '<br>');
 }
 
 function scrollToBottom() {
@@ -78,12 +65,9 @@ function scrollToBottom() {
 
 function clearChat(addWelcome = true) {
     messagesContainer.innerHTML = '';
-    if (addWelcome) {
-        addMessage('bot', 'بدأت محادثة جديدة. كيف يمكنني مساعدتك؟');
-    }
+    if (addWelcome) addMessage('bot', 'بدأت محادثة جديدة. كيف يمكنني مساعدتك؟');
 }
 
-// --- الربط مع الـ AI الحقيقي (هنا فين كاين "المخ" الحقيقي) ---
 async function sendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
@@ -96,7 +80,7 @@ async function sendMessage() {
     scrollToBottom();
 
     try {
-        const response = await fetch('[https://api.openai.com/v1/chat/completions](https://api.openai.com/v1/chat/completions)', {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,34 +98,19 @@ async function sendMessage() {
         addMessage('bot', aiResponse);
     } catch (error) {
         typingIndicator.style.display = 'none';
-        addMessage('bot', 'عذراً، حدث خطأ. تأكد من اتصالك ومن مفتاح الـ API.');
+        addMessage('bot', 'حدث خطأ. تأكد من مفتاح الـ API.');
     } finally {
         sendBtn.disabled = false;
     }
 }
 
-// --- مستمعي الأحداث ---
-userInput.addEventListener('input', function() {
-    adjustTextareaHeight();
-    sendBtn.disabled = this.value.trim() === '';
-});
-
-userInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-    }
-});
-
+userInput.addEventListener('input', adjustTextareaHeight);
+userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
 sendBtn.addEventListener('click', sendMessage);
 
 function adjustTextareaHeight() {
     userInput.style.height = 'auto';
     userInput.style.height = userInput.scrollHeight + 'px';
-}
-
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
 }
 
 init();
