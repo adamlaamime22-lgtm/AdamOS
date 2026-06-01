@@ -43,34 +43,25 @@
 
     // 1. الإرسال بـ Enter
     input.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            const query = input.value.trim();
-            if (query !== "") {
-                processRequest(query);
-                input.value = ""; // خوي البار بعد الإرسال
-            }
+        if (event.key === 'Enter' && input.value.trim() !== "") {
+            console.log("VELOX AI: جاري الإرسال: " + input.value);
+            input.value = ""; // كيمسح النص باش يرجع الـ UI نظيف
         }
     });
 
-    // 2. التحكم في الأيقونات (الضغطة)
-    document.addEventListener('click', function(e) {
-        const icon = e.target.closest('.icon-svg, .plus-btn, .model-selector');
-        if (!icon) return;
+    // 2. الميكروفون الحقيقي (Speech Recognition)
+    function startVoice() {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ar-MA';
+        recognition.start();
+        recognition.onresult = (event) => {
+            input.value = event.results[0][0].transcript;
+        };
+    }
 
-        if (icon.classList.contains('model-selector')) {
-            console.log("VELOX: تغيير الموديل...");
-        } else if (icon.classList.contains('plus-btn')) {
-            processRequest(input.value);
-            input.value = "";
-        } else {
-            console.log("VELOX: تفعيل الميكروفون أو أداة أخرى...");
-        }
-    });
-
-    // 3. المخ (الدالة اللي غتربط الـ API)
-    function processRequest(text) {
-        if (!text) return;
-        console.log("VELOX AI كتحلل دابا: " + text);
-        // هنا غنحطو لاحقاً الـ fetch API ديال Gemini
+    // 3. التحكم في الأيقونات الجانبية (Sidebar)
+    function triggerSidebar(action) {
+        console.log("VELOX AI: تنفيذ أمر " + action);
+        // هنا غدير شنو باغي الأيقونة دير (مثال: تبدل الصفحة أو تفتح Modal)
     }
 </script>
