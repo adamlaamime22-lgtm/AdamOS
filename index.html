@@ -390,18 +390,24 @@
        // 1. جلب عناصر الـ DOM
 const loginForm = document.querySelector('form'); // تأكد أن الفورم ديالك عندها وسم <form>
 const loginBtn = document.querySelector('#login-btn'); // بدلها بـ ID ديال زر الدخول عندك
+// حماية من أي تداخل
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Velox AI: النظام جاهز للعمل.");
 
-// 2. معالجة ضغطة زر الدخول
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // هادي هي اللي كتحبس البلوكا (Reload)
-    
-    // هنا غادي نحطوا المنطق ديال الدخول
-    console.log("Velox AI: جاري التحقق من البيانات...");
-    
-    // مؤقتاً: غنحولوك نيشان للشات باش تجرب واش الـ UI خدام
-    // بعد ما نربطو Firebase، غنبدلو هاد السطر بكود التحقق الحقيقي
-    window.location.href = "chat.html"; 
-});
+    // العثور على زر الدخول (تأكد أن الـ ID ديال الزر في HTML هو login-btn)
+    const loginBtn = document.getElementById('login-btn');
+    const loginForm = document.querySelector('form');
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // الحماية من الـ Reload
+            console.log("تم الضغط على دخول - جاري التوجيه...");
+            
+            // توجيه بسيط للمستعمل
+            window.location.href = 'chat.html'; 
+        });
+    }
+});});
             showToast(message, type = 'info') {
                 const toast = document.createElement('div');
                 toast.className = 'toast';
