@@ -39,22 +39,38 @@
 </body>
 </html>
 <script>
-    const inputField = document.getElementById('userInput');
+    const input = document.getElementById('userInput');
 
-    // هنا كنقولو للـ input: "ملي نورك على Enter، دير هاد الخدمة"
-    inputField.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            const userText = inputField.value;
-            if (userText.trim() !== "") {
-                console.log("VELOX AI: جاري الإرسال عبر Enter: " + userText);
-                
-                // هنا غتحط الخدمة ديالك (API Call)
-<input type="text" id="userInput" placeholder="اسأل VELOX AI...">            }
+    // 1. الإرسال بـ Enter
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            const query = input.value.trim();
+            if (query !== "") {
+                processRequest(query);
+                input.value = ""; // خوي البار بعد الإرسال
+            }
         }
     });
 
-    // إضافة الوظيفة لباقي الأيقونات (بدون alert، غير كود)
-    function triggerAction(actionName) {
-        console.log("تم تفعيل: " + actionName);
+    // 2. التحكم في الأيقونات (الضغطة)
+    document.addEventListener('click', function(e) {
+        const icon = e.target.closest('.icon-svg, .plus-btn, .model-selector');
+        if (!icon) return;
+
+        if (icon.classList.contains('model-selector')) {
+            console.log("VELOX: تغيير الموديل...");
+        } else if (icon.classList.contains('plus-btn')) {
+            processRequest(input.value);
+            input.value = "";
+        } else {
+            console.log("VELOX: تفعيل الميكروفون أو أداة أخرى...");
+        }
+    });
+
+    // 3. المخ (الدالة اللي غتربط الـ API)
+    function processRequest(text) {
+        if (!text) return;
+        console.log("VELOX AI كتحلل دابا: " + text);
+        // هنا غنحطو لاحقاً الـ fetch API ديال Gemini
     }
 </script>
