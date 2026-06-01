@@ -1,116 +1,56 @@
-let currentBotId = 'general';
-const messagesContainer = document.getElementById('messages-container');
-const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-const typingIndicator = document.getElementById('typing-indicator');
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Velox AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-5">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-bold mb-5 text-center">Velox AI - المخ الحقيقي</h1>
+        <div id="chat-box" class="h-96 bg-gray-800 p-4 rounded-lg overflow-y-auto mb-4 border border-gray-700"></div>
+        <div class="flex gap-2">
+            <input id="user-input" type="text" class="flex-1 bg-gray-700 p-2 rounded" placeholder="اسأل Velox...">
+            <button id="send-btn" class="bg-blue-600 px-4 py-2 rounded">إرسال</button>
+        </div>
+    </div>
 
-function init() {
-    renderSidebar();
-    adjustTextareaHeight();
-}
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const input = document.getElementById('user-input');
+        const btn = document.getElementById('send-btn');
 
-function renderSidebar() {
-    const list = document.querySelector('.bots-list');
-    if (!list) return;
-    list.innerHTML = '';
-    bots.forEach(bot => {
-        const item = document.createElement('div');
-        item.className = `bot-item ${bot.id === currentBotId ? 'active' : ''}`;
-        item.onclick = () => switchBot(bot.id);
-        item.innerHTML = `
-            <div class="bot-avatar" style="color: ${bot.color}; border: 1px solid ${bot.color}">
-                <i class="fa-solid ${bot.icon}"></i>
-            </div>
-            <div class="bot-info">
-                <h4>${bot.name}</h4>
-                <p>${bot.desc}</p>
-            </div>
-        `;
-        list.appendChild(item);
-    });
-}
+        // هنا حط الـ API KEY ديالك (ضروري)
+        const API_KEY = "sk-..."; 
 
-function switchBot(id) {
-    currentBotId = id;
-    const bot = bots.find(b => b.id === id);
-    document.getElementById('header-name').textContent = bot.name;
-    document.querySelector('#header-avatar i').className = `fa-solid ${bot.icon}`;
-    renderSidebar();
-    document.getElementById('sidebar').classList.remove('open');
-    clearChat(false);
-    addMessage('bot', `تم تفعيل وضع ${bot.name}. ${bot.role}`);
-}
+        async function sendMessage() {
+            const text = input.value;
+            if (!text) return;
 
-function addMessage(sender, text) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `message ${sender}`;
-    const avatarIcon = sender === 'user' ? 'fa-user' : bots.find(b => b.id === currentBotId).icon;
-    msgDiv.innerHTML = `
-        <div class="msg-avatar"><i class="fa-solid ${avatarIcon}"></i></div>
-        <div class="msg-content">${formatText(text)}</div>
-    `;
-    messagesContainer.appendChild(msgDiv);
-    scrollToBottom();
-}
+            chatBox.innerHTML += `<div class="mb-2 text-right"><b>أنت:</b> ${text}</div>`;
+            input.value = '';
 
-function formatText(text) {
-    text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    return text.replace(/\n/g, '<br>');
-}
+            try {
+                const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [{role: "user", content: text}]
+                    })
+                });
+                const data = await res.json();
+                const reply = data.choices[0].message.content;
+                chatBox.innerHTML += `<div class="mb-2 text-left bg-gray-700 p-2 rounded"><b>Velox AI:</b> ${reply}</div>`;
+            } catch (e) {
+                chatBox.innerHTML += `<div class="text-red-500">خطأ: تأكد من الـ API Key</div>`;
+            }
+        }
 
-function scrollToBottom() {
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-function clearChat(addWelcome = true) {
-    messagesContainer.innerHTML = '';
-    if (addWelcome) addMessage('bot', 'بدأت محادثة جديدة. كيف يمكنني مساعدتك؟');
-}
-
-async function sendMessage() {
-    const text = userInput.value.trim();
-    if (!text) return;
-
-    addMessage('user', text);
-    userInput.value = '';
-    userInput.style.height = 'auto';
-    sendBtn.disabled = true;
-    typingIndicator.style.display = 'block';
-    scrollToBottom();
-
-    try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer YOUR_OPENAI_API_KEY_HERE' // [حط هنا المفتاح ديالك]
-            },
-            body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: [{ role: "user", content: text }]
-            })
-        });
-
-        const data = await response.json();
-        const aiResponse = data.choices[0].message.content;
-        typingIndicator.style.display = 'none';
-        addMessage('bot', aiResponse);
-    } catch (error) {
-        typingIndicator.style.display = 'none';
-        addMessage('bot', 'حدث خطأ. تأكد من مفتاح الـ API.');
-    } finally {
-        sendBtn.disabled = false;
-    }
-}
-
-userInput.addEventListener('input', adjustTextareaHeight);
-userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
-sendBtn.addEventListener('click', sendMessage);
-
-function adjustTextareaHeight() {
-    userInput.style.height = 'auto';
-    userInput.style.height = userInput.scrollHeight + 'px';
-}
-
-init();
+        btn.onclick = sendMessage;
+    </script>
+</body>
+</html>
