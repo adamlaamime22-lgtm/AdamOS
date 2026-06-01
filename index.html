@@ -387,17 +387,21 @@
         };
 
         // --- MODULE 1: UI MANAGER ---
-        // مسؤول عن التعامل مع DOM والرسائل البصرية
-        class UIManager {
-            constructor() {
-                this.toastContainer = document.getElementById('toast-container');
-                this.authScreen = document.getElementById('auth-screen');
-                this.appScreen = document.getElementById('app-screen');
-                this.chatContainer = document.getElementById('chat-container');
-                this.historyList = document.getElementById('history-list');
-                this.userInput = document.getElementById('user-input');
-            }
+       // 1. جلب عناصر الـ DOM
+const loginForm = document.querySelector('form'); // تأكد أن الفورم ديالك عندها وسم <form>
+const loginBtn = document.querySelector('#login-btn'); // بدلها بـ ID ديال زر الدخول عندك
 
+// 2. معالجة ضغطة زر الدخول
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // هادي هي اللي كتحبس البلوكا (Reload)
+    
+    // هنا غادي نحطوا المنطق ديال الدخول
+    console.log("Velox AI: جاري التحقق من البيانات...");
+    
+    // مؤقتاً: غنحولوك نيشان للشات باش تجرب واش الـ UI خدام
+    // بعد ما نربطو Firebase، غنبدلو هاد السطر بكود التحقق الحقيقي
+    window.location.href = "chat.html"; 
+});
             showToast(message, type = 'info') {
                 const toast = document.createElement('div');
                 toast.className = 'toast';
