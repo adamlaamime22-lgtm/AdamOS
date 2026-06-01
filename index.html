@@ -41,25 +41,36 @@
 <script>
     const input = document.getElementById('userInput');
 
-    // 1. الإرسال بـ Enter
-    input.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' && input.value.trim() !== "") {
-            console.log("VELOX AI: جاري الإرسال: " + input.value);
-            input.value = ""; // كيمسح النص باش يرجع الـ UI نظيف
+    // 1. الميكروفون الاحترافي
+    function startVoice() {
+        if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+            alert("المتصفح ديالك ما كيدعمش الميكروفون");
+            return;
+        }
+
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ar-MA';
+        recognition.continuous = false;
+        
+        recognition.onstart = () => { console.log("الميكروفون نشط..."); };
+        recognition.onresult = (event) => {
+            input.value = event.results[0][0].transcript;
+        };
+        recognition.onerror = (e) => { console.log("خطأ:", e.error); };
+        
+        recognition.start();
+    }
+
+    // 2. الإرسال بـ Enter (مع مسح النص)
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && input.value.trim() !== "") {
+            console.log("إرسال لـ VELOX AI: " + input.value);
+            input.value = ""; // مسح النص
         }
     });
 
-    // 2. الميكروفون الحقيقي (Speech Recognition)
-    function startVoice() {
-    if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
-        alert("المتصفح ديالك ما كيدعمش الميكروفون (جرب Google Chrome)");
-        return;
-    }
-    // ... باقي الكود
-}
-    // 3. التحكم في الأيقونات الجانبية (Sidebar)
+    // 3. أوامر السايدبار (تأكد أن الـ HTML ديالك فيه onclick لكل وحدة)
     function triggerSidebar(action) {
-        console.log("VELOX AI: تنفيذ أمر " + action);
-        // هنا غدير شنو باغي الأيقونة دير (مثال: تبدل الصفحة أو تفتح Modal)
+        console.log("أمر مفعّل: " + action);
     }
 </script>
