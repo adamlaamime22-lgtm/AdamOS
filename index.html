@@ -51,14 +51,12 @@
 
     // 2. الميكروفون الحقيقي (Speech Recognition)
     function startVoice() {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'ar-MA';
-        recognition.start();
-        recognition.onresult = (event) => {
-            input.value = event.results[0][0].transcript;
-        };
+    if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+        alert("المتصفح ديالك ما كيدعمش الميكروفون (جرب Google Chrome)");
+        return;
     }
-
+    // ... باقي الكود
+}
     // 3. التحكم في الأيقونات الجانبية (Sidebar)
     function triggerSidebar(action) {
         console.log("VELOX AI: تنفيذ أمر " + action);
