@@ -1,213 +1,147 @@
-    let currentBotId = 'general';
-    const messagesContainer = document.getElementById('messages-container');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const typingIndicator = document.getElementById('typing-indicator');
+// --- المتغيرات الأساسية ---
+let currentBotId = 'general';
+const messagesContainer = document.getElementById('messages-container');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const typingIndicator = document.getElementById('typing-indicator');
 
-    // --- تهيئة التطبيق ---
-    function init() {
-        renderSidebar();
-        adjustTextareaHeight();
-    }
+// --- تهيئة التطبيق ---
+function init() {
+    renderSidebar();
+    adjustTextareaHeight();
+}
 
-    // --- عرض القائمة الجانبية ---
-    function renderSidebar() {
-        const list = document.querySelector('.bots-list');
-        list.innerHTML = '';
-        
-        bots.forEach(bot => {
-            const item = document.createElement('div');
-            item.className = `bot-item ${bot.id === currentBotId ? 'active' : ''}`;
-            item.onclick = () => switchBot(bot.id);
-            item.innerHTML = `
-                <div class="bot-avatar" style="color: ${bot.color}; border: 1px solid ${bot.color}">
-                    <i class="fa-solid ${bot.icon}"></i>
-                </div>
-                <div class="bot-info">
-                    <h4>${bot.name}</h4>
-                    <p>${bot.desc}</p>
-                </div>
-            `;
-            list.appendChild(item);
-        });
-    }
-
-    // --- تبديل البوت ---
-    function switchBot(id) {
-        currentBotId = id;
-        const bot = bots.find(b => b.id === id);
-        
-        // تحديث الواجهة
-        document.getElementById('header-name').textContent = bot.name;
-        document.querySelector('#header-avatar i').className = `fa-solid ${bot.icon}`;
-        document.querySelector('#header-avatar').style.background = `linear-gradient(135deg, ${bot.color}, #fff)`;
-        document.querySelector('#header-avatar').style.color = '#000';
-
-        renderSidebar();
-        
-        // إغلاق السايدبار في الموبايل
-        document.getElementById('sidebar').classList.remove('open');
-
-        // مسح الشات وإضافة رسالة ترحيبية
-        clearChat(false);
-        addMessage('bot', `تم تفعيل وضع <strong>${bot.name}</strong>. ${bot.role}`);
-    }
-
-    // --- إضافة رسالة للشات ---
-    function addMessage(sender, text) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${sender}`;
-        
-        const avatarIcon = sender === 'user' ? 'fa-user' : bots.find(b => b.id === currentBotId).icon;
-        
-        msgDiv.innerHTML = `
-            <div class="msg-avatar">
-                <i class="fa-solid ${avatarIcon}"></i>
+// --- عرض القائمة الجانبية ---
+function renderSidebar() {
+    const list = document.querySelector('.bots-list');
+    list.innerHTML = '';
+    
+    bots.forEach(bot => {
+        const item = document.createElement('div');
+        item.className = `bot-item ${bot.id === currentBotId ? 'active' : ''}`;
+        item.onclick = () => switchBot(bot.id);
+        item.innerHTML = `
+            <div class="bot-avatar" style="color: ${bot.color}; border: 1px solid ${bot.color}">
+                <i class="fa-solid ${bot.icon}"></i>
             </div>
-            <div class="msg-content">${formatText(text)}</div>
+            <div class="bot-info">
+                <h4>${bot.name}</h4>
+                <p>${bot.desc}</p>
+            </div>
         `;
-        
-        messagesContainer.appendChild(msgDiv);
-        scrollToBottom();
-    }
-
-    // --- تنسيق النص (محاكاة بسيطة لل Markdown) ---
-    function formatText(text) {
-        // تحويل الكود بين ** CODE ** إلى كتل برمجية
-        if (text.includes('```')) {
-            text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-        }
-        // تحويل النص العريض
-        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        // تحويل الأسطر الجديدة
-        text = text.replace(/\n/g, '<br>');
-        return text;
-    }
-
-    // --- التمرير للأسفل ---
-    function scrollToBottom() {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    // --- مسح المحادثة ---
-    function clearChat(addWelcome = true) {
-        messagesContainer.innerHTML = '';
-        if (addWelcome) {
-            addMessage('bot', 'بدأت محادثة جديدة. كيف يمكنني مساعدتك؟');
-        }
-    }
-
-    // --- محاكاة الذكاء (Simulation Logic) ---
-    function generateResponse(userText) {
-        const bot = bots.find(b => b.id === currentBotId);
-        const lowerText = userText.toLowerCase();
-
-        // 1. بوت المبرمج
-        if (currentBotId === 'coder') {
-            if (lowerText.includes('كود') || lowerText.includes('code') || lowerText.includes('دالة')) {
-                return `بالتأكيد، إليك مثال على الكود المطلوب بلغة JavaScript:\n\n\`\`\`javascript\nfunction calculateSum(a, b) {\n    return a + b;\n}\n\nconsole.log(calculateSum(5, 10)); // Output: 15\n\`\`\`\n\nهل تريد شرحاً لهذا الكود؟`;
-            } else if (lowerText.includes('خطأ') || lowerText.includes('error')) {
-                return `لإصلاح الأخطاء، تأكد من:\n1. فحص الـ Console في المتصفح.\n2. التأكد من إغلاق الأقواس والفواصل المنقوطة.\nهل يمكنك نسخ رسالة الخطأ هنا؟`;
-            }
-            return `كبرمجج، أنا جاهز لمساعدتك. هل تحتاج إلى **Python**، **JavaScript**، أو ربما **SQL**؟ يرجى تحديد طلبك.`;
-        }
-
-        // 2. بوت الكاتب
-        else if (currentBotId === 'writer') {
-            if (lowerText.includes('قصة') || lowerText.includes('شعر')) {
-                return `كان يا ما كان، في قديم الزمان، برمجة وفن... إليك بداية قصة قصيرة:\n\n*في عالمٍ تسوده البتات والبايتات، استيقظت خوارزمية صغيرة لتسأل: "ما هو معنى الحياة؟"...*\n\nهل ترغب في إكمالها؟`;
-            }
-            return `أحب صياغة الكلمات. يمكنني كتابة بريد إلكتروني رسمي، مقال مدونة، أو حتى تحرير نصوصك. ما هو موضوع اليوم؟`;
-        }
-
-        // 3. بوت المترجم
-        else if (currentBotId === 'translator') {
-            if (/[a-zA-Z]/.test(userText)) {
-                return `الترجمة إلى العربية:\n"${userText.replace(/[a-zA-Z]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 1000))}" (محاكاة للترجمة)`;
-                // ملاحظة: الترجمة الحقيقية تحتاج API، هذا مجرد محاكاة
-            } else {
-                return `Translation to English:\n"${userText} - Translated text"`;
-            }
-        }
-
-        // 4. بوت الرياضيات
-        else if (currentBotId === 'math') {
-            if (/\d+[\+\-\*\/]\d+/.test(userText)) {
-                try {
-                    // حساب آمن بسيط
-                    const result = Function('"use strict";return (' + userText + ')')();
-                    return `حساباً لما كتبته:\n\nالعملية: ${userText}\nالنتيجة: **${result}**`;
-                } catch (e) {
-                    return `العملية الحسابية غير صالحة. يرجى التأكد من الأرقام والرموز.`;
-                }
-            }
-            return `أنا جاهز للحل. اكتب معادلة (مثلاً 5 * 10) أو اسأل عن نظرية رياضية.`;
-        }
-
-        // 5. المساعد العام (Default)
-        else {
-            if (lowerText.includes('مرحبا') || lowerText.includes('السلام')) {
-                return `وعليكم السلام! أهلاً بك في Nexus AI. كيف يمكنني خدمتك اليوم؟`;
-            } else if (lowerText.includes('من انت')) {
-                return `أنا نموذج ذكاء اصطناعي تم تطويريه لمحاكاة تجربة Velox AI و Z AI. أنا هنا لأساعدك.`;
-            } else if (lowerText.includes('شكرا')) {
-                return `على الرحب والسعة! أنا دائماً في خدمتك.`;
-            }
-            return `هذا سؤال مثير للاهتمام. بصفتي المساعد العام، يمكنني القول أن المعلومات تتغير باستمرار. هل تريد مني التفكير في الجواب بعمق أكبر؟`;
-        }
-    }
-
-    // --- إرسال الرسالة ---
-    function sendMessage() {
-        const text = userInput.value.trim();
-        if (!text) return;
-
-        // إضافة رسالة المستخدم
-        addMessage('user', text);
-        userInput.value = '';
-        userInput.style.height = 'auto';
-        sendBtn.disabled = true;
-
-        // إظهار حالة الكتابة
-        typingIndicator.style.display = 'block';
-        scrollToBottom();
-
-        // محاكاة التفكير (تأخير زمني)
-        const delay = Math.random() * 1000 + 1000; // بين 1 و 2 ثانية
-
-        setTimeout(() => {
-            typingIndicator.style.display = 'none';
-            const response = generateResponse(text);
-            addMessage('bot', response);
-        }, delay);
-    }
-
-    // --- التعامل مع إدخال النص ---
-    userInput.addEventListener('input', function() {
-        adjustTextareaHeight();
-        sendBtn.disabled = this.value.trim() === '';
+        list.appendChild(item);
     });
+}
 
-    userInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
+// --- تبديل البوت ---
+function switchBot(id) {
+    currentBotId = id;
+    const bot = bots.find(b => b.id === id);
+    document.getElementById('header-name').textContent = bot.name;
+    document.querySelector('#header-avatar i').className = `fa-solid ${bot.icon}`;
+    document.querySelector('#header-avatar').style.background = `linear-gradient(135deg, ${bot.color}, #fff)`;
+    document.querySelector('#header-avatar').style.color = '#000';
+    renderSidebar();
+    document.getElementById('sidebar').classList.remove('open');
+    clearChat(false);
+    addMessage('bot', `تم تفعيل وضع <strong>${bot.name}</strong>. ${bot.role}`);
+}
 
-    sendBtn.addEventListener('click', sendMessage);
+// --- إضافة رسالة للشات ---
+function addMessage(sender, text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${sender}`;
+    const avatarIcon = sender === 'user' ? 'fa-user' : bots.find(b => b.id === currentBotId).icon;
+    msgDiv.innerHTML = `
+        <div class="msg-avatar">
+            <i class="fa-solid ${avatarIcon}"></i>
+        </div>
+        <div class="msg-content">${formatText(text)}</div>
+    `;
+    messagesContainer.appendChild(msgDiv);
+    scrollToBottom();
+}
 
-    function adjustTextareaHeight() {
-        userInput.style.height = 'auto';
-        userInput.style.height = userInput.scrollHeight + 'px';
+// --- تنسيق النص ---
+function formatText(text) {
+    if (text.includes('```')) {
+        text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
     }
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\n/g, '<br>');
+    return text;
+}
 
-    // --- الموبايل ---
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
+function scrollToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function clearChat(addWelcome = true) {
+    messagesContainer.innerHTML = '';
+    if (addWelcome) {
+        addMessage('bot', 'بدأت محادثة جديدة. كيف يمكنني مساعدتك؟');
     }
+}
 
-    // تشغيل التطبيق
-    init();
+// --- الربط مع الـ AI الحقيقي (هنا فين كاين "المخ" الحقيقي) ---
+async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
 
-</script>
+    addMessage('user', text);
+    userInput.value = '';
+    userInput.style.height = 'auto';
+    sendBtn.disabled = true;
+    typingIndicator.style.display = 'block';
+    scrollToBottom();
+
+    try {
+        const response = await fetch('[https://api.openai.com/v1/chat/completions](https://api.openai.com/v1/chat/completions)', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_OPENAI_API_KEY_HERE' // [حط هنا المفتاح ديالك]
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "user", content: text }]
+            })
+        });
+
+        const data = await response.json();
+        const aiResponse = data.choices[0].message.content;
+        typingIndicator.style.display = 'none';
+        addMessage('bot', aiResponse);
+    } catch (error) {
+        typingIndicator.style.display = 'none';
+        addMessage('bot', 'عذراً، حدث خطأ. تأكد من اتصالك ومن مفتاح الـ API.');
+    } finally {
+        sendBtn.disabled = false;
+    }
+}
+
+// --- مستمعي الأحداث ---
+userInput.addEventListener('input', function() {
+    adjustTextareaHeight();
+    sendBtn.disabled = this.value.trim() === '';
+});
+
+userInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+sendBtn.addEventListener('click', sendMessage);
+
+function adjustTextareaHeight() {
+    userInput.style.height = 'auto';
+    userInput.style.height = userInput.scrollHeight + 'px';
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+}
+
+init();
