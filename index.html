@@ -454,42 +454,23 @@ document.addEventListener('DOMContentLoaded', () => {
             clearChat() {
                 this.chatContainer.innerHTML = '';
             }
-        }
+        }// توليد معرف فريد للضيف
+function getGuestId() {
+    let guestId = localStorage.getItem('velox_guest_id');
+    if (!guestId) {
+        guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('velox_guest_id', guestId);
+    }
+    return guestId;
+}
 
-        // --- MODULE 2: AUTH SERVICE ---
-        // محاكاة لـ Firebase Auth
-        class AuthService {
-            constructor(ui) {
-                this.ui = ui;
-                this.user = null;
-            }
-
-            async loginWithEmail() {
-                const email = document.getElementById('email').value;
-                const pass = document.getElementById('password').value;
-                
-                if(!email || !pass) return this.ui.showToast('الرجاء ملء جميع الحقول', 'error');
-
-                // محاكاة تسجيل الدخول
-                this.ui.showToast('جاري تسجيل الدخول...', 'info');
-                await new Promise(r => setTimeout(r, 1000)); // Simulate network delay
-                this.user = { email: email, uid: 'user_123' };
-                this.ui.showToast(`مرحباً بك، ${email}`);
-                this.onLoginSuccess();
-            }
-
-            async loginWithGoogle() {
-                this.ui.showToast('جاري الاتصال بـ Google...', 'info');
-                await new Promise(r => setTimeout(r, 1000));
-                this.user = { email: 'google_user@gmail.com', uid: 'google_123' };
-                this.onLoginSuccess();
-            }
-
-            logout() {
-                this.user = null;
-                this.ui.toggleScreen(false);
-                this.ui.showToast('تم تسجيل الخروج');
-            }
+// توليد لون عشوائي للـ Avatar
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
+    return color;
+}
 
             onLoginSuccess() {
                 this.ui.toggleScreen(true);
