@@ -441,11 +441,16 @@
     // الحل باش يتحيد الخطأ: غنستعملو Proxy بسيط
     // كنصحك تستعمل هذا الرابط كوسيط باش المتصفح يقدر يهضر مع OpenAI
 API_URL: "https://proxy.cors.sh/https://api.openai.com/v1/chat/completions",
-  const CONFIG = {
-    API_KEY: "هنا_حط_المفتاح_ديالك",
-    API_URL: "https://proxy.cors.sh/https://api.openai.com/v1/chat/completions",
-    SYSTEM_PROMPT: "أنت مساعد ذكي ومحترف اسمه Velox AI..."
-};
+ <script>
+    const CONFIG = {
+        API_KEY: "حط_المفتاح_ديالك_هنا",
+        API_URL: "https://proxy.cors.sh/https://api.openai.com/v1/chat/completions",
+        SYSTEM_PROMPT: "أنت مساعد ذكي ومحترف اسمه Velox AI..."
+    };
+
+    // هنا كيكون باقي الكود ديال الـ App
+    const App = { ... }; 
+</script>
         // --- وحدة التخزين والهوية (Storage & Identity Module) ---
         const Storage = {
             // توليد أو استرجاع معرف الضيف
