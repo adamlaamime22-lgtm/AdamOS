@@ -38,4 +38,29 @@
 
 </body>
 </html>
-V
+<svg class="icon-svg" onclick="startVoiceInput()" viewBox="0 0 24 24">
+    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zM17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+</svg>
+
+<input type="text" id="userInput" placeholder="اسأل VELOX AI..." onkeydown="checkEnter(event)">
+
+<script>
+    // الإرسال بـ Enter
+    function checkEnter(e) {
+        if (e.key === 'Enter') {
+            const val = document.getElementById('userInput').value;
+            console.log("VELOX AI كتحلل:", val);
+            document.getElementById('userInput').value = "";
+        }
+    }
+
+    // الميكروفون
+    function startVoiceInput() {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ar-MA';
+        recognition.start();
+        recognition.onresult = (event) => {
+            document.getElementById('userInput').value = event.results[0][0].transcript;
+        };
+    }
+</script>
