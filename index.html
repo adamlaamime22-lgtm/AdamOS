@@ -39,28 +39,23 @@
 </body>
 </html>
 <script>
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.plus-btn, .model-selector, .icon-svg');
-        if (!btn) return;
+    const inputField = document.getElementById('userInput');
 
-        // دابا كل وحدة غنديرو ليها الخدمة ديالها الحقيقية
-        if (btn.classList.contains('plus-btn')) {
-            // هنا غيتم إرسال السؤال للـ API
-            const input = document.getElementById('userInput');
-            console.log("إرسال للسيرفر: " + input.value);
-            // غنضيفو كود الربط هنا من بعد
-        } 
-        else if (btn.classList.contains('model-selector')) {
-            // هنا غتخرج ليك قائمة الموديلات (Dropdown)
-            console.log("فتح قائمة الموديلات");
-        }
-        else {
-            // هنا الميكروفون أو الإعدادات
-            if (btn.querySelector('path').getAttribute('d').includes('M12 14')) {
-                console.log("تفعيل الميكروفون...");
-            } else {
-                console.log("فتح الإعدادات أو البحث...");
+    // هنا كنقولو للـ input: "ملي نورك على Enter، دير هاد الخدمة"
+    inputField.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const userText = inputField.value;
+            if (userText.trim() !== "") {
+                console.log("VELOX AI: جاري الإرسال عبر Enter: " + userText);
+                
+                // هنا غتحط الخدمة ديالك (API Call)
+                inputField.value = ""; // كيمسح البار بعد الإرسال
             }
         }
     });
+
+    // إضافة الوظيفة لباقي الأيقونات (بدون alert، غير كود)
+    function triggerAction(actionName) {
+        console.log("تم تفعيل: " + actionName);
+    }
 </script>
