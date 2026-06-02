@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI v3.0 | Absolute Sigma Protocol</title>
+    <title>Velox AI | Omega Core Protocol</title>
     <style>
         /* 
-         * VELOX AI v3.0 - UI SYSTEM DESIGN
-         * Theme: Dark Mode | Glassmorphism | High Contrast
+         * [OMEGA UI CORE - GLASSMORPHISM SYSTEM]
+         * Design Philosophy: High Contrast, Dark Mode, Functional Aesthetics.
          */
         :root {
             --bg-color: #050505;
-            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-bg: rgba(20, 20, 20, 0.6);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-color: #00f3ff; /* Cyan for high-tech feel */
-            --accent-green: #00ff9d; /* Connected status */
-            --accent-red: #ff4b4b; /* Error/Offline */
-            --text-primary: #ffffff;
+            --accent-color: #00ff9d; /* System Green */
+            --accent-glow: rgba(0, 255, 157, 0.2);
+            --text-primary: #e0e0e0;
             --text-secondary: #a0a0a0;
-            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            --blur-strength: 12px;
+            --danger-color: #ff4d4d;
+            --blur-amount: 12px;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-ui: system-ui, -apple-system, sans-serif;
         }
 
         * {
@@ -32,10 +33,10 @@
         body {
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(0, 255, 157, 0.05) 0%, transparent 20%);
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 150, 255, 0.03) 0%, transparent 20%);
             color: var(--text-primary);
-            font-family: var(--font-main);
+            font-family: var(--font-ui);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -44,114 +45,97 @@
         }
 
         /* LAYOUT STRUCTURE */
-        .app-container {
-            width: 95%;
-            height: 90%;
+        #app-container {
             display: flex;
+            width: 95vw;
+            height: 90vh;
+            max-width: 1600px;
             gap: 20px;
             position: relative;
         }
 
-        /* SIDEBAR (Glassmorphism) */
-        .sidebar {
-            width: 260px;
+        /* SIDEBAR (Functional Navigation) */
+        aside {
+            width: 80px;
             background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur-strength));
-            -webkit-backdrop-filter: blur(var(--blur-strength));
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
             border: 1px solid var(--glass-border);
             border-radius: 16px;
-            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .logo-area {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            display: flex;
             align-items: center;
-            gap: 10px;
+            padding: 20px 0;
+            justify-content: space-between;
+            z-index: 10;
         }
 
-        .logo-icon {
-            width: 12px;
-            height: 12px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-color);
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
         }
 
         .nav-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid transparent;
+            background: transparent;
+            border: none;
             color: var(--text-secondary);
-            padding: 12px 15px;
-            border-radius: 8px;
             cursor: pointer;
-            text-align: left;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            position: relative;
         }
 
-        .nav-btn:hover, .nav-btn.active {
-            background: rgba(0, 243, 255, 0.1);
-            color: var(--accent-color);
-            border-color: rgba(0, 243, 255, 0.2);
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
         }
 
-        .system-status {
-            margin-top: auto;
-            padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .nav-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
         }
 
+        /* Connection Status Indicator */
         .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
             border-radius: 50%;
-            background-color: var(--accent-green);
-            box-shadow: 0 0 8px var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-color);
             animation: pulse 2s infinite;
         }
 
-        .status-text {
-            color: var(--accent-green);
+        @keyframes pulse {
+            0% { opacity: 1; box-shadow: 0 0 5px var(--accent-color); }
+            50% { opacity: 0.5; box-shadow: 0 0 20px var(--accent-color); }
+            100% { opacity: 1; box-shadow: 0 0 5px var(--accent-color); }
         }
 
-        /* MAIN CHAT AREA */
-        .main-interface {
+        /* MAIN INTERFACE */
+        main {
             flex: 1;
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur-strength));
-            -webkit-backdrop-filter: blur(var(--blur-strength));
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
             display: flex;
             flex-direction: column;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
         }
 
-        .chat-header {
+        /* HEADER */
+        header {
             padding: 20px;
             border-bottom: 1px solid var(--glass-border);
             display: flex;
@@ -159,187 +143,161 @@
             align-items: center;
         }
 
-        .chat-title {
-            font-size: 1rem;
-            font-weight: 600;
+        .brand {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .system-tag {
+            font-size: 0.7rem;
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--accent-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 255, 157, 0.2);
         }
 
-        .guest-id {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-family: monospace;
-        }
-
-        .chat-container {
+        /* CHAT AREA */
+        #chat-container {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            scroll-behavior: smooth;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+            scroll-behavior: smooth;
         }
 
         /* Scrollbar Styling */
-        .chat-container::-webkit-scrollbar {
+        #chat-container::-webkit-scrollbar {
             width: 6px;
         }
-        .chat-container::-webkit-scrollbar-track {
+        #chat-container::-webkit-scrollbar-track {
             background: transparent;
         }
-        .chat-container::-webkit-scrollbar-thumb {
+        #chat-container::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
         }
 
-        /* MESSAGE BUBBLES */
         .message {
             max-width: 80%;
-            padding: 12px 18px;
+            padding: 15px;
             border-radius: 12px;
             font-size: 0.95rem;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease;
+            line-height: 1.6;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .message.user {
             align-self: flex-end;
-            background: rgba(0, 243, 255, 0.1);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            color: var(--text-primary);
+            background: rgba(0, 255, 157, 0.05);
+            border: 1px solid rgba(0, 255, 157, 0.1);
             border-bottom-right-radius: 2px;
+            color: var(--text-primary);
         }
 
-        .message.system {
+        .message.velox {
             align-self: flex-start;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
             border-bottom-left-radius: 2px;
+            color: var(--text-primary);
         }
-        
-        .message.system .sender-name {
-            color: var(--accent-color);
+
+        .message-header {
+            font-family: var(--font-mono);
             font-size: 0.75rem;
-            margin-bottom: 4px;
-            display: block;
-            font-weight: bold;
+            margin-bottom: 8px;
+            opacity: 0.7;
+            display: flex;
+            justify-content: space-between;
         }
 
         /* INPUT AREA */
-        .input-area {
+        #input-area {
             padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
             border-top: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             gap: 15px;
-        }
-
-        .input-wrapper {
-            flex: 1;
             position: relative;
         }
 
         #user-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
-            padding: 14px 45px 14px 15px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 12px;
             color: var(--text-primary);
-            font-family: var(--font-main);
+            font-family: var(--font-mono);
             resize: none;
-            height: 50px;
+            height: 54px; /* Matches button height roughly */
+            min-height: 54px;
             transition: border-color 0.3s;
-            overflow: hidden;
         }
 
         #user-input:focus {
             border-color: var(--accent-color);
         }
 
-        #send-btn, #mic-btn {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+        .action-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
         }
 
-        #send-btn:hover {
-            background: rgba(0, 243, 255, 0.1);
-            color: var(--accent-color);
-            border-color: var(--accent-color);
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        #mic-btn:hover {
-            background: rgba(0, 255, 157, 0.1);
-            color: var(--accent-green);
-            border-color: var(--accent-green);
+        #mic-btn {
+            position: relative;
         }
         
         #mic-btn.listening {
-            background: rgba(0, 255, 157, 0.2);
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-            animation: pulse 1.5s infinite;
+            background: rgba(0, 150, 255, 0.2);
+            color: #0096ff;
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+            animation: breathe 1.5s infinite;
+        }
+
+        @keyframes breathe {
+            0% { box-shadow: 0 0 5px rgba(0, 150, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(0, 150, 255, 0.5); }
+            100% { box-shadow: 0 0 5px rgba(0, 150, 255, 0.2); }
         }
 
         /* SPINNER */
-        .spinner-container {
-            display: none;
-            padding: 10px;
-            align-self: flex-start;
-        }
-        
         .spinner {
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(0, 243, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-top: 2px solid var(--accent-color);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        /* TOAST NOTIFICATION */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(20, 20, 20, 0.9);
-            border: 1px solid var(--accent-color);
-            padding: 10px 20px;
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        /* ANIMATIONS */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 255, 157, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0); }
+            animation: spin 0.8s linear infinite;
+            display: none; /* Hidden by default */
         }
 
         @keyframes spin {
@@ -347,526 +305,543 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* SVG Icons */
-        svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        
-        /* Markdown Styles within Chat */
-        .message.system code {
-            background: rgba(0,0,0,0.3);
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: #ff79c6;
-        }
-        
-        .message.system pre {
-            background: rgba(0,0,0,0.3);
-            padding: 10px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 10px 0;
-            border: 1px solid var(--glass-border);
-        }
-        
-        .message.system pre code {
-            background: transparent;
-            padding: 0;
-            color: #f8f8f2;
+        /* MODALS */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column;
-                height: 100%;
-                width: 100%;
-                border-radius: 0;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 10px;
-                border-radius: 0;
-                border-left: none;
-                border-right: none;
-            }
-            .nav-btn span {
-                display: none;
-            }
-            .nav-btn {
-                justify-content: center;
-            }
-            .logo-area {
-                display: none;
-            }
-            .main-interface {
-                border-radius: 0;
-                border: none;
-            }
+        .modal-content {
+            background: #111;
+            border: 1px solid var(--glass-border);
+            width: 400px;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
+
+        .modal-title {
+            font-family: var(--font-mono);
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        .modal-body {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-btn {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            float: left;
+        }
+
+        /* CODE BLOCKS STYLING */
+        pre {
+            background: #000;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 10px;
+            border: 1px solid #333;
+        }
+        code {
+            font-family: var(--font-mono);
+            color: #d63384;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <div id="app-container">
         <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="logo-area">
-                <div class="logo-icon"></div>
-                VELOX AI
+        <aside>
+            <div class="nav-group">
+                <button class="nav-btn" id="btn-new-chat" title="New Chat">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+                <button class="nav-btn" id="btn-settings" title="Settings">
+                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.58 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                </button>
             </div>
             
-            <button class="nav-btn active" id="btn-new-chat">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
-                <span>New Chat</span>
-            </button>
-            <button class="nav-btn" id="btn-export">
-                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>
-                <span>Export Data</span>
-            </button>
-            <button class="nav-btn" id="btn-clear">
-                <svg viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                <span>Clear Memory</span>
-            </button>
-            <button class="nav-btn" id="btn-settings">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span>Settings</span>
-            </button>
-
-            <div class="system-status">
-                <span>System Status</span>
-                <div class="status-indicator">
-                    <div class="status-dot" id="status-dot"></div>
-                    <span class="status-text" id="status-text">Connected</span>
-                </div>
+            <div class="nav-group">
+                <div class="status-indicator" id="status-led" title="System Connected"></div>
+                <button class="nav-btn" id="btn-export" title="Export Data">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                </button>
+                <button class="nav-btn" id="btn-status" title="System Status">
+                    <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+                </button>
             </div>
         </aside>
 
         <!-- MAIN INTERFACE -->
-        <main class="main-interface">
-            <header class="chat-header">
-                <span class="chat-title">Active Session</span>
-                <span class="guest-id" id="guest-id-display">ID: Loading...</span>
+        <main>
+            <header>
+                <div class="brand">
+                    <span>VELOX AI</span>
+                    <span class="system-tag">OMEGA v5.0</span>
+                </div>
+                <div class="system-info" style="font-size: 0.8rem; color: var(--text-secondary);">
+                    ID: <span id="guest-id">LOADING...</span>
+                </div>
             </header>
 
-            <div class="chat-container" id="chat-box">
+            <div id="chat-container">
                 <!-- Messages will be injected here -->
-                <div class="message system">
-                    <span class="sender-name">Velox AI</span>
-                    النظام جاهز. أمر التشغيل v3.0 مفعّل. بانتظار المدخلات التقنية.
+                <div class="message velox">
+                    <div class="message-header">VELOX CORE // SYSTEM_INIT</div>
+                    <div>
+                        [SYSTEM READY]<br>
+                        بروتوكول أوميجا v5.0 مفعل. الخصوصية محفوظة. الأداء في أقصى حد.<br>
+                        أنا جاهز للتحليل والتنفيذ البرمجي. قدم طلبك التقني.
+                    </div>
                 </div>
             </div>
 
-            <div class="spinner-container" id="spinner">
-                <div class="spinner"></div>
-            </div>
-
-            <div class="input-area">
-                <button id="mic-btn" title="Voice Input">
-                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            <div id="input-area">
+                <button class="action-btn" id="mic-btn" title="Voice Command">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
                 </button>
-                <div class="input-wrapper">
-                    <input type="text" id="user-input" placeholder="Enter technical query..." autocomplete="off">
-                </div>
-                <button id="send-btn" title="Send Command">
-                    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                <input type="text" id="user-input" placeholder="أدخل الأمر البرمجي أو الاستعلام التقني..." autocomplete="off">
+                <button class="action-btn" id="send-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                 </button>
+                <div class="spinner" id="loading-spinner"></div>
             </div>
         </main>
     </div>
 
-    <!-- TOAST CONTAINER -->
-    <div id="toast" class="toast">Notification</div>
+    <!-- MODALS -->
+    <!-- System Status Modal -->
+    <div class="modal-overlay" id="modal-status">
+        <div class="modal-content">
+            <div class="modal-title">System Diagnostics</div>
+            <div class="modal-body" id="status-body">
+                Loading diagnostic data...
+            </div>
+            <button class="modal-btn" onclick="closeModal('modal-status')">Close</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="modal-settings">
+        <div class="modal-content">
+            <div class="modal-title">Core Configuration</div>
+            <div class="modal-body">
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom:5px;">Memory Management</label>
+                    <button class="modal-btn" style="background:var(--danger-color); color:white;" onclick="VeloxApp.clearMemory()">Clear Memory (Reset)</button>
+                </div>
+                <p style="font-size:0.8rem; margin-top:20px;">Zero-Fault Protocol: Active<br>
+                Glassmorphism Engine: Active<br>
+                WebSocket Simulation: Connected</p>
+            </div>
+            <button class="modal-btn" onclick="closeModal('modal-settings')">Close</button>
+        </div>
+    </div>
 
     <script>
         /**
-         * VELOX AI v3.0 - CORE ENGINE
+         * VELOX AI - OMEGA CORE PROTOCOL v5.0
          * Single File Architecture
+         * No Frameworks. Pure Logic.
          */
 
-        // --- CONSTANTS & CONFIG ---
-        const DB_NAME = 'VeloxAIDB_v3';
-        const DB_STORE = 'conversations';
-        const DB_VERSION = 1;
-        const SYSTEM_ID = 'Velox AI';
+        // --- DATA LAYER (IndexedDB) ---
+        class VeloxDB {
+            constructor() {
+                this.dbName = 'VeloxOmegaDB';
+                this.storeName = 'chats';
+                this.db = null;
+            }
 
-        // --- STATE MANAGEMENT ---
-        const state = {
-            guestId: '',
-            isProcessing: false,
-            memory: [],
-            wsConnected: false // Simulated WebSocket state
-        };
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, 1);
 
-        // --- DOM ELEMENTS ---
-        const elements = {
-            chatBox: document.getElementById('chat-box'),
-            input: document.getElementById('user-input'),
-            sendBtn: document.getElementById('send-btn'),
-            micBtn: document.getElementById('mic-btn'),
-            spinner: document.getElementById('spinner'),
-            guestIdDisplay: document.getElementById('guest-id-display'),
-            statusDot: document.getElementById('status-dot'),
-            statusText: document.getElementById('status-text'),
-            toast: document.getElementById('toast'),
-            btnNewChat: document.getElementById('btn-new-chat'),
-            btnExport: document.getElementById('btn-export'),
-            btnClear: document.getElementById('btn-clear'),
-            btnSettings: document.getElementById('btn-settings')
-        };
+                    request.onupgradeneeded = (e) => {
+                        this.db = e.target.result;
+                        if (!this.db.objectStoreNames.contains(this.storeName)) {
+                            const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                            store.createIndex('timestamp', 'timestamp', { unique: false });
+                        }
+                    };
 
-        // --- INITIALIZATION ---
-        (async function initSystem() {
-            try {
-                state.guestId = await generateGuestId();
-                elements.guestIdDisplay.textContent = `ID: ${state.guestId}`;
-                
-                await initDB();
-                await loadHistory();
-                
-                // Simulate WebSocket Connection
-                setTimeout(() => {
-                    state.wsConnected = true;
-                    updateStatus('Connected');
-                }, 1500);
+                    request.onsuccess = (e) => {
+                        this.db = e.target.result;
+                        resolve();
+                    };
 
-                // Event Listeners
-                elements.sendBtn.addEventListener('click', () => handleUserMessage());
-                elements.input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') handleUserMessage();
+                    request.onerror = (e) => reject(e);
                 });
-                
-                elements.btnNewChat.addEventListener('click', () => clearChatUI());
-                elements.btnClear.addEventListener('click', clearMemory);
-                elements.btnExport.addEventListener('click', exportData);
-                elements.btnSettings.addEventListener('click', () => showToast("Settings Panel Locked by Admin"));
-                
-                elements.micBtn.addEventListener('click', toggleVoiceInput);
-
-                console.log(`Velox AI v3.0 initialized for Guest: ${state.guestId}`);
-                
-                // Start Self-Healing Monitor
-                startResourceMonitor();
-
-            } catch (error) {
-                console.error("System Init Failure:", error);
-                updateStatus('Error');
-                showToast("Critical System Failure");
             }
-        })();
 
-        // --- DATA MANAGEMENT (IndexedDB) ---
-        let db;
+            async addMessage(role, content) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const message = {
+                        role, 
+                        content, 
+                        timestamp: new Date().getTime(),
+                        guestId: VeloxApp.guestId
+                    };
+                    const request = store.add(message);
+                    request.onsuccess = () => resolve(message);
+                    request.onerror = () => reject(request.error);
+                });
+            }
 
-        function initDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, DB_VERSION);
-                
-                request.onupgradeneeded = (e) => {
-                    db = e.target.result;
-                    if (!db.objectStoreNames.contains(DB_STORE)) {
-                        const store = db.createObjectStore(DB_STORE, { keyPath: 'id', autoIncrement: true });
-                        store.createIndex('timestamp', 'timestamp', { unique: false });
-                    }
-                };
-                
-                request.onsuccess = (e) => {
-                    db = e.target.result;
-                    resolve(db);
-                };
-                
-                request.onerror = (e) => reject(e);
-            });
+            async getAllMessages() {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readonly');
+                    const store = transaction.objectStore(this.storeName);
+                    // Using a cursor to get all data for simplicity in this prototype
+                    // In production, pagination should be used
+                    const request = store.getAll();
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async clearStore() {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.clear();
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
         }
 
-        async function saveMessage(role, text) {
-            const transaction = db.transaction([DB_STORE], 'readwrite');
-            const store = transaction.objectStore(DB_STORE);
-            
-            const record = {
-                guestId: state.guestId,
-                role: role, // 'user' or 'system'
-                text: text,
-                timestamp: Date.now()
-            };
-            
-            store.add(record);
-        }
+        // --- LOGIC CORE ---
+        class VeloxCore {
+            constructor() {
+                this.isProcessing = false;
+            }
 
-        async function loadHistory() {
-            if (!db) return;
-            const transaction = db.transaction([DB_STORE], 'readonly');
-            const store = transaction.objectStore(DB_STORE);
-            const index = store.index('timestamp');
-            const request = index.openCursor(null, 'prev'); // Get latest
+            // Simulate "Sigma-Level" Analysis
+            async processInput(input) {
+                this.isProcessing = true;
+                VeloxUI.toggleSpinner(true);
 
-            request.onsuccess = (e) => {
-                const cursor = e.target.result;
-                if (cursor) {
-                    // In a real scenario, we would limit this load. 
-                    // For demo, we load the last session of this guest ID
-                    if(cursor.value.guestId === state.guestId) {
-                        // Logic to rebuild chat could go here. 
-                        // For simplicity, we start fresh but keep history in DB.
+                // Simulate Network/Processing Latency for "Realism" (min 600ms)
+                await new Promise(r => setTimeout(r, 800));
+
+                let response = "";
+                
+                // Keyword Analysis (The "Semantic Filter")
+                const lowerInput = input.toLowerCase();
+                
+                try {
+                    if (lowerInput.includes('error') || lowerInput.includes('bug')) {
+                        response = `**[DIAGNOSTIC MODE]**\nتحليل المدخلات: "${input}"\n\nالسبب المحتمل: Unhandled Exception في المنطق التسلسلي.\n\nالحل المقترح (Zero-Fault):\n\`\`\`javascript\ntry {\n  // criticalOperation\n} catch (e) {\n  console.error('Sigma Protocol Intercept:', e);\n  // Self-healing trigger\n}\n\`\`\`\nتم تسجيل الخطأ في سجل الجلسة.`;
+                    } 
+                    else if (lowerInput.includes('status') || lowerInput.includes('health')) {
+                        const mem = performance.memory ? (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2) + ' MB' : 'N/A (Restricted)';
+                        response = `**[SYSTEM INTEGRITY REPORT]**\n- Protocol: OMEGA v5.0\n- Uptime: ${performance.now().toFixed(0)}ms\n- Heap Usage: ${mem}\n- WebSocket: CONNECTED (Latency: 12ms)\n- Threads: Active\n\nالنظام يعمل ضمن المعايير المسموحة.`;
                     }
-                    cursor.continue();
+                    else if (lowerInput.includes('code') || lowerInput.includes('function')) {
+                        response = `**[GENERATING OPTIMIZED CODE]**\nتم تفكيك الطلب البرمجي. جارٍ تطبيق Best Practices...\n\n\`\`\`javascript\n/**\n * Optimized Execution Path\n * Generated by Velox Core\n */\nconst executeTask = async (data) => {\n  if (!data) throw new Error("Invalid Input");\n  // Parallel processing simulation\n  return await Promise.resolve(data.process());\n};\n\`\`\`\nالكود جاهز للتنفيذ.`;
+                    }
+                    else if (lowerInput === 'clear') {
+                        VeloxApp.clearMemory();
+                        response = "[SYSTEM] Memory flushed. ObjectStores reset.";
+                    }
+                    else {
+                        // Default Technical Response
+                        response = `**[ACKNOWLEDGED]**\nتم استلام المدخلات: "${input}".\n\nالنظام يقوم بتحليل السياق الدلالي... البيانات غير كافية لاستنتاج حل هندسي محدد، ولكن البنية المنطقية سليمة.\n\nيرجى تحديد المتطلبات التقنية (كود، تحليل أخطاء، بنية النظام) لتفعيل المحرك الكامل.`;
+                    }
+                } catch (e) {
+                    response = "[CRITICAL ERROR] Failure in Logic Core. Initiating Self-Healing...";
                 }
-            };
-        }
 
-        async function clearMemory() {
-            const transaction = db.transaction([DB_STORE], 'readwrite');
-            const store = transaction.objectStore(DB_STORE);
-            const request = store.clear();
-            
-            request.onsuccess = () => {
-                clearChatUI();
-                showToast("Memory Purged Successfully");
-            };
-        }
-
-        async function exportData() {
-            const transaction = db.transaction([DB_STORE], 'readonly');
-            const store = transaction.objectStore(DB_STORE);
-            const request = store.getAll();
-
-            request.onsuccess = () => {
-                const data = request.result;
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `velox_backup_${state.guestId}_${Date.now()}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-                showToast("Data Exported");
-            };
-        }
-
-        // --- CORE LOGIC ENGINE ---
-        async function handleUserMessage(voiceInput = null) {
-            const text = voiceInput || elements.input.value.trim();
-            
-            // Input Validation
-            if (!text) return;
-            
-            // Security Filter
-            if (isMaliciousInput(text)) {
-                appendMessage('system', "هذا الطلب خارج نطاق صلاحيات النظام التقنية");
-                elements.input.value = '';
-                return;
-            }
-
-            // UI Updates
-            elements.input.value = '';
-            elements.input.style.height = '50px'; // Reset height
-            appendMessage('user', text);
-            await saveMessage('user', text);
-
-            // Processing State
-            setProcessing(true);
-
-            try {
-                // Simulate "Deep Parsing" and Async Processing
-                const response = await processLogicCore(text);
-                appendMessage('system', response);
-                await saveMessage('system', response);
-            } catch (error) {
-                appendMessage('system', `[SYSTEM ERROR]: ${error.message}`);
-                console.error(error);
-            } finally {
-                setProcessing(false);
+                this.isProcessing = false;
+                VeloxUI.toggleSpinner(false);
+                return response;
             }
         }
 
-        function isMaliciousInput(input) {
-            const forbidden = ['password', 'hack', 'secret', 'emotional', 'love', 'horoscope'];
-            const lowerInput = input.toLowerCase();
-            return forbidden.some(word => lowerInput.includes(word));
-        }
-
-        function processLogicCore(input) {
-            return new Promise((resolve) => {
-                // Simulate Network Latency & Calculation
-                const delay = Math.floor(Math.random() * 800) + 400; 
-
-                setTimeout(() => {
-                    // Simple Semantic Filter for Demo Purposes
-                    // In a real app, this would call an API or use a local model
-                    
-                    if (input.includes('code') || input.includes('function') || input.includes('html')) {
-                        resolve(`**Analysis:** Request for code structure detected.\n\nHere is a standard implementation pattern:\n\n\`\`\`javascript\nfunction executeTask(order) {\n  try {\n    // Validate input parameters\n    if (!order) throw new Error("No input");\n    \n    // Execute logic\n    const result = performComplexCalculation(order);\n    return { status: "Success", data: result };\n    \n  } catch (err) {\n    logError(err);\n    return { status: "Failed", reason: err.message };\n  }\n}\n\`\`\`\n*Logic verified. No uncaught promises detected.*`);
-                    } else if (input.includes('status') || input.includes('system')) {
-                        resolve(`**System Report:**\n- **CPU Load:** Optimal (Simulated)\n- **Memory Heap:** Stable (Self-Healing Active)\n- **Protocol:** v3.0 Sigma-Level\n- **Uptime:** ${Math.floor(performance.now() / 1000)}s\n\nAll subsystems operational.`);
-                    } else if (input.includes('who are you')) {
-                        resolve("I am Velox AI, a high-performance digital tool designed for development and data analysis. My operational protocol focuses strictly on technical execution and logical inference.");
-                    } else {
-                        resolve("Input received and analyzed. The semantic structure suggests a general inquiry. To provide a Sigma-Level solution, please specify the technical context or provide the data set for deep parsing.");
-                    }
-                }, delay);
-            });
-        }
-
-        // --- UI UTILITIES ---
-        function appendMessage(role, text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message', role);
-            
-            if (role === 'system') {
-                const sender = document.createElement('span');
-                sender.classList.add('sender-name');
-                sender.textContent = SYSTEM_ID;
-                msgDiv.appendChild(sender);
+        // --- UI CONTROLLER ---
+        class VeloxUI {
+            constructor() {
+                this.chatContainer = document.getElementById('chat-container');
+                this.inputField = document.getElementById('user-input');
+                this.micBtn = document.getElementById('mic-btn');
+                this.spinner = document.getElementById('loading-spinner');
+                this.statusLed = document.getElementById('status-led');
             }
 
-            // Basic Markdown Parsing
-            const contentDiv = document.createElement('div');
-            contentDiv.innerHTML = parseMarkdown(text);
-            msgDiv.appendChild(contentDiv);
+            static appendMessage(role, text) {
+                const container = document.getElementById('chat-container');
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${role}`;
+                
+                // Markdown Parsing (Simplified for vanilla JS)
+                // Handle bold, code blocks, newlines
+                let formattedText = text
+                    .replace(/\n/g, '<br>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
 
-            elements.chatBox.appendChild(msgDiv);
-            elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
-        }
+                msgDiv.innerHTML = `
+                    <div class="message-header">
+                        <span>${role === 'user' ? 'USER_INPUT' : 'VELOX_CORE'}</span>
+                        <span>${new Date().toLocaleTimeString('en-US', {hour12: false})}</span>
+                    </div>
+                    <div>${formattedText}</div>
+                `;
+                
+                container.appendChild(msgDiv);
+                container.scrollTop = container.scrollHeight;
+            }
 
-        function parseMarkdown(text) {
-            let html = text
-                .replace(/\n/g, '<br>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/`{3}(\w*)([\s\S]*?)`{3}/g, '<pre><code class="$1">$2</code></pre>') // Code blocks
-                .replace(/`([^`]+)`/g, '<code>$1</code>'); // Inline code
-            return html;
-        }
+            static toggleSpinner(show) {
+                const spinner = document.getElementById('loading-spinner');
+                spinner.style.display = show ? 'block' : 'none';
+            }
 
-        function clearChatUI() {
-            elements.chatBox.innerHTML = '';
-            const welcomeMsg = document.createElement('div');
-            welcomeMsg.classList.add('message', 'system');
-            welcomeMsg.innerHTML = `<span class="sender-name">Velox AI</span><div>New session initialized. Context cleared.</div>`;
-            elements.chatBox.appendChild(welcomeMsg);
-        }
-
-        function setProcessing(bool) {
-            state.isProcessing = bool;
-            elements.spinner.style.display = bool ? 'block' : 'none';
-            elements.sendBtn.disabled = bool;
-        }
-
-        function updateStatus(status) {
-            if (status === 'Connected') {
-                elements.statusDot.style.backgroundColor = 'var(--accent-green)';
-                elements.statusDot.style.boxShadow = '0 0 8px var(--accent-green)';
-                elements.statusText.textContent = 'Connected';
-                elements.statusText.style.color = 'var(--accent-green)';
-            } else if (status === 'Error') {
-                elements.statusDot.style.backgroundColor = 'var(--accent-red)';
-                elements.statusDot.style.boxShadow = '0 0 8px var(--accent-red)';
-                elements.statusText.textContent = 'Offline';
-                elements.statusText.style.color = 'var(--accent-red)';
+            setMicState(active) {
+                if (active) {
+                    this.micBtn.classList.add('listening');
+                } else {
+                    this.micBtn.classList.remove('listening');
+                }
             }
         }
 
-        function showToast(message) {
-            elements.toast.textContent = message;
-            elements.toast.classList.add('show');
-            setTimeout(() => elements.toast.classList.remove('show'), 3000);
-        }
+        // --- APP CONTROLLER (Main Entry) ---
+        const VeloxApp = {
+            db: new VeloxDB(),
+            core: new VeloxCore(),
+            ui: new VeloxUI(),
+            guestId: null,
+            recognition: null,
 
-        function generateGuestId() {
-            return 'GUEST-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-        }
+            async init() {
+                // 1. Generate/Load Guest ID
+                this.guestId = localStorage.getItem('velox_guest_id');
+                if (!this.guestId) {
+                    this.guestId = 'GID-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                    localStorage.setItem('velox_guest_id', this.guestId);
+                }
+                document.getElementById('guest-id').textContent = this.guestId;
 
-        // --- VOICE INTEGRATION (Web Speech API) ---
-        function toggleVoiceInput() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                showToast("Audio Module Not Supported");
-                return;
-            }
-
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            if (elements.micBtn.classList.contains('listening')) {
-                // Stop logic is handled by 'end' event, but this is a manual toggle safeguard
-                return; 
-            }
-
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'en-US'; // Default to English for technical accuracy, can be changed
-            recognition.continuous = false;
-            recognition.interimResults = false;
-
-            recognition.onstart = () => {
-                elements.micBtn.classList.add('listening');
-                showToast("Listening...");
-            };
-
-            recognition.onend = () => {
-                elements.micBtn.classList.remove('listening');
-            };
-
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                elements.input.value = transcript;
-                handleUserMessage(transcript);
-            };
-
-            recognition.onerror = (event) => {
-                console.error("Speech Error:", event.error);
-                elements.micBtn.classList.remove('listening');
-                showToast("Audio Input Failed");
-            };
-
-            recognition.start();
-        }
-
-        // --- SELF-HEALING & MONITORING PROTOCOL ---
-        function startResourceMonitor() {
-            // Monitor FPS and Memory (if available)
-            let lastTime = performance.now();
-            let frameCount = 0;
-
-            function monitorLoop() {
-                const now = performance.now();
-                frameCount++;
-
-                if (now - lastTime >= 1000) {
-                    const fps = frameCount;
-                    
-                    // Performance Logic: If FPS drops too low, trigger garbage collection hint or cleanup
-                    if (fps < 30) {
-                        console.warn("Performance degradation detected. Initiating optimization...");
-                        // Force cleanup of old DOM nodes if chat is too long
-                        if (elements.chatBox.childElementCount > 100) {
-                            const messages = elements.chatBox.querySelectorAll('.message');
-                            for(let i = 0; i < 20; i++) {
-                                if(messages[i]) messages[i].remove();
+                // 2. Init DB
+                try {
+                    await this.db.init();
+                    const history = await this.db.getAllMessages();
+                    if (history.length > 0) {
+                        history.forEach(msg => {
+                            // Only restore if guestId matches (Security)
+                            if(msg.guestId === this.guestId) {
+                                VeloxUI.appendMessage(msg.role, msg.content);
                             }
-                            console.log("DOM optimized.");
+                        });
+                    }
+                } catch (e) {
+                    console.error("DB Init Failed:", e);
+                    VeloxUI.appendMessage('velox', '[WARNING] IndexDB Mount Failed. Running in volatile mode.');
+                }
+
+                // 3. Setup Event Listeners
+                this.setupEvents();
+                
+                // 4. Init Audio
+                this.initAudio();
+
+                // 5. Start Self-Healing Monitor
+                this.startSelfHealing();
+
+                // 6. Simulate Connection Pulse
+                this.simulateConnection();
+            },
+
+            setupEvents() {
+                // Send Button
+                document.getElementById('send-btn').addEventListener('click', () => this.handleSend());
+                
+                // Enter Key
+                document.getElementById('user-input').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleSend();
+                });
+
+                // Nav Buttons
+                document.getElementById('btn-new-chat').addEventListener('click', () => {
+                     document.getElementById('chat-container').innerHTML = '';
+                     // Optional: Keep DB but clear UI
+                     VeloxUI.appendMessage('velox', 'New session context initialized.');
+                });
+
+                document.getElementById('btn-status').addEventListener('click', () => this.showStatus());
+                document.getElementById('btn-settings').addEventListener('click', () => document.getElementById('modal-settings').style.display = 'flex');
+                document.getElementById('btn-export').addEventListener('click', () => this.exportData());
+            },
+
+            async handleSend() {
+                const input = document.getElementById('user-input');
+                const text = input.value.trim();
+                
+                if (!text) return;
+
+                // UI Update
+                VeloxUI.appendMessage('user', text);
+                input.value = '';
+
+                // Logic Core Processing
+                const response = await this.core.processInput(text);
+                
+                // UI Update Response
+                VeloxUI.appendMessage('velox', response);
+
+                // Persist to DB
+                try {
+                    await this.db.addMessage('user', text);
+                    await this.db.addMessage('velox', response);
+                } catch(e) {
+                    console.error("Storage Error:", e);
+                }
+            },
+
+            initAudio() {
+                if ('webkitSpeechRecognition' in window) {
+                    this.recognition = new webkitSpeechRecognition();
+                    this.recognition.continuous = false;
+                    this.recognition.lang = 'en-US'; // Defaulting to EN for code commands
+                    this.recognition.interimResults = false;
+
+                    this.recognition.onstart = () => {
+                        this.ui.setMicState(true);
+                    };
+
+                    this.recognition.onend = () => {
+                        this.ui.setMicState(false);
+                    };
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        document.getElementById('user-input').value = transcript;
+                        // Optional: Auto-send
+                        // this.handleSend(); 
+                    };
+
+                    document.getElementById('mic-btn').addEventListener('click', () => {
+                        this.recognition.start();
+                    });
+                } else {
+                    document.getElementById('mic-btn').style.display = 'none'; // Hide if not supported
+                    console.warn("Web Speech API not supported in this browser environment.");
+                }
+            },
+
+            async clearMemory() {
+                try {
+                    await this.db.clearStore();
+                    document.getElementById('chat-container').innerHTML = '';
+                    VeloxUI.appendMessage('velox', '[SYSTEM] Memory flushed. ObjectStores reset.');
+                    closeModal('modal-settings');
+                } catch(e) {
+                    console.error(e);
+                }
+            },
+
+            async exportData() {
+                try {
+                    const data = await this.db.getAllMessages();
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+                    const downloadAnchorNode = document.createElement('a');
+                    downloadAnchorNode.setAttribute("href", dataStr);
+                    downloadAnchorNode.setAttribute("download", "velox_backup_" + new Date().toISOString() + ".json");
+                    document.body.appendChild(downloadAnchorNode);
+                    downloadAnchorNode.click();
+                    downloadAnchorNode.remove();
+                } catch(e) {
+                    console.error(e);
+                }
+            },
+
+            showStatus() {
+                const modal = document.getElementById('modal-status');
+                const body = document.getElementById('status-body');
+                
+                // Collect Metrics
+                const mem = performance.memory ? `Heap Used: ${(performance.memory.usedJSHeapSize / 1048576).toFixed(2)} MB` : "Heap: Restricted Mode";
+                const latency = Math.floor(Math.random() * 20) + 5; // Simulated WebSocket Latency
+
+                body.innerHTML = `
+                    <ul style="list-style:none; line-height: 2;">
+                        <li><strong>Protocol:</strong> OMEGA v5.0</li>
+                        <li><strong>Security:</strong> Zero-Fault Active</li>
+                        <li><strong>WebSocket:</strong> Connected (${latency}ms)</li>
+                        <li><strong>Memory:</strong> ${mem}</li>
+                        <li><strong>Integrity:</strong> 100%</li>
+                        <li><strong>Guest ID:</strong> ${this.guestId}</li>
+                    </ul>
+                `;
+                
+                modal.style.display = 'flex';
+            },
+
+            startSelfHealing() {
+                // Monitor loop every 10 seconds
+                setInterval(() => {
+                    if (performance.memory) {
+                        const used = performance.memory.usedJSHeapSize;
+                        const limit = performance.memory.jsHeapSizeLimit;
+                        // If usage > 80%, suggest garbage collection (Browser handles it, but we can log optimization)
+                        if (used / limit > 0.8) {
+                            console.warn("[VELOX HEALER] High Memory Usage Detected. Optimizing DOM references...");
+                            // Logic to clear heavy elements if any would go here
                         }
                     }
+                }, 10000);
+            },
 
-                    frameCount = 0;
-                    lastTime = now;
-                }
-                requestAnimationFrame(monitorLoop);
+            simulateConnection() {
+                const led = document.getElementById('status-led');
+                // Blink logic is in CSS, here we verify "System Status" logic
+                setInterval(() => {
+                    // Randomly check connection (Simulated)
+                    const isOnline = navigator.onLine;
+                    if(!isOnline) {
+                        led.style.backgroundColor = 'red';
+                        led.style.boxShadow = '0 0 10px red';
+                    } else {
+                        led.style.backgroundColor = '#00ff9d';
+                        led.style.boxShadow = '0 0 10px #00ff9d';
+                    }
+                }, 5000);
             }
-            monitorLoop();
+        };
+
+        // Utility: Close Modals
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
         }
 
-        // Auto-resize textarea
-        elements.input.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-            if(this.value === '') this.style.height = '50px';
+        // --- BOOTSTRAP ---
+        window.addEventListener('DOMContentLoaded', () => {
+            VeloxApp.init();
         });
 
     </script>
