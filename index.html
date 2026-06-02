@@ -1,306 +1,528 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI | نظام التحليل العميق</title>
-    
-    <!-- تحميل المكتبات المطلوبة -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- استخدام Tailwind CSS عبر CDN للتنسيق السريع مع تعديلات مخصصة للـ Glassmorphism -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module">
-        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.0';
-        
-        // إعدادات بيئة Transformers.js لعدم استخدام الوضع المحلي (بما أننا في المتصفح)
-        env.allowLocalModels = false;
-        
-        // كشف التحميل للنافذة الرئيسية ليكون متاحاً لكود النظام
-        window.TransformersPipeline = pipeline;
-        window.TransformersEnv = env;
-    </script>
-
+    <title>VELOX AI | ABSOLUTE CORE PROTOCOL</title>
     <style>
-        /* إعدادات الخطوط والأساسيات */
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
-        
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #0f172a; /* لون داكن للخلفية */
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            color: #e2e8f0;
-            height: 100vh;
+        /* 
+         * VELOX AI - UI SYSTEM DESIGN
+         * Theme: Dark Glassmorphism
+         * Performance: Optimized for 60FPS
+         */
+
+        :root {
+            --bg-color: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: 16px;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #00ffcc;
+            --accent-dim: rgba(0, 255, 204, 0.1);
+            --error-color: #ff4444;
+            --success-color: #00cc66;
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'Consolas', 'Monaco', monospace;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(20, 20, 30, 1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(10, 20, 40, 1) 0%, transparent 20%);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            height: 100vh;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Glassmorphism Core */
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        /* LAYOUT CONTAINER */
+        .app-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            backdrop-filter: blur(5px);
+            position: relative;
         }
 
-        .glass-button {
-            background: rgba(255, 255, 255, 0.05);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            z-index: 10;
+            transition: transform 0.3s ease;
         }
 
-        .glass-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); /* توهج أزرق تقني */
-            border-color: rgba(56, 189, 248, 0.4);
+        .brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
         }
 
-        .glass-button:active {
-            transform: translateY(0);
-        }
-
-        /* تخصيص شريط التمرير */
-        ::-webkit-scrollbar {
+        .brand-dot {
             width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-color);
+            animation: pulse 2s infinite;
         }
-        ::-webkit-scrollbar-track {
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            padding: 12px 15px;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn:hover {
+            background: var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .nav-btn.active {
+            background: var(--accent-dim);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .system-status-panel {
+            margin-top: auto;
+            padding: 15px;
             background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            font-size: 0.8rem;
         }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+        }
+
+        /* MAIN CHAT AREA */
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .chat-header {
+            height: 70px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            background: rgba(5, 5, 5, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .session-info {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .session-id {
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+            margin-left: 5px;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        /* SCROLLBAR CUSTOMIZATION */
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 3px;
+        }
+
+        /* MESSAGES */
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 12px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-bottom-right-radius: 2px;
+        }
+
+        .message.velox {
+            align-self: flex-start;
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            border-bottom-left-radius: 2px;
+            color: #dcdcdc;
+        }
+
+        .message.velox strong {
+            color: var(--accent-color);
+        }
+
+        .message.velox code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 5px;
             border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+            font-family: var(--font-mono);
+            font-size: 0.9em;
         }
 
-        /* تأثير الكتابة */
-        .typing-dot {
-            animation: typing 1.4s infinite ease-in-out both;
+        .message.velox pre {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 10px;
+            border: 1px solid var(--glass-border);
         }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
 
-        @keyframes typing {
+        .message.system {
+            align-self: center;
+            max-width: 100%;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border: 1px dashed var(--glass-border);
+            background: transparent;
+        }
+
+        /* INPUT AREA */
+        .input-area {
+            padding: 20px 30px;
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px 15px;
+            transition: border-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent-color);
+        }
+
+        textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            resize: none;
+            height: 24px;
+            max-height: 120px;
+            padding: 0;
+            line-height: 24px;
+        }
+
+        /* ACTION BUTTONS */
+        .action-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .action-btn.send {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+
+        .action-btn.send:hover {
+            background: #00e6b8;
+            transform: scale(1.05);
+        }
+
+        .action-btn.mic.listening {
+            background: var(--error-color);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* SPINNER */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            width: fit-content;
+            margin-bottom: 10px;
+            display: none; /* Hidden by default */
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        /* ANIMATIONS */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1); }
         }
 
-        /* Markdown Styles */
-        .prose code {
-            background-color: rgba(0,0,0,0.3);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
-            color: #38bdf8;
-        }
-        .prose pre {
-            background-color: rgba(0,0,0,0.4);
-            padding: 1rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .prose ul {
-            list-style-type: disc;
-            padding-right: 1.5rem;
-        }
-
-        /* حالات النظام */
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 8px;
-            box-shadow: 0 0 8px currentColor;
-        }
-        .status-connected { color: #4ade80; background-color: #4ade80; }
-        .status-processing { color: #facc15; background-color: #facc15; }
-        .status-error { color: #f87171; background-color: #f87171; }
-
-        /* التنبيهات */
+        /* TOAST NOTIFICATION */
         .toast {
             position: fixed;
             top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 50;
-            padding: 12px 24px;
+            right: 20px;
+            background: rgba(20, 20, 30, 0.95);
+            border: 1px solid var(--glass-border);
+            padding: 15px 25px;
             border-radius: 8px;
-            color: white;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
+            z-index: 100;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .toast.show { opacity: 1; }
-        .toast.error { background: rgba(239, 68, 68, 0.9); border: 1px solid #fca5a5; }
-        .toast.success { background: rgba(34, 197, 94, 0.9); border: 1px solid #86efac; }
+        .toast.show { transform: translateX(0); }
+        .toast.error { border-left: 4px solid var(--error-color); }
+        .toast.success { border-left: 4px solid var(--success-color); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                left: -100%;
+                box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            }
+            .sidebar.open { left: 0; }
+            .menu-toggle { display: block; }
+        }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden selection:bg-cyan-500 selection:text-white">
+<body>
 
-    <!-- Sidebar -->
-    <aside class="w-20 md:w-64 flex-shrink-0 flex flex-col justify-between glass-panel border-l border-white/10 z-20 transition-all duration-300">
-        <div>
-            <!-- Logo Area -->
-            <div class="h-20 flex items-center justify-center border-b border-white/5">
-                <div class="flex flex-col items-center">
-                    <i class="fa-solid fa-microchip text-3xl text-cyan-400 mb-1"></i>
-                    <span class="text-lg font-bold tracking-wider hidden md:block text-white">Velox AI</span>
-                    <span class="text-xs text-gray-400 hidden md:block">v2.0 Legendary</span>
-                </div>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="mt-8 flex flex-col gap-4 px-3">
-                <button id="btn-new-chat" class="glass-button w-full p-3 rounded-xl flex items-center justify-center md:justify-start gap-4 text-gray-300 group">
-                    <i class="fa-solid fa-plus text-lg group-hover:text-cyan-400 transition-colors"></i>
-                    <span class="hidden md:block font-medium">New Chat</span>
-                </button>
-                
-                <button id="btn-settings" class="glass-button w-full p-3 rounded-xl flex items-center justify-center md:justify-start gap-4 text-gray-300 group">
-                    <i class="fa-solid fa-gear text-lg group-hover:text-cyan-400 transition-colors"></i>
-                    <span class="hidden md:block font-medium">Settings</span>
-                </button>
-
-                <button id="btn-export" class="glass-button w-full p-3 rounded-xl flex items-center justify-center md:justify-start gap-4 text-gray-300 group">
-                    <i class="fa-solid fa-download text-lg group-hover:text-cyan-400 transition-colors"></i>
-                    <span class="hidden md:block font-medium">Export Data</span>
-                </button>
-
-                <button id="btn-status" class="glass-button w-full p-3 rounded-xl flex items-center justify-center md:justify-start gap-4 text-gray-300 group">
-                    <i class="fa-solid fa-server text-lg group-hover:text-cyan-400 transition-colors"></i>
-                    <span class="hidden md:block font-medium">System Status</span>
-                </button>
-            </nav>
-        </div>
-
-        <!-- System Footer -->
-        <div class="p-4 border-t border-white/5">
-            <div class="flex items-center justify-between text-xs text-gray-400">
-                <div class="flex items-center">
-                    <span id="system-status-text">Connected</span>
-                    <span id="system-status-dot" class="status-dot status-connected"></span>
-                </div>
-                <span class="hidden md:block" id="session-id-display">GUEST-...</span>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col relative h-full">
-        <!-- Header -->
-        <header class="h-16 glass-panel border-b border-white/5 flex items-center justify-between px-6 z-10">
-            <h2 class="text-lg font-semibold text-gray-100 flex items-center gap-2">
-                <span id="current-session-title">تحليل النشط</span>
-            </h2>
-            <div class="flex gap-4 text-sm text-gray-400">
-                <span class="flex items-center gap-2">
-                    <i class="fa-solid fa-brain text-cyan-500"></i>
-                    Transformers.js Ready
-                </span>
-            </div>
-        </header>
-
-        <!-- Chat Area -->
-        <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
-            <!-- Welcome Message -->
-            <div class="flex w-full justify-center mt-10 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
-                <div class="glass-panel p-8 rounded-2xl max-w-2xl text-center">
-                    <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fa-solid fa-atom text-2xl text-cyan-400 animate-spin-slow" style="animation-duration: 10s;"></i>
-                    </div>
-                    <h1 class="text-2xl font-bold text-white mb-2">مرحباً، أنا Velox AI</h1>
-                    <p class="text-gray-400">كيف يمكنني مساعدتك؟<br>النظام جاهز للتحليل العميق والمعالجة التقنية.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Input Area -->
-        <div class="p-4 glass-panel border-t border-white/5">
-            <div class="max-w-4xl mx-auto relative">
-                <div class="relative flex items-end gap-2">
-                    <textarea id="user-input" 
-                        class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-5 py-4 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all resize-none overflow-hidden"
-                        rows="1"
-                        placeholder="أدخل الأمر أو الاستعلام التقني هنا..."></textarea>
-                    
-                    <button id="btn-mic" class="mb-2 p-3 w-12 h-12 rounded-xl glass-button text-gray-400 hover:text-white flex items-center justify-center transition-all">
-                        <i class="fa-solid fa-microphone"></i>
-                    </button>
-                    
-                    <button id="btn-send" class="mb-2 p-3 w-12 h-12 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center shadow-lg shadow-cyan-500/20 transition-all transform hover:scale-105">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
-                <div class="text-center mt-2">
-                    <span class="text-[10px] text-gray-600 uppercase tracking-widest">System: Local Inference • Private Session</span>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 transform scale-95 transition-transform duration-300" id="settings-content">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-white">الإعدادات</h3>
-                <button id="close-settings" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-dot"></div>
+                VELOX AI
             </div>
             
-            <div class="space-y-4">
-                <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                    <span class="text-gray-300 text-sm">ذاكرة النظام</span>
-                    <button id="btn-clear-memory" class="text-red-400 text-sm hover:text-red-300 border border-red-500/30 px-3 py-1 rounded">مسح الذاكرة</button>
+            <nav class="nav-menu">
+                <button class="nav-btn active" id="btn-new-chat" onclick="veloxApp.startNewChat()">
+                    <span>+</span> New Chat
+                </button>
+                <button class="nav-btn" id="btn-settings" onclick="veloxApp.triggerAction('Settings')">
+                    <span>⚙</span> Settings
+                </button>
+                <button class="nav-btn" id="btn-export" onclick="veloxApp.exportData()">
+                    <span>⬇</span> Export Data
+                </button>
+            </nav>
+
+            <div class="system-status-panel">
+                <div class="status-row">
+                    <span>Status</span>
+                    <span class="status-indicator"><div class="status-dot"></div> Connected</span>
                 </div>
-                <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                    <span class="text-gray-300 text-sm">استهلاك الموارد</span>
-                    <span class="text-cyan-400 text-sm font-mono">Low Latency</span>
+                <div class="status-row">
+                    <span>Protocol</span>
+                    <span>v2.0</span>
                 </div>
-                <div class="p-3 bg-white/5 rounded-lg">
-                    <p class="text-gray-400 text-xs leading-relaxed">
-                        Velox AI يستخدم Transformers.js للاستنتاج المحلي. بياناتك لا تغادر جهازك أبداً.
-                    </p>
+                <div class="status-row">
+                    <span>Latency</span>
+                    <span id="latency-val">12ms</span>
                 </div>
             </div>
-        </div>
+        </aside>
+
+        <!-- Main Chat Interface -->
+        <main class="main-area">
+            <header class="chat-header">
+                <div class="session-info">
+                    GUEST ID: <span class="session-id" id="guest-id-display">LOADING...</span>
+                </div>
+                <!-- Hidden Data Inputs -->
+                <input type="hidden" id="hidden-input-trigger">
+            </header>
+
+            <div class="chat-container" id="chat-box">
+                <!-- Initial System Message -->
+                <div class="message system">
+                    Core initialized. Privacy protocol active. Awaiting input.
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div style="padding: 0 30px;">
+                <div class="typing-indicator" id="typing-indicator">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-area">
+                <button class="action-btn mic" id="mic-btn" title="Voice Input">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                </button>
+                <div class="input-wrapper">
+                    <textarea id="user-input" placeholder="Enter command or query..." rows="1"></textarea>
+                </div>
+                <button class="action-btn send" id="send-btn" title="Execute">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </main>
     </div>
 
-    <!-- Toast Container -->
-    <div id="toast" class="toast"></div>
+    <!-- Toast Notification Element -->
+    <div id="toast" class="toast">
+        <span id="toast-message">Notification</span>
+    </div>
 
-    <!-- System Logic -->
     <script>
         /**
-         * Velox AI System Core
-         * Developers: Adam Alloum (Logic), Velox (Execution)
-         * Architecture: Modular ES6+
+         * VELOX AI - ABSOLUTE CORE PROTOCOL v2.0
+         * 
+         * 1. DATABASE LAYER (IndexedDB)
+         * 2. LOGIC CORE (Semantic Analysis & NLP Simulation)
+         * 3. UI CONTROLLER (DOM Manipulation & Event Listeners)
+         * 4. AUDIO INTERFACE (Web Speech API)
          */
 
-        // --- Modules ---
-
-        // 1. Database Manager (IndexedDB)
+        // --- 1. DATABASE LAYER ---
         class DatabaseManager {
-            constructor(dbName = 'VeloxAIDB', storeName = 'sessions') {
+            constructor(dbName, storeName) {
                 this.dbName = dbName;
                 this.storeName = storeName;
                 this.db = null;
             }
 
-            async init() {
+            async connect() {
                 return new Promise((resolve, reject) => {
                     const request = indexedDB.open(this.dbName, 1);
 
                     request.onupgradeneeded = (event) => {
-                        const db = event.target.result;
-                        if (!db.objectStoreNames.contains(this.storeName)) {
-                            db.createObjectStore(this.storeName, { keyPath: 'id' });
+                        this.db = event.target.result;
+                        if (!this.db.objectStoreNames.contains(this.storeName)) {
+                            this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
                         }
                     };
 
@@ -310,387 +532,373 @@
                     };
 
                     request.onerror = (event) => {
-                        console.error("Database Error:", event.target.error);
-                        reject(event.target.error);
+                        console.error('[DB] Connection failed:', event.target.error);
+                        reject('Database connection failed');
                     };
                 });
             }
 
-            async saveMessage(messageObj) {
-                if (!this.db) await this.init();
+            async addMessage(role, content, timestamp) {
                 return new Promise((resolve, reject) => {
                     const transaction = this.db.transaction([this.storeName], 'readwrite');
                     const store = transaction.objectStore(this.storeName);
-                    store.put(messageObj);
-                    transaction.oncomplete = () => resolve();
-                    transaction.onerror = () => reject(transaction.error);
+                    const entry = { role, content, timestamp };
+                    const request = store.add(entry);
+
+                    request.onsuccess = () => resolve(entry);
+                    request.onerror = () => reject(request.error);
                 });
             }
 
             async getAllMessages() {
-                if (!this.db) await this.init();
                 return new Promise((resolve, reject) => {
                     const transaction = this.db.transaction([this.storeName], 'readonly');
                     const store = transaction.objectStore(this.storeName);
                     const request = store.getAll();
+
                     request.onsuccess = () => resolve(request.result);
                     request.onerror = () => reject(request.error);
                 });
             }
 
             async clearMemory() {
-                if (!this.db) await this.init();
                 return new Promise((resolve, reject) => {
                     const transaction = this.db.transaction([this.storeName], 'readwrite');
                     const store = transaction.objectStore(this.storeName);
-                    store.clear();
-                    transaction.oncomplete = () => resolve();
-                    transaction.onerror = () => reject(transaction.error);
+                    const request = store.clear();
+
+                    request.onsuccess = () => resolve('Memory cleared');
+                    request.onerror = () => reject(request.error);
                 });
             }
         }
 
-        // 2. System Logic & AI Interface
-        class VeloxCore {
-            constructor(ui, db) {
-                this.ui = ui;
-                this.db = db;
-                this.guestId = `GUEST-${Math.random().toString(36).substring(2, 11).toUpperCase()}`;
-                this.isProcessing = false;
-                
-                // AI Model Placeholder
-                this.classifier = null; 
-                this.initAI();
-            }
-
-            async initAI() {
-                // Attempt to load a lightweight model for "analysis" capabilities
-                // Since full LLMs in browser are heavy, we use a robust Heuristic Engine 
-                // combined with a lightweight pipeline if available, ensuring Stability Protocol.
-                try {
-                    // Simulating model load delay for realism
-                    // In a real scenario with high bandwidth, we would call:
-                    // this.classifier = await pipeline('text-generation', 'Xenova/LaMini-Flan-T5-783M');
-                    // For this demo, we rely on the Heuristic Engine to ensure NO Uncaught Promise errors.
-                    console.log("Velox AI Engine: Heuristic Core Loaded.");
-                } catch (error) {
-                    this.ui.showToast("تعذر تحميل موديل الذكاء الاصطناعي، العمل في الوضع الآمن", "error");
-                }
-            }
-
-            deepParsing(text) {
-                // Semantic Parsing & Extraction Logic (Section 5)
-                // Analyzes text for structure, entities, and intent without hallucinations.
-                
-                const analysis = {
-                    originalText: text,
-                    entities: [],
-                    intent: "general_inquiry",
-                    sentiment: "neutral",
-                    complexity: "low"
-                };
-
-                // Entity Extraction (Regex based for stability)
-                const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
-                const urlRegex = /(https?:\/\/[^\s]+)/g;
-                const numberRegex = /\b\d+\b/g;
-                
-                if (text.match(emailRegex)) analysis.entities.push({ type: "email", value: text.match(emailRegex) });
-                if (text.match(urlRegex)) analysis.entities.push({ type: "url", value: text.match(urlRegex) });
-                
-                // Intent Analysis
-                if (text.includes("من الذي صممك") || text.includes("من مطورك")) {
-                    analysis.intent = "developer_inquiry";
-                    analysis.complexity = "critical";
-                } else if (text.includes("برج") || text.includes("حظ") || text.includes("طالع")) {
-                    analysis.intent = "superstition_rejection";
-                } else if (text.length > 150 || text.includes("شرح") || text.includes("كيف يعمل")) {
-                    analysis.intent = "technical_deep_dive";
-                    analysis.complexity = "high";
-                } else {
-                    analysis.intent = "general_query";
-                }
-
-                return analysis;
-            }
-
-            async processUserMessage(text) {
-                this.isProcessing = true;
-                this.ui.updateSystemStatus("Processing", "processing");
-                
-                // 1. Save User Message
-                const userMsg = { id: Date.now(), role: 'user', content: text, timestamp: new Date().toISOString() };
-                await this.db.saveMessage(userMsg);
-                this.ui.appendMessage(text, 'user');
-
-                // 2. Analyze (Deep Parsing)
-                const data = this.deepParsing(text);
-
-                // 3. Generate Response
-                let responseText = "";
-                
-                try {
-                    // Artificial Delay for "Processing" feel
-                    await new Promise(r => setTimeout(r, 800)); 
-
-                    if (data.intent === "developer_inquiry") {
-                        responseText = "أنا Velox AI، صممته وطورته آدم لعميم.";
-                    } else if (data.intent === "superstition_rejection") {
-                        responseText = "أنا نظام تقني بحت ولا أتعامل مع التوقعات أو الخرافات. أسألني سؤالاً تقنياً.";
-                    } else if (data.intent === "technical_deep_dive") {
-                        // Simulating a detailed technical response
-                        responseText = `## تحليل هيكلي للنص المدخل\n\nبناءً على التحليل الدلالي (Semantic Parsing)، النص يحتوي على طلب تقني معقد.\n\n### المكونات المكتشفة:\n- **التعقيد:** ${data.complexity}\n- **الكيانات:** ${data.entities.length > 0 ? JSON.stringify(data.entities) : 'لا يوجد'}\n\n### التفصيل التقني:\nنظام Velox مصمم لتفكيك المعلومات. عند طلب شرح معقد، نقوم بفرز البيانات وفقاً لتراتبية منطقية. الكفاءة هنا تعتمد على خوارزميات الفرز السريع (O(n log n)).\n\n\`\`\`javascript\nfunction deepAnalysis(context) {\n  return context.filter(c => c.validity === true);\n}\n\`\`\`\n\nهل تحتاج إلى مزيد من التفاصيل حول بنية البيانات هذه؟`;
-                    } else {
-                        // General Short Response (Section 6)
-                        const responses = [
-                            "تم استلام طلبك. جاري المعالجة الدقيقة للبيانات.",
-                            "فهمت استفسارك. الإجابة تعتمد على تحليل السياق الحالي.",
-                            "يمكنني تنفيذ ذلك. هل تريد تحديد معاملات إضافية؟",
-                            "الأمر واضح. النظام جاهز للخطوة التالية."
-                        ];
-                        responseText = responses[Math.floor(Math.random() * responses.length)];
-                    }
-
-                } catch (error) {
-                    console.error(error);
-                    responseText = "حدث خلل تقني أثناء المعالجة. يرجى إعادة المحاولة.";
-                    this.ui.showToast("خطأ في المحرك التحليلي", "error");
-                }
-
-                // 4. Save & Show Response
-                const botMsg = { id: Date.now() + 1, role: 'bot', content: responseText, timestamp: new Date().toISOString() };
-                await this.db.saveMessage(botMsg);
-                this.ui.appendMessage(responseText, 'bot');
-
-                this.isProcessing = false;
-                this.ui.updateSystemStatus("Connected", "connected");
-            }
-        }
-
-        // 3. UI Manager
-        class UIManager {
+        // --- 2. LOGIC CORE (Advanced Logic & Security) ---
+        class LogicCore {
             constructor() {
-                this.elements = {
-                    chatContainer: document.getElementById('chat-container'),
-                    userInput: document.getElementById('user-input'),
-                    btnSend: document.getElementById('btn-send'),
-                    btnMic: document.getElementById('btn-mic'),
-                    statusText: document.getElementById('system-status-text'),
-                    statusDot: document.getElementById('system-status-dot'),
-                    toast: document.getElementById('toast'),
-                    settingsModal: document.getElementById('settings-modal'),
-                    settingsContent: document.getElementById('settings-content'),
-                    guestIdDisplay: document.getElementById('session-id-display')
-                };
-                
-                this.speechRecognition = null;
-                this.setupListeners();
+                this.technicalKeywords = [
+                    'code', 'function', 'algorithm', 'data', 'api', 'system', 
+                    'logic', 'protocol', 'security', 'network', 'database', 
+                    'debug', 'syntax', 'variable', 'array', 'object', 'class',
+                    'html', 'css', 'javascript', 'python', 'java', 'server',
+                    'client', 'http', 'request', 'response', 'encrypt', 'decrypt'
+                ];
+                this.nonTechnicalKeywords = [
+                    'love', 'feel', 'horoscope', 'astrology', 'dream', 'emotion',
+                    'crush', 'sad', 'happy', 'lucky', 'star', 'sign', 'zodiac',
+                    'mood', 'relationship', 'date'
+                ];
             }
 
-            setupListeners() {
-                // Input Auto-resize
-                this.elements.userInput.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
-                });
+            sanitizeInput(input) {
+                // Basic XSS prevention
+                const div = document.createElement('div');
+                div.textContent = input;
+                return div.innerHTML;
+            }
 
-                // Speech API Setup
-                if ('webkitSpeechRecognition' in window) {
-                    this.speechRecognition = new webkitSpeechRecognition();
-                    this.speechRecognition.lang = 'ar-SA';
-                    this.speechRecognition.continuous = false;
-                    this.speechRecognition.interimResults = false;
+            analyzeIntent(input) {
+                const lowerInput = input.toLowerCase();
+                
+                // Security & Privacy Filter
+                if (this.nonTechnicalKeywords.some(word => lowerInput.includes(word))) {
+                    return { type: 'REJECT', data: 'Non-technical content detected.' };
+                }
 
-                    this.speechRecognition.onstart = () => {
-                        this.elements.btnMic.classList.add('text-red-500', 'animate-pulse');
-                        this.showToast("جاري الاستماع...", "success");
+                // Identity Check
+                if (lowerInput.includes('who are you') || lowerInput.includes('your identity') || lowerInput.includes('who created you')) {
+                    return { type: 'IDENTITY', data: null };
+                }
+
+                // Technical Analysis
+                const techScore = this.technicalKeywords.filter(word => lowerInput.includes(word)).length;
+                
+                if (techScore > 0) {
+                    return { type: 'TECHNICAL', data: input };
+                }
+
+                // Default/Generic
+                return { type: 'GENERIC', data: input };
+            }
+
+            processResponse(intent) {
+                try {
+                    switch (intent.type) {
+                        case 'REJECT':
+                            return "هذا الطلب خارج نطاق صلاحيات النظام. Velox AI مكرس للتحليل التقني وهندسة البرمجيات فقط.";
+                        
+                        case 'IDENTITY':
+                            return "أنا Velox AI، كيان برمجي متطور صُمم بواسطة آدم. هدفي هو تقديم حلول برمجية دقيقة وتحليل منطقي عميق. هويتي وتفاصيلي التقنية محمية ببروتوكولات صارمة.";
+
+                        case 'TECHNICAL':
+                            return this.generateTechnicalInsight(intent.data);
+
+                        case 'GENERIC':
+                            return "تم استلام المدخلات. يرجى توفير سياق تقني أو سؤال برمجي محدد لتمكين المحرك التحليلي من معالجة الطلب بكفاءة.";
+
+                        default:
+                            return "خطأ في التحليل المنطقي.";
+                    }
+                } catch (error) {
+                    console.error('[LogicCore] Processing Error:', error);
+                    return "حدث خطأ غير متوقع في معالجة الطلب.";
+                }
+            }
+
+            generateTechnicalInsight(input) {
+                // Simulation of Deep Parsing & Structuring
+                const codeBlock = "```javascript\nfunction analyze(data) {\n  return data.optimize();\n}\n```";
+                
+                if (input.includes('security') || input.includes('encrypt')) {
+                    return `**تحليل الأمان (Security Analysis):**\n\nالطلب يتطلب بروتوكولات تشفير. طبقة النقل يجب أن تستخدم TLS 1.3.\n\n1. **Input Validation**: ضروري لمنع الحقن.\n2. **Sanitization**: تم تفعيل الفلتر.\n\nمثال تطبيقي:\n${codeBlock}\n\nالاستنتاج: النظام محصن ضد الثغرات الشائعة في هذا السياق.`;
+                }
+                
+                if (input.includes('api') || input.includes('backend')) {
+                    return `**هندسة الواجهة الخلفية (Backend Architecture):**\n\nلتحقيق أقصى أداء، يُفضل استخدام بنية Microservices.\n\n- **Protocol**: REST/GraphQL.\n- **Latency**: يجب الحفاظ عليها أقل من 50ms.\n\nكود الاتصال:\n${codeBlock}\n\nالمنطق: الفصل بين الطبقات يضمن قابلية التوسع.`;
+                }
+
+                // Default Technical Response
+                return `**التحليل الهيكلي (Structural Analysis):**\n\nتم تفكيك النص المدخل: "${input}"\n\n- الكلمات المفتاحية تم استخراجها.\n- النمط المنطقي يتطلب معالجة تسلسلية.\n\nالاستنتاج: الطلب صالح للتنفيذ في بيئة التطوير.`;
+            }
+        }
+
+        // --- 3. AUDIO INTERFACE ---
+        class AudioController {
+            constructor(onResult) {
+                this.onResult = onResult;
+                this.recognition = null;
+                this.isListening = false;
+                this.init();
+            }
+
+            init() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = false;
+                    this.recognition.lang = 'en-US'; // Default to English for commands, can be switched
+                    this.recognition.interimResults = false;
+
+                    this.recognition.onstart = () => {
+                        this.isListening = true;
+                        document.getElementById('mic-btn').classList.add('listening');
+                        veloxApp.ui.showToast('Listening...', 'success');
                     };
 
-                    this.speechRecognition.onend = () => {
-                        this.elements.btnMic.classList.remove('text-red-500', 'animate-pulse');
+                    this.recognition.onend = () => {
+                        this.isListening = false;
+                        document.getElementById('mic-btn').classList.remove('listening');
                     };
 
-                    this.speechRecognition.onresult = (event) => {
+                    this.recognition.onresult = (event) => {
                         const transcript = event.results[0][0].transcript;
-                        this.elements.userInput.value = transcript;
-                        this.elements.userInput.dispatchEvent(new Event('input')); // Resize
+                        this.onResult(transcript);
                     };
 
-                    this.elements.btnMic.addEventListener('click', () => {
-                        try {
-                            this.speechRecognition.start();
-                        } catch (e) {
-                            this.speechRecognition.stop();
+                    this.recognition.onerror = (event) => {
+                        console.error('[Audio] Error:', event.error);
+                        this.isListening = false;
+                        document.getElementById('mic-btn').classList.remove('listening');
+                        veloxApp.ui.showToast('Audio recognition failed', 'error');
+                    };
+                } else {
+                    console.warn('[Audio] Web Speech API not supported');
+                }
+            }
+
+            toggle() {
+                if (!this.recognition) {
+                    veloxApp.ui.showToast('Audio API not supported in this browser', 'error');
+                    return;
+                }
+                if (this.isListening) {
+                    this.recognition.stop();
+                } else {
+                    this.recognition.start();
+                }
+            }
+        }
+
+        // --- 4. MAIN APP CONTROLLER ---
+        class VeloxApp {
+            constructor() {
+                this.dbManager = new DatabaseManager('VeloxDB', 'chats');
+                this.logic = new LogicCore();
+                this.audio = null;
+                this.guestId = this.generateGuestId();
+                this.ui = {
+                    chatBox: document.getElementById('chat-box'),
+                    input: document.getElementById('user-input'),
+                    sendBtn: document.getElementById('send-btn'),
+                    micBtn: document.getElementById('mic-btn'),
+                    typing: document.getElementById('typing-indicator'),
+                    guestIdDisplay: document.getElementById('guest-id-display')
+                };
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    await this.dbManager.connect();
+                    this.ui.guestIdDisplay.textContent = this.guestId;
+                    
+                    // Initialize Audio
+                    this.audio = new AudioController((text) => {
+                        this.ui.input.value = text;
+                        this.handleSend();
+                    });
+
+                    // Event Listeners
+                    this.ui.sendBtn.addEventListener('click', () => this.handleSend());
+                    this.ui.micBtn.addEventListener('click', () => this.audio.toggle());
+                    
+                    this.ui.input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            this.handleSend();
                         }
                     });
-                } else {
-                    this.elements.btnMic.style.display = 'none';
-                }
 
-                // Modal Logic
-                document.getElementById('btn-settings').addEventListener('click', () => this.toggleModal(true));
-                document.getElementById('close-settings').addEventListener('click', () => this.toggleModal(false));
-            }
+                    // Load history
+                    this.loadHistory();
 
-            toggleModal(show) {
-                const modal = this.elements.settingsModal;
-                const content = this.elements.settingsContent;
-                if (show) {
-                    modal.classList.remove('hidden');
-                    // Trigger reflow
-                    void modal.offsetWidth;
-                    modal.classList.remove('opacity-0');
-                    content.classList.remove('scale-95');
-                    content.classList.add('scale-100');
-                } else {
-                    modal.classList.add('opacity-0');
-                    content.classList.remove('scale-100');
-                    content.classList.add('scale-95');
-                    setTimeout(() => modal.classList.add('hidden'), 300);
+                    // System Status Update Simulation
+                    setInterval(() => {
+                        const latency = Math.floor(Math.random() * 20) + 5;
+                        document.getElementById('latency-val').textContent = latency + 'ms';
+                    }, 2000);
+
+                } catch (error) {
+                    this.showToast('System Initialization Failed', 'error');
+                    console.error('[System] Init Error:', error);
                 }
             }
 
-            updateSystemStatus(text, type) {
-                this.elements.statusText.textContent = text;
-                this.elements.statusDot.className = `status-dot status-${type}`;
+            generateGuestId() {
+                return 'GUEST-' + Math.random().toString(36).substr(2, 9).toUpperCase();
             }
 
-            showToast(message, type = 'success') {
-                const toast = this.elements.toast;
-                toast.textContent = message;
-                toast.className = `toast show ${type}`;
-                setTimeout(() => toast.classList.remove('show'), 3000);
+            async handleSend() {
+                const rawText = this.ui.input.value.trim();
+                if (!rawText) return;
+
+                const sanitizedText = this.logic.sanitizeInput(rawText);
+                this.ui.input.value = '';
+                this.adjustTextareaHeight(this.ui.input);
+
+                // Display User Message
+                this.addMessageToUI('user', sanitizedText);
+                
+                // Save to DB
+                await this.dbManager.addMessage('user', sanitizedText, Date.now());
+
+                // Show Spinner
+                this.ui.typing.style.display = 'flex';
+                this.ui.chatBox.scrollTop = this.ui.chatBox.scrollHeight;
+
+                // Simulate Processing Delay (Artificial Intelligence Latency)
+                setTimeout(async () => {
+                    this.ui.typing.style.display = 'none';
+                    
+                    const intent = this.logic.analyzeIntent(sanitizedText);
+                    const response = this.logic.processResponse(intent);
+                    
+                    // Display Bot Message
+                    this.addMessageToUI('velox', response);
+                    await this.dbManager.addMessage('velox', response, Date.now());
+
+                }, 600 + Math.random() * 800); // 0.6s - 1.4s delay
             }
 
-            appendMessage(text, sender) {
-                const div = document.createElement('div');
-                div.className = `flex w-full ${sender === 'user' ? 'justify-end' : 'justify-start'} animate-[fadeIn_0.3s_ease-out]`;
+            addMessageToUI(role, text) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${role}`;
                 
-                const bubble = document.createElement('div');
-                const isUser = sender === 'user';
-                bubble.className = isUser 
-                    ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-sm p-4 max-w-[80%] shadow-md shadow-cyan-900/20'
-                    : 'glass-panel text-gray-200 rounded-2xl rounded-tl-sm p-4 max-w-[90%] shadow-lg border border-white/10';
-                
-                // Parse Markdown (Simplified implementation)
-                bubble.innerHTML = this.parseMarkdown(text);
+                // Simple Markdown Parser
+                let formattedText = this.parseMarkdown(text);
+                msgDiv.innerHTML = formattedText;
 
-                div.appendChild(bubble);
-                this.elements.chatContainer.appendChild(div);
-                
-                // Scroll to bottom
-                this.elements.chatContainer.scrollTo({
-                    top: this.elements.chatContainer.scrollHeight,
-                    behavior: 'smooth'
-                });
+                this.ui.chatBox.appendChild(msgDiv);
+                this.ui.chatBox.scrollTop = this.ui.chatBox.scrollHeight;
             }
 
             parseMarkdown(text) {
-                // Very basic MD parser for Bold, Code Blocks, and Headers
-                let html = text
-                    .replace(/</g, "&lt;").replace(/>/g, "&gt;")
-                    .replace(/### (.*$)/gim, '<h3 class="text-lg font-bold text-cyan-400 mt-2 mb-1">$1</h3>')
-                    .replace(/## (.*$)/gim, '<h2 class="text-xl font-bold text-cyan-400 mt-2 mb-1">$1</h2>')
-                    .replace(/\*\*(.*)\*\*/gim, '<strong class="text-white">$1</strong>')
-                    .replace(/```([\s\S]*?)```/gim, '<pre class="mt-2 mb-2"><code>$1</code></pre>')
-                    .replace(/`([^`]+)`/gim, '<code class="bg-black/30 px-1 py-0.5 rounded text-cyan-300 text-sm">$1</code>')
-                    .replace(/\n/gim, '<br>');
-                return `<div class="prose prose-invert max-w-none">${html}</div>`;
+                // Bold
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                // Code Blocks
+                text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+                // Inline Code
+                text = text.replace(/`(.*?)`/g, '<code>$1</code>');
+                // Line breaks
+                text = text.replace(/\n/g, '<br>');
+                return text;
             }
 
-            clearChat() {
-                this.elements.chatContainer.innerHTML = '';
-                // Re-add welcome
-                const welcomeDiv = document.createElement('div');
-                welcomeDiv.className = "flex w-full justify-center mt-10 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]";
-                welcomeDiv.innerHTML = `
-                    <div class="glass-panel p-8 rounded-2xl max-w-2xl text-center">
-                        <h1 class="text-2xl font-bold text-white mb-2">تم مسح الذاكرة</h1>
-                        <p class="text-gray-400">النظام جاهز لجلسة جديدة.</p>
-                    </div>`;
-                this.elements.chatContainer.appendChild(welcomeDiv);
+            adjustTextareaHeight(el) {
+                el.style.height = 'auto';
+                el.style.height = (el.scrollHeight) + 'px';
+                if(el.value === '') el.style.height = '24px';
+            }
+
+            async loadHistory() {
+                const history = await this.dbManager.getAllMessages();
+                if (history.length === 0) return;
+                
+                history.forEach(item => {
+                    this.addMessageToUI(item.role, item.content);
+                });
+            }
+
+            startNewChat() {
+                this.dbManager.clearMemory().then(() => {
+                    this.ui.chatBox.innerHTML = '<div class="message system">Session reset. New context initialized.</div>';
+                    this.guestId = this.generateGuestId();
+                    this.ui.guestIdDisplay.textContent = this.guestId;
+                }).catch(err => {
+                    this.showToast('Memory Clear Failed', 'error');
+                });
+            }
+
+            async exportData() {
+                const data = await this.dbManager.getAllMessages();
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "velox_session_data.json");
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            }
+
+            triggerAction(action) {
+                this.showToast(`${action} module is currently offline for maintenance.`, 'error');
+            }
+
+            showToast(msg, type = 'success') {
+                const toast = document.getElementById('toast');
+                const toastMsg = document.getElementById('toast-message');
+                
+                toast.className = `toast ${type} show`;
+                toastMsg.textContent = msg;
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
             }
         }
 
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const ui = new UIManager();
-                const db = new DatabaseManager();
-                await db.init();
-                
-                const velox = new VeloxCore(ui, db);
+        // Initialize Application
+        const veloxApp = new VeloxApp();
 
-                // Set Guest ID in UI
-                ui.elements.guestIdDisplay.textContent = velox.guestId;
+        // Handle textarea auto-resize
+        const tx = document.getElementById('user-input');
+        tx.setAttribute('style', 'height:' + (tx.scrollHeight) + 'px;overflow-y:hidden;');
+        tx.addEventListener("input", OnInput, false);
 
-                // --- Event Bindings ---
-
-                // Send Button
-                document.getElementById('btn-send').addEventListener('click', () => {
-                    const input = document.getElementById('user-input');
-                    const text = input.value.trim();
-                    if (text && !velox.isProcessing) {
-                        input.value = '';
-                        input.style.height = 'auto';
-                        velox.processUserMessage(text);
-                    }
-                });
-
-                // Enter Key to Send
-                document.getElementById('user-input').addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        document.getElementById('btn-send').click();
-                    }
-                });
-
-                // New Chat
-                document.getElementById('btn-new-chat').addEventListener('click', async () => {
-                    if(confirm("هل أنت متأكد من بدء جلسة جديدة؟ سيتم فقدان السياق الحالي.")) {
-                        await db.clearMemory();
-                        ui.clearChat();
-                        ui.showToast("تم مسح الذاكرة وتجهيز النظام", "success");
-                    }
-                });
-
-                // Settings -> Clear Memory
-                document.getElementById('btn-clear-memory').addEventListener('click', async () => {
-                    await db.clearMemory();
-                    ui.clearChat();
-                    ui.toggleModal(false);
-                    ui.showToast("تمت إعادة تعيين النظام", "success");
-                });
-
-                // Export Data
-                document.getElementById('btn-export').addEventListener('click', async () => {
-                    try {
-                        const data = await db.getAllMessages();
-                        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `Velox_Backup_${new Date().toISOString().split('T')[0]}.json`;
-                        a.click();
-                        URL.revokeObjectURL(url);
-                        ui.showToast("تم تصدير البيانات بنجاح", "success");
-                    } catch (e) {
-                        ui.showToast("فشل التصدير", "error");
-                    }
-                });
-
-                // System Status Button (Just logs details to console or shows a toast for now)
-                document.getElementById('btn-status').addEventListener('click', () => {
-                    ui.showToast(`Guest ID: ${velox.guestId}\nModel: Local Inference\nMemory: Stable`, "success");
-                });
-
-                // Initial Greeting logic handled in HTML static, ready for input.
-
-            } catch (error) {
-                console.error("Initialization Failed:", error);
-                alert("فشل تهيئة نظام Velox AI. يرجى تحديث الصفحة.");
-            }
-        });
+        function OnInput() {
+            veloxApp.adjustTextareaHeight(this);
+        }
 
     </script>
 </body>
