@@ -3,31 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI | Adam Laamime</title>
+    <title>Velox AI | Local Neural Engine</title>
+    <!-- استيراد خط تجوال لدعم اللغة العربية بشكل جميل -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <!-- 
-        ========================================
-        ARCHITECTURE: STYLE LAYER (style.css)
-        ========================================
-        تصميم Glassmorphism Pro UI مع هوية Deep Space
+        تعليمات التشغيل:
+        1. احفظ هذا الملف بصيغة .html (مثلاً: velox_ai.html).
+        2. افتحه في متصفح حديث (Chrome/Edge/Firefox) يدعم WebGPU/WebAssembly.
+        3. تأكد من الاتصال بالإنترنت عند التشغيل الأول فقط لتحميل نموذج الذكاء الاصطناعي (حوالي 500MB).
     -->
-    <style>
-        /* Typography & Base Variables */
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
 
+    <style>
+        /* =========================================
+           1. متغيرات الألوان والتصميم الأساسي (CSS Variables)
+           ========================================= */
         :root {
-            --bg-deep-space: #0f0c29;
-            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            --glass-bg: rgba(255, 255, 255, 0.03);
+            --primary-hue: 250; /* بنفسجي تقني */
+            --bg-color: #050505;
+            --glass-bg: rgba(20, 20, 25, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --accent-color: #7b2cbf; /* Velvet Purple */
-            --accent-glow: rgba(123, 44, 191, 0.4);
-            --status-green: #00ff88;
-            
-            --font-main: 'Tajawal', 'Inter', sans-serif;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --accent-color: hsl(var(--primary-hue), 80%, 60%);
+            --accent-glow: hsla(var(--primary-hue), 80%, 60%, 0.4);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --msg-user-bg: hsla(var(--primary-hue), 60%, 50%, 0.3);
+            --msg-ai-bg: rgba(255, 255, 255, 0.05);
+            --status-online: #00ff9d;
+            --status-loading: #ff9d00;
+            --danger-color: #ff4757;
+            --font-main: 'Tajawal', sans-serif;
             --blur-strength: 20px;
         }
 
@@ -36,13 +42,17 @@
             margin: 0;
             padding: 0;
             outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: var(--font-main);
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-primary);
+            background-color: var(--bg-color);
+            /* خلفية تقنية متدرجة */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(76, 29, 149, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.1) 0%, transparent 40%);
+            color: var(--text-main);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -50,29 +60,383 @@
             align-items: center;
         }
 
-        /* --- UI Utility: Glassmorphism Class --- */
+        /* =========================================
+           2. مكونات الزجاج (Glassmorphism Components)
+           ========================================= */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--blur-strength));
             -webkit-backdrop-filter: blur(var(--blur-strength));
             border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: var(--glass-shadow);
+            border-radius: 16px;
         }
 
-        /* --- 1. Initialization Screen --- */
-        #init-screen {
+        /* =========================================
+           3. هيكل التخطيط الرئيسي (Layout Structure)
+           ========================================= */
+        #app-container {
+            width: 100%;
+            height: 100%;
+            max-width: 1600px;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 320px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            z-index: 10;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 1px solid var(--glass-border);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-color), #2563eb);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .user-profile-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .user-info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .guest-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .guest-id {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.3);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: block;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        /* حالة الاتصال: أخضر */
+        .status-online {
+            background: rgba(0, 255, 157, 0.15);
+            color: var(--status-online);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+        }
+
+        /* حالة التحميل: برتقالي */
+        .status-loading {
+            background: rgba(255, 157, 0, 0.15);
+            color: var(--status-loading);
+            border: 1px solid rgba(255, 157, 0, 0.2);
+            animation: pulse-badge 1.5s infinite;
+        }
+
+        .sidebar-actions {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            border: none;
+            cursor: pointer;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #4c1d95);
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-danger {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(255, 71, 87, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 71, 87, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        /* --- Main Chat Area --- */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 5;
+        }
+
+        .model-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .model-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .model-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Messages Container --- */
+        #messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        /* تخصيص شريط التمرير */
+        #messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #messages-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #messages-container::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        #messages-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            line-height: 1.6;
+            font-size: 1rem;
+            position: relative;
+            animation: fadeIn 0.4s ease-out;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-user {
+            align-self: flex-end; /* في العربية اليمين هو البداية، لكن flex-end يعني اليسار إذا dir=rtl؟ لا، في RTL flex-end هو اليسار. لذا المستخدم يكون يسار؟ */
+            /* عكس: في العربية، المستخدم عادة يكتب يمين. لكن الـ chat bubbles العالمية: User يمين، AI يسار. */
+            /* في RTL: justify-content: flex-start (يمين)، justify-content: flex-end (يسار). */
+            /* لذا المستخدم يجب أن يكون flex-start (يمين) */
+            align-self: flex-start; 
+            background: var(--msg-user-bg);
+            border-bottom-right-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .msg-ai {
+            align-self: flex-end; /* يسار في RTL */
+            background: var(--msg-ai-bg);
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: #e0e0e0;
+        }
+
+        .msg-role {
+            font-size: 0.7rem;
+            margin-bottom: 5px;
+            opacity: 0.7;
+            font-weight: 700;
+            display: block;
+        }
+
+        /* --- Input Area --- */
+        .input-container {
+            padding: 20px 30px;
+            background: rgba(10, 10, 12, 0.8);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        #user-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px 50px 16px 20px; /* مسافة للأيقونات */
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            resize: none;
+            height: 56px;
+            transition: border-color 0.3s ease;
+        }
+
+        #user-input:focus {
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .mic-btn {
+            position: absolute;
+            left: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .mic-btn:hover {
+            color: var(--accent-color);
+        }
+
+        /* تأثير الميكروفون النابض */
+        .mic-btn.listening {
+            color: var(--danger-color);
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { transform: scale(1); text-shadow: 0 0 0 rgba(255, 71, 87, 0.4); }
+            50% { transform: scale(1.2); text-shadow: 0 0 10px rgba(255, 71, 87, 0.8); }
+            100% { transform: scale(1); text-shadow: 0 0 0 rgba(255, 71, 87, 0.4); }
+        }
+
+        @keyframes pulse-badge {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* --- Loading Overlay (Initial Model Load) --- */
+        #loader-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 9999;
+            background: rgba(5, 5, 5, 0.95);
+            z-index: 1000;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #050510;
-            transition: opacity 0.8s ease-out;
+            backdrop-filter: blur(30px);
+            transition: opacity 0.5s ease;
         }
 
         .loader-content {
@@ -80,719 +444,947 @@
             width: 300px;
         }
 
-        .velox-logo-loader {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #fff, #a29bfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: pulse 2s infinite;
-        }
-
-        .progress-container {
+        .loader-bar-bg {
             width: 100%;
-            height: 4px;
+            height: 6px;
             background: rgba(255,255,255,0.1);
-            border-radius: 2px;
+            border-radius: 3px;
+            margin: 20px 0;
             overflow: hidden;
-            position: relative;
         }
 
-        .progress-bar {
+        .loader-bar-fill {
             height: 100%;
             width: 0%;
-            background: var(--accent-color);
-            box-shadow: 0 0 10px var(--accent-color);
+            background: linear-gradient(90deg, var(--accent-color), #00ff9d);
             transition: width 0.2s linear;
+            box-shadow: 0 0 15px var(--accent-color);
         }
 
-        .loading-text {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-family: monospace;
+        .loader-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 5px;
         }
 
-        /* --- 2. Main Layout --- */
-        #app-container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            width: 95vw;
-            height: 92vh;
-            border-radius: 24px;
-            overflow: hidden;
-            opacity: 0; /* Hidden until loaded */
-            transform: scale(0.98);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        /* --- Sidebar --- */
-        aside {
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            border-left: 1px solid var(--glass-border);
-        }
-
-        .brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand span { color: var(--accent-color); }
-
-        .user-profile {
-            padding: 1rem;
-            border-radius: 16px;
-            background: rgba(255,255,255,0.02);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .user-info h4 { font-size: 0.9rem; margin-bottom: 4px; }
-        .user-info p { font-size: 0.75rem; color: var(--text-secondary); }
-        
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            background: rgba(0, 255, 136, 0.1);
-            border-radius: 12px;
-            color: var(--status-green);
-            margin-top: 5px;
-        }
-        
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--status-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--status-green);
-            animation: blink 2s infinite;
-        }
-
-        .controls {
-            margin-top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .btn-glass {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            padding: 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .loader-status {
             font-size: 0.9rem;
+            color: var(--text-muted);
         }
 
-        .btn-glass:hover {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            border-color: rgba(255,255,255,0.2);
-        }
-
-        .btn-glass.danger:hover {
-            border-color: rgba(255, 99, 71, 0.5);
-            color: #ff6347;
-        }
-
-        /* --- Chat Area --- */
-        main {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .model-info {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .model-badge {
-            background: rgba(123, 44, 191, 0.2);
-            color: #b983ff;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        #chat-history {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            scroll-behavior: smooth;
-        }
-
-        /* Custom Scrollbar */
-        #chat-history::-webkit-scrollbar { width: 6px; }
-        #chat-history::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
-        .message {
-            max-width: 80%;
-            padding: 1rem 1.5rem;
-            border-radius: 18px;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            position: relative;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        .message.user {
-            align-self: flex-start; /* RTL: Start is Right */
-            background: rgba(123, 44, 191, 0.15);
-            border: 1px solid rgba(123, 44, 191, 0.3);
-            border-bottom-right-radius: 4px;
-            color: #fff;
-        }
-
-        .message.ai {
-            align-self: flex-end; /* RTL: End is Left */
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-bottom-left-radius: 4px;
-            color: #eee;
-        }
-
-        .rag-source {
-            margin-top: 8px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* --- Input Area --- */
-        .input-area {
-            padding: 1.5rem 2rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .input-wrapper {
-            flex: 1;
-            position: relative;
-        }
-
-        textarea {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 14px 50px 14px 20px; /* Space for icon */
-            color: #fff;
-            font-family: inherit;
-            resize: none;
-            height: 54px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-
-        textarea:focus {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(123, 44, 191, 0.15);
-        }
-
-        .action-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.2s;
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-        }
-        
-        .action-btn:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
-        .action-btn:active { transform: scale(0.95); }
-
-        .send-btn {
-            background: var(--accent-color);
-            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.4);
-        }
-        .send-btn:hover { background: #9d4edd; }
-
-        .mic-active {
-            color: #ff6347 !important;
-            animation: pulse-red 1.5s infinite;
-        }
-
-        /* --- Toast Notification --- */
-        #toast-container {
-            position: absolute;
+        /* --- Toast Notifications --- */
+        .toast-container {
+            position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .toast {
-            background: rgba(20, 20, 30, 0.9);
-            backdrop-filter: blur(10px);
-            color: white;
+            background: rgba(30, 30, 35, 0.9);
+            border: 1px solid var(--glass-border);
             padding: 12px 24px;
             border-radius: 50px;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: fadeInDown 0.4s ease-out;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            animation: slideDown 0.3s ease-out;
+            color: white;
+            font-size: 0.9rem;
         }
 
-        /* --- Animations --- */
-        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
-        @keyframes blink { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 71, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 99, 71, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 99, 71, 0); } }
+        .toast.error { border-color: var(--danger-color); color: #ffcccc; }
+        .toast.success { border-color: var(--status-online); color: #ccffdd; }
 
-        /* Responsive */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Typewriter Cursor --- */
+        .cursor {
+            display: inline-block;
+            width: 6px;
+            height: 18px;
+            background-color: var(--accent-color);
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            #app-container { grid-template-columns: 1fr; height: 100vh; width: 100vw; border-radius: 0; }
-            aside { display: none; } /* Mobile Hide Sidebar for simplicity */
-            .input-area { padding: 1rem; }
+            .sidebar {
+                position: absolute;
+                width: 100%;
+                transform: translateX(100%);
+                background: #0a0a0a; /* Solid background for mobile performance */
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .message {
+                max-width: 90%;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. Initialization Screen -->
-    <div id="init-screen">
+    <!-- شاشة التحميل الأولية للنموذج -->
+    <div id="loader-overlay">
         <div class="loader-content">
-            <div class="velox-logo-loader">Velox AI</div>
-            <div class="progress-container">
-                <div class="progress-bar" id="loader-bar"></div>
+            <div class="loader-text">جاري تهيئة Velox AI...</div>
+            <div class="loader-status" id="loader-status-text">تحضير المحرك العصبي</div>
+            <div class="loader-bar-bg">
+                <div class="loader-bar-fill" id="loader-bar"></div>
             </div>
-            <div class="loading-text" id="loading-status">جاري تهيئة النواة...</div>
+            <div style="font-size: 0.8rem; color: #666; margin-top: 10px;">Xenova/LaMini-Flan-T5-248M</div>
         </div>
     </div>
 
-    <!-- 2. Main App Container -->
-    <div id="app-container" class="glass-panel">
-        
-        <!-- Sidebar -->
-        <aside class="glass-panel" style="border-radius: 0;">
-            <div class="brand">
-                <span>◆</span> Velox AI
-            </div>
+    <!-- حاوية الإشعارات -->
+    <div class="toast-container" id="toast-container"></div>
 
-            <div class="user-profile">
-                <div class="avatar">Z</div>
-                <div class="user-info">
-                    <h4 id="guest-name">Guest User</h4>
-                    <div class="status-badge">
-                        <div class="status-dot"></div>
-                        متصل
-                    </div>
-                    <p style="margin-top:5px; font-size:0.65rem; opacity:0.5;" id="guest-id-display">ID: ----</p>
+    <div id="app-container">
+        <!-- الـ Sidebar -->
+        <nav class="sidebar glass-panel">
+            <div class="logo-area">
+                <div class="logo-icon">V</div>
+                <div>
+                    <h2 style="font-weight: 800; letter-spacing: 1px;">VELOX AI</h2>
+                    <span style="font-size: 0.7rem; color: var(--accent-color);">NEURAL ENGINE V1.0</span>
                 </div>
             </div>
 
-            <div class="controls">
-                <button class="btn-glass" id="btn-settings">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-                    الإعدادات
+            <!-- بطاقة المستخدم -->
+            <div class="user-profile-card">
+                <div class="user-info-row">
+                    <span class="guest-name" id="display-username">Loading...</span>
+                    <div id="status-badge" class="status-badge status-loading">
+                        <div class="status-dot"></div>
+                        <span id="status-text">تحميل</span>
+                    </div>
+                </div>
+                <span class="guest-id" id="display-guest-id">ID: ---</span>
+            </div>
+
+            <div class="sidebar-actions">
+                <button class="btn btn-glass" id="settings-btn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+                    إعدادات النظام
                 </button>
-                <button class="btn-glass danger" id="btn-clear">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                <button class="btn btn-danger" id="clear-chat-btn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     مسح المحادثة
                 </button>
             </div>
-        </aside>
+        </nav>
 
-        <!-- Main Chat Interface -->
-        <main>
-            <header>
+        <!-- منطقة الدردشة -->
+        <main class="chat-area">
+            <header class="glass-panel chat-header" style="border-radius: 0; border-left: none; border-right: none; border-top: none;">
                 <div class="model-info">
-                    LaMini-Flan-T5 <span class="model-badge">Local Engine</span>
+                    <span class="model-name">LaMini-Flan-T5-248M</span>
+                    <span class="model-meta">Local Inference • Transformers.js</span>
                 </div>
-                <div style="font-size: 0.8rem; opacity: 0.6;">Velox v1.0.0</div>
+                <!-- زر للقائمة في الموبايل -->
+                <button class="btn btn-glass" style="padding: 8px;" id="mobile-menu-btn">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
             </header>
 
-            <div id="chat-history">
-                <!-- Welcome Message -->
-                <div class="message ai">
-                    مرحباً بك. أنا Velox AI، مساعدك الذكي الذي يعمل بتقنية المعالجة المحلية. كيف يمكنني مساعدتك اليوم؟
+            <div id="messages-container">
+                <!-- الرسائل ستظهر هنا -->
+                <div class="message msg-ai">
+                    <span class="msg-role">Velox AI</span>
+                    النظام جاهز. أنا مساعدك التقني الذكي.
                 </div>
             </div>
 
-            <div class="input-area">
-                <button class="action-btn" id="btn-mic" title="تسجيل صوتي">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+            <div class="input-container">
+                <button class="btn btn-primary" id="send-btn" style="height: 56px; width: 56px; padding: 0; border-radius: 12px;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
                 </button>
                 <div class="input-wrapper">
-                    <textarea id="user-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+                    <input type="text" id="user-input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+                    <button class="mic-btn" id="mic-btn" title="تحدث">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    </button>
                 </div>
-                <button class="action-btn send-btn" id="btn-send">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                </button>
             </div>
         </main>
     </div>
 
-    <!-- Toast Container -->
-    <div id="toast-container"></div>
+    <!-- استيراد المكتبة عبر CDN (Modular) -->
+    <script type="module">
+        /**
+         * =========================================
+         * Velox AI Core System
+         * مهندس النظام: Senior Full-Stack AI Architect
+         * =========================================
+         */
 
-    <!-- 
-        ========================================
-        ARCHITECTURE: LOGIC LAYER (script.js)
-        ========================================
-    -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // استيراد المكتبة من CDN
+        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+
+        // تعطيل تحميل النماذج من HuggingFace Hub المحلي واستخدام CDN مباشرة
+        env.allowLocalModels = false;
+        env.useBrowserCache = true;
+
+        /* -------------------------------------------------------------------------- */
+        /*                               Module: Utils                                */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * دالة مساعدة لإنشاء تأخير زمني (Promisified Timeout)
+         * @param {number} ms - عدد الميلي ثانية
+         * @returns {Promise}
+         */
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        /* -------------------------------------------------------------------------- */
+        /*                            Module: Notification                            */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * فئة إدارة الإشعارات (Toast Notifications)
+         * مسؤولة عن عرض رسائل الخطأ والنجاح بدلاً من alert
+         */
+        class ToastManager {
+            constructor(containerId) {
+                this.container = document.getElementById(containerId);
+            }
+
             /**
-             * Velox AI Core Logic
-             * Developer: Adam Laamime
-             * Architecture: Modular, Event-Driven, Zero-API Dependency
+             * عرض إشعار
+             * @param {string} message - نص الرسالة
+             * @param {string} type - نوع الإشعار ('error' | 'success' | 'info')
              */
-
-            // --- Configuration & State ---
-            const CONFIG = {
-                identityString: "أنا Velox AI، ذكاء اصطناعي ذكي مطور من قبل المبرمج آدم لعميم (Adam Laamime).",
-                modelName: "LaMini-Flan-T5",
-                typingSpeed: 30
-            };
-
-            const state = {
-                guestId: localStorage.getItem('velox_guest_id') || generateGuestId(),
-                isProcessing: false,
-                isRecording: false
-            };
-
-            // --- DOM Elements ---
-            const elements = {
-                loaderScreen: document.getElementById('init-screen'),
-                loaderBar: document.getElementById('loader-bar'),
-                loadingStatus: document.getElementById('loading-status'),
-                appContainer: document.getElementById('app-container'),
-                guestIdDisplay: document.getElementById('guest-id-display'),
-                chatHistory: document.getElementById('chat-history'),
-                userInput: document.getElementById('user-input'),
-                btnSend: document.getElementById('btn-send'),
-                btnMic: document.getElementById('btn-mic'),
-                btnClear: document.getElementById('btn-clear'),
-                btnSettings: document.getElementById('btn-settings'),
-                toastContainer: document.getElementById('toast-container')
-            };
-
-            // --- Initialization Logic ---
-            initSystem();
-
-            function initSystem() {
-                // Save ID if not exists
-                if (!localStorage.getItem('velox_guest_id')) {
-                    localStorage.setItem('velox_guest_id', state.guestId);
-                }
-                elements.guestIdDisplay.textContent = `ID: ${state.guestId}`;
-
-                // Start Loading Simulation
-                simulateLoading();
-            }
-
-            function simulateLoading() {
-                let progress = 0;
-                const stages = [
-                    "جاري تهيئة النواة...",
-                    "تحميل نموذج LaMini-Flan-T5...",
-                    "ضبط مصفوفات الذاكرة...",
-                    "بناء واجهة Glassmorphism...",
-                    "النظام جاهز"
-                ];
-
-                const interval = setInterval(() => {
-                    // Randomize progress increment for realism
-                    progress += Math.floor(Math.random() * 5) + 1;
-                    
-                    if (progress > 100) progress = 100;
-                    
-                    elements.loaderBar.style.width = `${progress}%`;
-                    
-                    // Update text based on progress milestones
-                    const stageIndex = Math.floor((progress / 100) * (stages.length - 1));
-                    elements.loadingStatus.textContent = stages[stageIndex];
-
-                    if (progress === 100) {
-                        clearInterval(interval);
-                        setTimeout(revealApp, 800);
-                    }
-                }, 50); // Speed of loading
-            }
-
-            function revealApp() {
-                elements.loaderScreen.style.opacity = '0';
-                elements.appContainer.style.opacity = '1';
-                elements.appContainer.style.transform = 'scale(1)';
-                
-                setTimeout(() => {
-                    elements.loaderScreen.style.display = 'none';
-                    elements.userInput.focus();
-                }, 800);
-            }
-
-            // --- Core Interaction Logic ---
-
-            // 1. Send Message
-            elements.btnSend.addEventListener('click', handleSendMessage);
-            elements.userInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
-                }
-            });
-
-            async function handleSendMessage() {
-                const text = elements.userInput.value.trim();
-                if (!text || state.isProcessing) return;
-
-                // UI Update: Add User Message
-                addMessage(text, 'user');
-                elements.userInput.value = '';
-                adjustTextareaHeight(elements.userInput);
-                
-                state.isProcessing = true;
-                showTypingIndicator();
-
-                try {
-                    // Check Identity Constraint
-                    if (isIdentityQuestion(text)) {
-                        await simulateNetworkDelay(800);
-                        removeTypingIndicator();
-                        addMessage(CONFIG.identityString, 'ai');
-                    } 
-                    else {
-                        // RAG Engine & Processing
-                        const context = await performSearch(text);
-                        await simulateNetworkDelay(1500); // Simulate inference time
-                        
-                        removeTypingIndicator();
-                        
-                        // Generate simulated response based on context
-                        const response = generateAIResponse(text, context);
-                        addMessage(response, 'ai', context.source);
-                    }
-                } catch (error) {
-                    removeTypingIndicator();
-                    showToast("حدث خطأ في المعالجة المحلية", "error");
-                }
-
-                state.isProcessing = false;
-            }
-
-            // 2. RAG Engine Simulation (Search Retrieval)
-            async function performSearch(query) {
-                // In a real scenario, this fetches from a vector DB.
-                // Here we simulate finding context.
-                console.log(`[RAG Engine]: Searching index for "${query}"...`);
-                
-                const dummyKnowledge = {
-                    "default": "قمت بتحليل استفسارك بناءً على البيانات المتاحة في النظام المحلي.",
-                    "velox": "Velox AI هو نظام ذكاء اصطناعي متقدم يعمل بمعالجة EDGE.",
-                    "adam": "آدم لعميم هو المطور الرئيسي والمؤسس لهذا المشروع."
-                };
-
-                let match = dummyKnowledge["default"];
-                let source = "Local Memory";
-
-                const lowerQuery = query.toLowerCase();
-                if (lowerQuery.includes("velox") || lowerQuery.includes("نظام")) {
-                    match = dummyKnowledge["velox"];
-                    source = "Internal Docs";
-                } else if (lowerQuery.includes("آدم") || lowerQuery.includes("مطور")) {
-                    match = dummyKnowledge["adam"];
-                    source = "Profile DB";
-                } else if (lowerQuery.includes("مرحبا") || lowerQuery.includes("هلو")) {
-                    match = "أهلاً بك! كيف يمكنني تقديم الدعم التقني لك؟";
-                    source = "Greeting Protocol";
-                }
-
-                return { text: match, source: source };
-            }
-
-            // 3. AI Response Generation (Simulated LLM)
-            function generateAIResponse(query, context) {
-                // Simple logic to construct a "smart" response
-                const responses = [
-                    `بناءً على ${context.source}، ${context.text} هل هناك تفاصيل أخرى تود معرفتها؟`,
-                    `تم استرجاع المعلومات التالية من ${context.source}: ${context.text}`,
-                    `حسب تحليلي: ${context.text}`
-                ];
-                
-                // Pick random variation to feel dynamic
-                return responses[Math.floor(Math.random() * responses.length)];
-            }
-
-            // 4. Identity Check Function
-            function isIdentityQuestion(text) {
-                const keywords = ["منصنعك", "من أنت", "من برمجك", "مصدر البرمجة", "من المطور"];
-                return keywords.some(k => text.includes(k));
-            }
-
-            // --- UI Helper Functions ---
-
-            function addMessage(text, type, source = null) {
-                const div = document.createElement('div');
-                div.className = `message ${type}`;
-                
-                // Markdown-ish parsing for bold (simple)
-                let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                
-                div.innerHTML = `
-                    <div>${formattedText}</div>
-                    ${source ? `<div class="rag-source"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> ${source}</div>` : ''}
-                `;
-                
-                elements.chatHistory.appendChild(div);
-                scrollToBottom();
-            }
-
-            function showTypingIndicator() {
-                const div = document.createElement('div');
-                div.className = 'message ai typing-indicator';
-                div.id = 'typing-indicator';
-                div.innerHTML = `
-                    <span style="display:inline-block; animation:pulse 1s infinite">●</span>
-                    <span style="display:inline-block; animation:pulse 1s infinite 0.2s">●</span>
-                    <span style="display:inline-block; animation:pulse 1s infinite 0.4s">●</span>
-                `;
-                elements.chatHistory.appendChild(div);
-                scrollToBottom();
-            }
-
-            function removeTypingIndicator() {
-                const indicator = document.getElementById('typing-indicator');
-                if (indicator) indicator.remove();
-            }
-
-            function scrollToBottom() {
-                elements.chatHistory.scrollTop = elements.chatHistory.scrollHeight;
-            }
-
-            // --- Sidebar Controls ---
-
-            elements.btnClear.addEventListener('click', () => {
-                if(confirm("هل أنت متأكد من مسح المحادثة؟")) {
-                    elements.chatHistory.innerHTML = '';
-                    addMessage("تم مسح الذاكرة المؤقتة. النظام جاهز.", 'ai');
-                    showToast("تم مسح المحادثة بنجاح");
-                }
-            });
-
-            elements.btnSettings.addEventListener('click', () => {
-                showToast("لوحة الإعدادات قيد التطوير للإصدار 1.1");
-            });
-
-            // --- Microphone Simulation ---
-            elements.btnMic.addEventListener('click', () => {
-                if (state.isRecording) {
-                    // Stop
-                    state.isRecording = false;
-                    elements.btnMic.classList.remove('mic-active');
-                    showToast("تم إيقاف التسجيل");
-                } else {
-                    // Start
-                    state.isRecording = true;
-                    elements.btnMic.classList.add('mic-active');
-                    showToast("جاري الاستماع...");
-                    
-                    // Simulate speech-to-text result
-                    setTimeout(() => {
-                        if(state.isRecording) {
-                            elements.userInput.value += "هذا نص تجريبي من تحويل الصوت.";
-                            state.isRecording = false;
-                            elements.btnMic.classList.remove('mic-active');
-                            adjustTextareaHeight(elements.userInput);
-                        }
-                    }, 3000);
-                }
-            });
-
-            // --- Utilities ---
-
-            function generateGuestId() {
-                return 'G-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-            }
-
-            function simulateNetworkDelay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-
-            function showToast(message) {
+            show(message, type = 'info') {
                 const toast = document.createElement('div');
-                toast.className = 'toast';
-                toast.textContent = message;
-                elements.toastContainer.appendChild(toast);
+                toast.className = `toast ${type}`;
                 
+                // أيقونة حسب النوع
+                let icon = '';
+                if (type === 'error') icon = '⚠️';
+                else if (type === 'success') icon = '✅';
+                else icon = 'ℹ️';
+
+                toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+                this.container.appendChild(toast);
+
+                // إزالة الإشعار بعد 3 ثواني
                 setTimeout(() => {
                     toast.style.opacity = '0';
                     toast.style.transform = 'translateY(-20px)';
-                    setTimeout(() => toast.remove(), 400);
+                    toast.addEventListener('transitionend', () => toast.remove());
                 }, 3000);
             }
+        }
 
-            // Auto-resize textarea
-            elements.userInput.addEventListener('input', function() {
-                adjustTextareaHeight(this);
-            });
+        const toaster = new ToastManager('toast-container');
 
-            function adjustTextareaHeight(el) {
-                el.style.height = '54px';
-                el.style.height = (el.scrollHeight) + 'px';
-                if(el.value === '') el.style.height = '54px';
+        /* -------------------------------------------------------------------------- */
+        /*                         Module: IndexedDB Manager                          */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * فئة إدارة قاعدة البيانات المحلية (The Brain)
+         * تستخدم IndexedDB لتخزين الهويات والمحادثات
+         */
+        class DatabaseManager {
+            constructor(dbName, storeName) {
+                this.dbName = dbName;
+                this.storeName = storeName;
+                this.db = null;
             }
+
+            /**
+             * تهيئة قاعدة البيانات وفتح الاتصال
+             * @returns {Promise<IDBDatabase>}
+             */
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, 1);
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        // إنشاء مخزن الكائنات (Object Store) للمحادثات
+                        if (!db.objectStoreNames.contains(this.storeName)) {
+                            const store = db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                            store.createIndex('userId', 'userId', { unique: false });
+                        }
+                        // إنشاء مخزن للإعدادات/الهوية
+                        if (!db.objectStoreNames.contains('settings')) {
+                            db.createObjectStore('settings', { keyPath: 'key' });
+                        }
+                    };
+
+                    request.onsuccess = (event) => {
+                        this.db = event.target.result;
+                        resolve(this.db);
+                    };
+
+                    request.onerror = (event) => {
+                        console.error("IndexedDB Error:", event.target.error);
+                        reject("فشل الاتصال بقاعدة البيانات المحلية");
+                    };
+                });
+            }
+
+            /**
+             * حفظ رسالة جديدة في المحادثة
+             * @param {string} userId - معرف المستخدم
+             * @param {string} content - نص الرسالة
+             * @param {string} role - دور المرسل ('user' | 'assistant')
+             */
+            async saveMessage(userId, content, role) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const message = {
+                        userId,
+                        content,
+                        role,
+                        timestamp: new Date().toISOString()
+                    };
+                    const request = store.add(message);
+                    
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject('فشل حفظ الرسالة');
+                });
+            }
+
+            /**
+             * جلب سجل المحادثات لمستخدم معين
+             * @param {string} userId - معرف المستخدم
+             * @returns {Promise<Array>} مصفوفة من الرسائل
+             */
+            async fetchHistory(userId) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readonly');
+                    const store = transaction.objectStore(this.storeName);
+                    const index = store.index('userId');
+                    const request = index.getAll(userId);
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject('فشل جلب السجل');
+                });
+            }
+
+            /**
+             * مسح محادثات مستخدم معين
+             * @param {string} userId - معرف المستخدم
+             */
+            async clearUserHistory(userId) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const index = store.index('userId');
+                    // ملاحظة: في IndexedDB حذف العناصر بناءً على الفهرس يتطلب تكراراً أو استخدام KeyCursor
+                    // هنا سنقوم بحذف الكل بتحديد المفاتيح
+                    const request = index.openCursor(IDBKeyRange.only(userId));
+                    
+                    request.onsuccess = (e) => {
+                        const cursor = e.target.result;
+                        if (cursor) {
+                            cursor.delete();
+                            cursor.continue();
+                        } else {
+                            resolve();
+                        }
+                    };
+                    request.onerror = () => reject('فشل مسح السجل');
+                });
+            }
+
+            /**
+             * حفظ الإعدادات (مثل Guest ID)
+             * @param {string} key - مفت الإعداد
+             * @param {any} value - القيمة
+             */
+            async saveSetting(key, value) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['settings'], 'readwrite');
+                    const store = transaction.objectStore('settings');
+                    store.put({ key, value });
+                    transaction.oncomplete = () => resolve();
+                });
+            }
+
+            /**
+             * جلب إعداد معين
+             * @param {string} key - مفت الإعداد
+             * @returns {Promise<any>}
+             */
+            async getSetting(key) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['settings'], 'readonly');
+                    const store = transaction.objectStore('settings');
+                    const request = store.get(key);
+                    request.onsuccess = () => resolve(request.result ? request.result.value : null);
+                });
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                            Module: User Identity                           */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * فئة إدارة هوية المستخدم (Guest Identity Management)
+         * مسؤولة عن إنشاء واسترجاع معرف الضيف
+         */
+        class UserIdentity {
+            constructor(dbManager) {
+                this.db = dbManager;
+                this.id = null;
+                this.name = "Guest User";
+            }
+
+            /**
+             * تهيئة الهوية: إما استرجاع القديم أو إنشاء جديد
+             */
+            async init() {
+                try {
+                    // محاولة جلب الـ ID المخزن
+                    let storedId = await this.db.getSetting('guest_id');
+                    
+                    if (!storedId) {
+                        // إنشاء ID جديد فريد
+                        this.id = this.generateUniqueId();
+                        await this.db.saveSetting('guest_id', this.id);
+                        console.log(`[Identity] New Guest Created: ${this.id}`);
+                    } else {
+                        this.id = storedId;
+                        console.log(`[Identity] Welcome Back: ${this.id}`);
+                    }
+                    return this.id;
+                } catch (error) {
+                    console.error("Identity Init Error:", error);
+                    toaster.show("خطأ في تهيئة الهوية", "error");
+                    throw error;
+                }
+            }
+
+            /**
+             * توليد سلسلة عشوائية للـ ID
+             * @returns {string} ID بالصيغة guest_xxxxx
+             */
+            generateUniqueId() {
+                const randomStr = Math.random().toString(36).substring(2, 12);
+                return `guest_${randomStr}`;
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                            Module: Speech Input                            */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * فئة إدارة المدخلات الصوتية (Web Speech API)
+         */
+        class SpeechManager {
+            constructor() {
+                // التحقق من دعم المتصفح
+                this.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                this.isListening = false;
+                this.onResultCallback = null;
+            }
+
+            /**
+             * بدء الاستماع
+             * @param {function} callback - دالة تستدعى عند الانتهاء من النص
+             * @param {function} onEnd - دالة تستدعى عند انتهاء الجلسة
+             */
+            start(callback, onEnd) {
+                if (!this.SpeechRecognition) {
+                    toaster.show("المتصفح لا يدعم التعرف على الصوت", "error");
+                    return;
+                }
+
+                const recognition = new this.SpeechRecognition();
+                recognition.lang = 'ar-SA'; // اللغة العربية
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = () => {
+                    this.isListening = true;
+                    document.getElementById('mic-btn').classList.add('listening');
+                };
+
+                recognition.onend = () => {
+                    this.isListening = false;
+                    document.getElementById('mic-btn').classList.remove('listening');
+                    if (onEnd) onEnd();
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    if (callback) callback(transcript);
+                };
+
+                recognition.onerror = (event) => {
+                    this.isListening = false;
+                    document.getElementById('mic-btn').classList.remove('listening');
+                    console.error("Speech Error:", event.error);
+                    if(event.error !== 'no-speech') {
+                        toaster.show("خطأ في التعرف على الصوت", "error");
+                    }
+                };
+
+                recognition.start();
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                            Module: AI Engine                               */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * فئة محرك الذكاء الاصطناعي (Local Engine)
+         * تستخدم Transformers.js لتشغيل النموذج
+         */
+        class AIEngine {
+            constructor() {
+                this.generator = null;
+                this.isModelLoaded = false;
+                this.systemPrompt = 'أنت Velox AI، مساعد تقني ابتكره المبرمج آدم لعميم. إجاباتك تقنية، رسمية، مباشرة (3 أسطر)، وممنوع منعاً كلياً استخدام الإيموجي أو التعبيرات الطفولية.';
+            }
+
+            /**
+             * تحميل نموذج الذكاء الاصطناعي مع تتبع التقدم
+             * @param {function} progressCallback - دالة تستقبل نسبة التحميل
+             */
+            async loadModel(progressCallback) {
+                try {
+                    console.log("[AI] Loading Model...");
+                    // تحميل النموذج المحدد Xenova/LaMini-Flan-T5-248M
+                    this.generator = await pipeline('text2text-generation', 'Xenova/LaMini-Flan-T5-248M', {
+                        progress_callback: (data) => {
+                            if (data.status === 'progress') {
+                                // data.progress موجود أحياناً، أو نحسبه من file/fileSize
+                                // Transformers.js يرسل status: 'downloading' أو 'progress'
+                                if (data.file) {
+                                    const percent = Math.round((data.progress || 0) * 100);
+                                    if (progressCallback) progressCallback(percent, data.status);
+                                }
+                            } else if (data.status === 'done') {
+                                if (progressCallback) progressCallback(100, 'تم التحميل');
+                            }
+                        }
+                    });
+                    
+                    this.isModelLoaded = true;
+                    console.log("[AI] Model Loaded Successfully");
+                } catch (error) {
+                    console.error("[AI] Load Error:", error);
+                    toaster.show("فشل تحميل نموذج الذكاء الاصطناعي", "error");
+                    throw error;
+                }
+            }
+
+            /**
+             * توليد رد بناءً على المحادثة
+             * @param {string} userMessage - رسالة المستخدم
+             * @param {Array} history - سجل المحادثة السابق
+             * @returns {Promise<string>} نص الرد
+             */
+            async generateResponse(userMessage, history) {
+                if (!this.isModelLoaded) throw new Error("النموذج غير محمل");
+
+                // تجهيز الـ Context (السياق) للنموذج
+                // ندمج الـ System Prompt مع آخر 3 تبادلات للحفاظ على السياق
+                let context = this.systemPrompt + "\n\n";
+                
+                // إضافة جزء من السجل
+                const recentHistory = history.slice(-4); // آخر 4 رسائل فقط لتوفير الذاكرة
+                recentHistory.forEach(msg => {
+                    if (msg.role === 'user') context += `User: ${msg.content}\n`;
+                    else context += `Assistant: ${msg.content}\n`;
+                });
+
+                // إضافة الرسالة الحالية
+                context += `User: ${userMessage}\nAssistant:`;
+
+                // تشغيل الاستدلال (Inference)
+                try {
+                    const output = await this.generator(context, {
+                        max_new_tokens: 150,
+                        temperature: 0.7,
+                        do_sample: true,
+                        top_k: 30,
+                    });
+
+                    // تنظيف النص المخرج
+                    let reply = output[0].generated_text;
+                    
+                    // إزالة أي تكرار لنص "Assistant:" أو "User:" قد ينتجه النموذج
+                    reply = reply.replace(/Assistant:|User:/g, '').trim();
+                    
+                    // التأكد من عدم وجود إيموجي (Filter إضافي لضمان الامتثال الصارم للـ System Prompt)
+                    // ملاحظة: النموذج قد يخرجهم، نقوم بتنظيفهم إذا وجدوا لضمان الدقة المطلوبة
+                    const emojiRegex = /[\u{1F600}-\u{1F64F}| \u{1F300}-\u{1F5FF}| \u{1F680}-\u{1F6FF}| \u{1F1E0}-\u{1F1FF}| \u{2600}-\u{26FF}| \u{2700}-\u{27BF}]/gu;
+                    reply = reply.replace(emojiRegex, '');
+
+                    return reply;
+                } catch (error) {
+                    console.error("Inference Error:", error);
+                    throw error;
+                }
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                          Module: UI Controller                             */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * فئة التحكم في واجهة المستخدم
+         * مسؤولة عن الرسم، الأحداث، وتأثيرات الواجهة
+         */
+        class UIController {
+            constructor() {
+                this.messagesContainer = document.getElementById('messages-container');
+                this.userInput = document.getElementById('user-input');
+                this.sendBtn = document.getElementById('send-btn');
+                this.micBtn = document.getElementById('mic-btn');
+                this.clearBtn = document.getElementById('clear-chat-btn');
+                this.settingsBtn = document.getElementById('settings-btn');
+                this.loaderOverlay = document.getElementById('loader-overlay');
+                this.loaderBar = document.getElementById('loader-bar');
+                this.loaderText = document.getElementById('loader-status-text');
+                
+                this.isProcessing = false;
+            }
+
+            /**
+             * إضافة رسالة إلى واجهة الدردشة
+             * @param {string} text - نص الرسالة
+             * @param {string} role - 'user' or 'ai'
+             * @param {boolean} animate - هل نستخدم تأثير الآلة الكاتبة؟
+             */
+            addMessage(text, role, animate = false) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
+                
+                const roleSpan = document.createElement('span');
+                roleSpan.className = 'msg-role';
+                roleSpan.textContent = role === 'user' ? 'أنت' : 'Velox AI';
+                
+                const contentSpan = document.createElement('span');
+                contentSpan.className = 'msg-content';
+                
+                msgDiv.appendChild(roleSpan);
+                msgDiv.appendChild(contentSpan);
+                this.messagesContainer.appendChild(msgDiv);
+                
+                // التمرير للأسفل
+                this.scrollToBottom();
+
+                if (animate && role === 'ai') {
+                    this.typewriterEffect(contentSpan, text);
+                } else {
+                    contentSpan.textContent = text;
+                }
+
+                return msgDiv;
+            }
+
+            /**
+             * تأثير الآلة الكاتبة (Typewriter Effect)
+             * @param {HTMLElement} element - العنصر الذي سيحوي النص
+             * @param {string} text - النص المراد كتابته
+             */
+            async typewriterEffect(element, text) {
+                // إضافة مؤشر الكتابة
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+                element.parentElement.appendChild(cursor);
+
+                for (let i = 0; i < text.length; i++) {
+                    element.textContent += text.charAt(i);
+                    this.scrollToBottom();
+                    // سرعة كتابة عشوائية طفيفة للواقعية
+                    await delay(Math.random() * 20 + 10);
+                }
+
+                // إزالة المؤشر بعد الانتهاء
+                cursor.remove();
+            }
+
+            /**
+             * التمرير لأسفل المحادثة
+             */
+            scrollToBottom() {
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }
+
+            /**
+             * تحديث حالة زر الإرسال (Loading)
+             * @param {boolean} loading
+             */
+            setSendingState(loading) {
+                this.isProcessing = loading;
+                this.sendBtn.disabled = loading;
+                this.userInput.disabled = loading;
+                this.micBtn.disabled = loading;
+
+                if (loading) {
+                    this.sendBtn.innerHTML = `<svg class="animate-spin" style="animation: spin 1s linear infinite;" width="24" height="24" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+                } else {
+                    this.sendBtn.innerHTML = `<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>`;
+                    this.userInput.focus();
+                }
+            }
+
+            /**
+             * تحديث شريط التحميل الأولي
+             * @param {number} percent - النسبة المئوية
+             * @param {string} status - نص الحالة
+             */
+            updateLoader(percent, status) {
+                this.loaderBar.style.width = `${percent}%`;
+                this.loaderText.textContent = status;
+                if (percent === 100) {
+                    setTimeout(() => {
+                        this.loaderOverlay.style.opacity = '0';
+                        setTimeout(() => this.loaderOverlay.style.display = 'none', 500);
+                    }, 800);
+                }
+            }
+
+            /**
+             * مسح واجهة الدردشة
+             */
+            clearChatUI() {
+                this.messagesContainer.innerHTML = '';
+                // إضافة رسالة ترحيبية افتراضية
+                this.addMessage('تم مسح السجل. كيف يمكنني مساعدتك تقنياً اليوم؟', 'ai', true);
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                          Main Application Logic                             */
+        /* -------------------------------------------------------------------------- */
+
+        /**
+         * التطبيق الرئيسي (Velox App)
+         * يجمع كل الوحدات معاً
+         */
+        class VeloxApp {
+            constructor() {
+                this.db = new DatabaseManager('VeloxAI_DB', 'chats');
+                this.identity = new UserIdentity(this.db);
+                this.ai = new AIEngine();
+                this.speech = new SpeechManager();
+                this.ui = new UIController();
+                
+                this.currentUserId = null;
+                this.chatHistory = [];
+            }
+
+            /**
+             * نقطة البداية: تهيئة النظام بالكامل
+             */
+            async start() {
+                try {
+                    // 1. تهيئة قاعدة البيانات
+                    await this.db.init();
+
+                    // 2. تهيئة الهوية
+                    this.currentUserId = await this.identity.init();
+                    this.updateUserProfileUI();
+
+                    // 3. تحميل نموذج الذكاء الاصطناعي
+                    await this.ai.loadModel((percent, status) => {
+                        this.ui.updateLoader(percent, status);
+                    });
+
+                    // 4. تحديث الحالة للخضر (متصل)
+                    this.updateSystemStatus('online');
+
+                    // 5. استعادة المحادثة السابقة
+                    await this.loadHistory();
+
+                    // 6. تفعيل مستمعي الأحداث (Event Listeners)
+                    this.initEventListeners();
+
+                    console.log("[System] Velox AI Started Successfully");
+
+                } catch (error) {
+                    console.error("[System] Critical Failure:", error);
+                    this.ui.updateLoader(0, "خطأ جسيم في النظام");
+                    toaster.show("تعذر بدء النظام: " + error.message, "error");
+                }
+            }
+
+            /**
+             * تحديث بيانات المستخدم في الـ Sidebar
+             */
+            updateUserProfileUI() {
+                document.getElementById('display-username').textContent = this.identity.name;
+                document.getElementById('display-guest-id').textContent = this.currentUserId;
+            }
+
+            /**
+             * تحديث شارة الحالة (Status Badge)
+             * @param {string} state - 'online' | 'loading' | 'busy'
+             */
+            updateSystemStatus(state) {
+                const badge = document.getElementById('status-badge');
+                const text = document.getElementById('status-text');
+                
+                badge.className = 'status-badge'; // Reset
+                
+                if (state === 'online') {
+                    badge.classList.add('status-online');
+                    text.textContent = 'متصل';
+                } else if (state === 'loading') {
+                    badge.classList.add('status-loading');
+                    text.textContent = 'معالجة...';
+                }
+            }
+
+            /**
+             * استعادة المحادثة من قاعدة البيانات
+             */
+            async loadHistory() {
+                const history = await this.db.fetchHistory(this.currentUserId);
+                this.chatHistory = history;
+                
+                if (history.length > 0) {
+                    // إفراغ الواجهة الحالية
+                    document.getElementById('messages-container').innerHTML = '';
+                    // عرض الرسائل المحفوظة
+                    history.forEach(msg => {
+                        this.ui.addMessage(msg.content, msg.role === 'user' ? 'user' : 'ai');
+                    });
+                    toaster.show("تم استعادة المحادثة", "success");
+                }
+            }
+
+            /**
+             * ربط الأحداث والأزرار
+             */
+            initEventListeners() {
+                // زر الإرسال
+                this.ui.sendBtn.addEventListener('click', () => this.handleSend());
+
+                // زر الإدخال (Enter)
+                this.ui.userInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleSend();
+                });
+
+                // زر الميكروفون
+                this.ui.micBtn.addEventListener('click', () => {
+                    if (this.ui.isProcessing) return;
+                    
+                    this.speech.start(
+                        (transcript) => {
+                            this.ui.userInput.value = transcript;
+                            this.handleSend(); // إرسال تلقائي بعد الكلام
+                        },
+                        () => {} // onEnd
+                    );
+                });
+
+                // زر مسح المحادثة
+                this.ui.clearBtn.addEventListener('click', async () => {
+                    if (confirm('هل أنت متأكد من مسح سجل المحادثات بالكامل؟')) {
+                        await this.db.clearUserHistory(this.currentUserId);
+                        this.chatHistory = [];
+                        this.ui.clearChatUI();
+                        toaster.show("تم مسح السجل", "success");
+                    }
+                });
+
+                // زر الإعدادات (تجريبي)
+                this.ui.settingsBtn.addEventListener('click', () => {
+                    toaster.show("لوحة الإعدادات قيد التطوير", "info");
+                });
+
+                // زر الموبايل
+                document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                    document.querySelector('.sidebar').classList.toggle('active');
+                });
+            }
+
+            /**
+             * المنطق الرئيسي لإرسال الرسالة واستقبال الرد
+             */
+            async handleSend() {
+                const text = this.ui.userInput.value.trim();
+                if (!text) return;
+
+                // 1. UI Updates
+                this.ui.userInput.value = '';
+                this.ui.addMessage(text, 'user');
+                this.ui.setSendingState(true);
+                this.updateSystemStatus('loading');
+
+                // 2. Save User Message to DB
+                try {
+                    await this.db.saveMessage(this.currentUserId, text, 'user');
+                    this.chatHistory.push({ role: 'user', content: text });
+                } catch (err) {
+                    console.error(err);
+                    toaster.show("فشل حفظ الرسالة محلياً", "error");
+                }
+
+                // 3. AI Inference
+                try {
+                    const response = await this.ai.generateResponse(text, this.chatHistory);
+                    
+                    // 4. Save AI Response & Update UI
+                    await this.db.saveMessage(this.currentUserId, response, 'assistant');
+                    this.chatHistory.push({ role: 'assistant', content: response });
+                    
+                    this.ui.addMessage(response, 'ai', true); // true = typewriter
+
+                } catch (error) {
+                    console.error("AI Error:", error);
+                    this.ui.addMessage("عذراً، حدث خطأ أثناء معالجة طلبك من المحرك العصبي.", 'ai');
+                    toaster.show("فشل المحرك العصبي", "error");
+                } finally {
+                    // 5. Reset State
+                    this.ui.setSendingState(false);
+                    this.updateSystemStatus('online');
+                }
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                                 Initialization                             */
+        /* -------------------------------------------------------------------------- */
+
+        // تشغيل التطبيق عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            const app = new VeloxApp();
+            app.start();
         });
+
+        // إضافة Animation Spin للـ CSS via JS injection (لأيقونة التحميل)
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
     </script>
 </body>
 </html>
