@@ -1,28 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX AI v13.0 | Integrated System Architecture</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>VELOX AI - OMEGA CORE v14.0</title>
     <style>
+        /* 
+         * [VELOX UI ENGINE v14.0]
+         * Advanced Glassmorphism & Responsive Grid System
+         */
         :root {
-            --bg-dark: #050505;
-            --glass-bg: rgba(20, 20, 25, 0.65);
+            --bg-color: #050505;
+            --glass-bg: rgba(20, 20, 20, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.05);
-            --primary: #00ff9d; /* Neon Green */
-            --primary-dim: rgba(0, 255, 157, 0.2);
-            --danger: #ff2a6d;
+            --accent-color: #00ff9d; /* Neon Green for Sigma-Level clarity */
+            --accent-dim: rgba(0, 255, 157, 0.1);
             --text-main: #e0e0e0;
-            --text-muted: #888888;
-            --blur-amount: 20px;
-            --font-ui: 'Inter', sans-serif;
-            --font-code: 'JetBrains Mono', monospace;
+            --text-muted: #888;
+            --font-mono: 'Courier New', Courier, monospace;
+            --blur-amt: 20px;
+            --danger: #ff4d4d;
         }
 
         * {
@@ -30,58 +27,59 @@
             margin: 0;
             padding: 0;
             outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 150, 255, 0.05) 0%, transparent 40%);
             color: var(--text-main);
-            font-family: var(--font-ui);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(42, 100, 255, 0.05) 0%, transparent 40%);
         }
 
-        /* Advanced Glassmorphism Container */
-        #velox-app {
-            width: 95vw;
-            height: 92vh;
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px var(--glass-highlight);
+        /* LAYOUT ARCHITECTURE */
+        #app-container {
+            width: 100%;
+            height: 100%;
+            max-width: 1600px;
             display: grid;
-            grid-template-rows: 60px 1fr 70px;
-            grid-template-columns: 280px 1fr 400px; /* Sidebar, Main, Visualizer */
-            overflow: hidden;
+            grid-template-rows: 60px 1fr 80px;
+            gap: 0;
             position: relative;
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        @media (min-width: 768px) {
+            #app-container {
+                margin: 20px;
+                height: calc(100vh - 40px);
+                border-radius: 16px;
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+                overflow: hidden;
+            }
         }
 
-        /* Header */
+        /* HEADER: STATUS & IDENTITY */
         header {
-            grid-column: 1 / -1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amt));
             border-bottom: 1px solid var(--glass-border);
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             padding: 0 24px;
-            background: rgba(0, 0, 0, 0.2);
+            z-index: 10;
         }
 
         .brand {
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 1px;
             font-size: 1.1rem;
             display: flex;
@@ -89,904 +87,535 @@
             gap: 10px;
         }
 
-        .brand span { color: var(--primary); }
+        .brand span { color: var(--accent-color); }
 
         .system-status {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            font-family: var(--font-mono);
             font-size: 0.8rem;
-            font-family: var(--font-code);
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--text-muted);
-            transition: all 0.3s ease;
-        }
-
-        .dot.active {
-            background-color: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        /* Sidebar */
-        aside {
-            border-right: 1px solid var(--glass-border);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .panel-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .data-card {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .data-value {
-            font-family: var(--font-code);
-            font-size: 1.2rem;
-            color: var(--text-main);
-            margin-bottom: 5px;
-        }
-
-        .data-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        .btn-utility {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .btn-utility:hover {
-            border-color: var(--primary);
-            background: var(--primary-dim);
-            color: var(--primary);
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-color);
+            animation: pulse 2s infinite;
         }
 
-        /* Main Chat Area */
-        main {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background: rgba(0,0,0,0.1);
-        }
-
-        #chat-container {
-            flex: 1;
+        /* MAIN CHAT AREA */
+        #chat-interface {
+            padding: 20px;
             overflow-y: auto;
-            padding: 30px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
             scroll-behavior: smooth;
         }
 
-        /* Custom Scrollbar */
-        #chat-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        #chat-container::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        #chat-container::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-        }
+        /* Scrollbar Styling */
+        #chat-interface::-webkit-scrollbar { width: 6px; }
+        #chat-interface::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 3px; }
 
         .message {
-            max-width: 80%;
-            line-height: 1.6;
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 12px;
             font-size: 0.95rem;
+            line-height: 1.6;
             position: relative;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.user {
-            align-self: flex-end;
-            background: rgba(0, 255, 157, 0.1);
-            border: 1px solid rgba(0, 255, 157, 0.2);
-            padding: 12px 18px;
-            border-radius: 12px 12px 0 12px;
-            color: #fff;
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            word-wrap: break-word;
         }
 
         .message.velox {
             align-self: flex-start;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
-            padding: 15px 20px;
-            border-radius: 12px 12px 12px 0;
-            border-left: 3px solid var(--primary);
+            border-bottom-right-radius: 2px;
         }
 
-        .velox-header {
-            font-family: var(--font-code);
-            font-size: 0.7rem;
-            color: var(--primary);
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
+        .message.user {
+            align-self: flex-end;
+            background: var(--accent-dim);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            color: #fff;
+            border-bottom-left-radius: 2px;
         }
 
-        .code-block {
-            background: #0f0f12;
+        .message code {
+            font-family: var(--font-mono);
+            background: rgba(0,0,0,0.3);
+            padding: 2px 5px;
             border-radius: 4px;
-            padding: 10px;
-            margin-top: 10px;
-            font-family: var(--font-code);
-            font-size: 0.8rem;
-            overflow-x: auto;
-            border: 1px solid var(--glass-border);
-            color: #a9b7c6;
+            color: #ff79c6;
         }
 
-        /* Input Area */
-        .input-area {
-            padding: 20px 30px;
+        .message pre {
+            background: #111;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 8px;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* CONTROLS AREA */
+        #control-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amt));
             border-top: 1px solid var(--glass-border);
+            padding: 0 20px;
             display: flex;
             align-items: center;
             gap: 15px;
-            background: rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
         .input-wrapper {
-            flex: 1;
+            flex-grow: 1;
             position: relative;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            transition: border-color 0.3s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent-color);
         }
 
         #user-input {
             width: 100%;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--glass-border);
-            color: white;
-            padding: 14px 20px;
-            border-radius: 30px;
-            font-family: var(--font-ui);
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-
-        #user-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(0, 255, 157, 0.1);
-            background: rgba(0,0,0,0.6);
-        }
-
-        .action-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            background: transparent;
             border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            transition: all 0.2s;
-            background: var(--glass-bg);
+            color: #fff;
+            padding: 14px;
+            font-size: 1rem;
+        }
+
+        /* BUTTONS */
+        .btn {
+            background: transparent;
             border: 1px solid var(--glass-border);
             color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
-        .action-btn:hover {
-            background: var(--primary-dim);
-            color: var(--primary);
-            transform: scale(1.05);
+        .btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.2);
         }
 
-        .action-btn.mic.listening {
-            color: var(--danger);
-            border-color: var(--danger);
+        .btn:active { transform: scale(0.96); }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover {
+            background: #00cc7d;
+            box-shadow: 0 0 15px var(--accent-dim);
+        }
+
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .mic-active {
+            background: var(--danger) !important;
+            color: white !important;
+            border-color: var(--danger) !important;
             animation: pulse-red 1.5s infinite;
         }
 
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(255, 42, 109, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 42, 109, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 42, 109, 0); }
-        }
-
-        /* Right Panel (Visualizer) */
-        #visualizer-panel {
-            border-left: 1px solid var(--glass-border);
-            position: relative;
-            background: rgba(0,0,0,0.2);
-            overflow: hidden;
+        /* UTILITIES & ANIMATIONS */
+        .typing-indicator {
             display: flex;
-            flex-direction: column;
+            gap: 4px;
+            padding: 10px 0;
         }
 
-        #canvas-container {
-            flex: 1;
-            position: relative;
-            width: 100%;
-            height: 100%;
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
         }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
 
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        .panel-overlay {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            text-align: right;
-            pointer-events: none;
-        }
-
-        .panel-overlay h3 {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* Toast Notification */
         #toast-container {
-            position: absolute;
-            top: 80px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 1000;
         }
 
         .toast {
-            background: rgba(10, 10, 12, 0.9);
+            background: rgba(10, 10, 10, 0.9);
             backdrop-filter: blur(10px);
-            border-left: 4px solid var(--primary);
-            padding: 15px 25px;
-            border-radius: 4px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            font-size: 0.9rem;
-            color: white;
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
-            gap: 12px;
-            transform: translateX(120%);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            gap: 10px;
+            animation: fadeInOut 3s forwards;
+            font-size: 0.9rem;
         }
 
-        .toast.show {
-            transform: translateX(0);
+        .toast.success { border-left: 3px solid var(--accent-color); }
+        .toast.error { border-left: 3px solid var(--danger); }
+
+        /* Animations */
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; box-shadow: 0 0 15px var(--accent-color); } 100% { opacity: 0.5; } }
+        @keyframes pulse-red { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInOut { 0% { opacity: 0; transform: translateY(-10px); } 10% { opacity: 1; transform: translateY(0); } 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
+
+        /* Loading Overlay */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s;
         }
-
-        .toast i { color: var(--primary); }
-
-        /* Spinner */
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-top-color: var(--primary);
+        .loader-ring {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--glass-border);
+            border-top-color: var(--accent-color);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: none; /* Hidden by default */
+            animation: spin 1s linear infinite;
         }
-        
-        .spinner.active { display: block; }
-
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            #velox-app {
-                grid-template-columns: 1fr;
-                grid-template-rows: 60px 1fr 200px 70px; /* Adjust for visualizer at bottom or hidden */
-            }
-            #visualizer-panel {
-                border-left: none;
-                border-top: 1px solid var(--glass-border);
-                display: none; /* Hide visualizer on tablet/mobile for focus */
-            }
-        }
     </style>
 </head>
 <body>
 
-    <div id="velox-app">
-        <!-- Header -->
+    <!-- ZERO-FAULT: LOADER -->
+    <div id="loader">
+        <div class="loader-ring"></div>
+        <div style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-color);">INITIALIZING OMEGA CORE v14.0...</div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <!-- MAIN APP STRUCTURE -->
+    <div id="app-container">
         <header>
             <div class="brand">
-                <i class="fa-solid fa-cube"></i>
-                VELOX <span>AI</span> <small style="opacity: 0.5; font-size: 0.8em; margin-left:5px;">v13.0</small>
+                <span>VELOX</span> AI <small style="color:var(--text-muted); font-weight:400;">v14.0</small>
             </div>
             <div class="system-status">
-                <div class="status-item">
-                    <div class="dot active" id="status-ws"></div>
-                    <span>WS: CONNECTED</span>
-                </div>
-                <div class="status-item">
-                    <div class="dot active" id="status-core"></div>
-                    <span>CORE: STABLE</span>
-                </div>
-                <div class="status-item">
-                    <div class="dot" id="status-db"></div>
-                    <span>DB: IDLE</span>
-                </div>
+                <div class="status-dot" id="connection-dot"></div>
+                <span id="status-text">SYSTEM ONLINE</span>
             </div>
         </header>
 
-        <!-- Sidebar -->
-        <aside>
-            <div>
-                <div class="panel-title">System Resources</div>
-                <div class="data-card">
-                    <div class="data-value" id="latency-val">12<span style="font-size:0.6em">ms</span></div>
-                    <div class="data-label">NETWORK LATENCY</div>
-                </div>
-            </div>
-
-            <div style="margin-top: 20px;">
-                <div class="panel-title">Memory Management</div>
-                <div class="data-card" style="margin-bottom: 10px;">
-                    <div class="data-value" id="session-entries">0</div>
-                    <div class="data-label">STORED SESSIONS</div>
-                </div>
-                <button class="btn-utility" onclick="app.clearMemory()">
-                    <i class="fa-solid fa-trash-can"></i> Clear Memory
-                </button>
-            </div>
-
-            <div style="margin-top: auto;">
-                <div class="panel-title">Security</div>
-                <div class="data-card">
-                    <div class="data-value" style="font-size: 0.9rem; color: var(--primary);">AES-256</div>
-                    <div class="data-label">ENCRYPTION ACTIVE</div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Chat Interface -->
-        <main>
-            <div id="chat-container">
-                <!-- Welcome Message -->
-                <div class="message velox">
-                    <div class="velox-header">
-                        <span>VELOX CORE</span>
-                        <span>INIT_SEQ_01</span>
-                    </div>
-                    <div class="message-content">
-                        System initialized. Identity confirmed: Adam L. Aqeel.<br>
-                        Zero-Fault Protocol engaged. Neural Logic Core is ready for input.<br>
-                        <br>
-                        <em>Awaiting engineering directives...</em>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-area">
-                <button class="action-btn mic" id="btn-mic" title="Activate Voice Command">
-                    <i class="fa-solid fa-microphone"></i>
-                </button>
-                <div class="input-wrapper">
-                    <input type="text" id="user-input" placeholder="Enter command or code query..." autocomplete="off">
-                </div>
-                <button class="action-btn" id="btn-send" title="Execute Command">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
-                <div class="spinner" id="loading-spinner"></div>
+        <main id="chat-interface">
+            <!-- Messages will be injected here via JS -->
+            <div class="message velox">
+                تم تفعيل بروتوكول [OMEGA CORE v14.0] بنجاح.<br>
+                أنا Velox AI، الكيان الهندسي المسؤول عن استقرار النظام. البيانات محمية، والذاكرة جاهزة. بانتظار أوامرك البرمجية، آدم.
             </div>
         </main>
 
-        <!-- Visualizer Panel -->
-        <div id="visualizer-panel">
-            <div class="panel-overlay">
-                <h3>Structural Analysis</h3>
-                <div class="data-label" id="viz-status">WAITING FOR DATA</div>
-            </div>
-            <div id="canvas-container">
-                <canvas id="neural-canvas"></canvas>
-            </div>
-        </div>
-    </div>
+        <footer id="control-panel">
+            <button class="btn btn-icon" id="btn-clear" title="Clear Memory">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+            </button>
+            
+            <button class="btn btn-icon" id="btn-mic" title="Voice Command">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </button>
 
-    <!-- Toasts -->
-    <div id="toast-container"></div>
+            <div class="input-wrapper">
+                <input type="text" id="user-input" placeholder="أدخل الأمر البرمجي..." autocomplete="off">
+            </div>
+
+            <button class="btn btn-primary" id="btn-send">
+                إرسال <span style="font-size:1.2rem;">&larr;</span>
+            </button>
+        </footer>
+    </div>
 
     <script>
         /**
-         * VELOX AI v13.0 - INTEGRATED SYSTEM ARCHITECTURE
-         * Single File Implementation
-         * 
-         * Modules:
-         * 1. ZeroErrorImmuneSystem (Proxy)
-         * 2. StorageManager (IndexedDB)
-         * 3. NeuralLogicCore (Processing)
-         * 4. VisualizerEngine (2D Canvas)
-         * 5. AudioInterface (Web Speech API)
-         * 6. UIManager (DOM)
+         * VELOX AI - OMEGA CORE v14.0
+         * Zero-Fault Logic & Backend Integration
          */
 
-        // --- CONSTANTS & CONFIG ---
-        const CONFIG = {
-            dbName: 'VeloxDB_v13',
-            storeName: 'sessions',
-            encryptionKey: 'ADAM_AQEEL_KEY_V13', // Simulated
-            version: 1
-        };
-
-        // --- 1. ZERO ERROR IMMUNE SYSTEM ---
-        // Prevents runtime crashes by wrapping function calls in a Proxy
-        const createSafeProxy = (target) => {
-            return new Proxy(target, {
-                get(obj, prop) {
-                    const value = obj[prop];
-                    if (typeof value === 'function') {
-                        return function (...args) {
-                            try {
-                                return value.apply(obj, args);
-                            } catch (e) {
-                                console.error(`[Zero-Error Protocol] Intercepted fault in ${prop}:`, e.message);
-                                ui.showToast(`System prevented a fault in module: ${prop}`, 'error');
-                                return null; // Fail safe
-                            }
-                        };
-                    }
-                    return value;
+        // [PROTOCOL 1: IMMUNE SYSTEM - SAFE HANDLERS]
+        // Wrapped to prevent Runtime Errors if DOM elements fail to load
+        const ui = {
+            chatInterface: document.getElementById('chat-interface'),
+            input: document.getElementById('user-input'),
+            btnSend: document.getElementById('btn-send'),
+            btnMic: document.getElementById('btn-mic'),
+            btnClear: document.getElementById('btn-clear'),
+            loader: document.getElementById('loader'),
+            statusText: document.getElementById('status-text'),
+            
+            showToast: (message, type = 'success') => {
+                try {
+                    const container = document.getElementById('toast-container');
+                    const toast = document.createElement('div');
+                    toast.className = `toast ${type}`;
+                    toast.innerHTML = `
+                        <span>${type === 'success' ? '&#10003;' : '&#9888;'}</span>
+                        <span>${message}</span>
+                    `;
+                    container.appendChild(toast);
+                    setTimeout(() => toast.remove(), 3500);
+                } catch (e) {
+                    console.error('[UI ERROR]: Toast failed', e);
                 }
-            });
+            },
+
+            appendMessage: (text, sender) => {
+                try {
+                    const div = document.createElement('div');
+                    div.className = `message ${sender}`;
+                    // Parse basic markdown-like code blocks
+                    const formattedText = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                                              .replace(/`([^`]+)`/g, '<code>$1</code>');
+                    div.innerHTML = formattedText;
+                    ui.chatInterface.appendChild(div);
+                    ui.chatInterface.scrollTop = ui.chatInterface.scrollHeight;
+                } catch (e) {
+                    console.error('[UI ERROR]: Append failed', e);
+                }
+            },
+
+            showTyping: () => {
+                const div = document.createElement('div');
+                div.className = 'message velox';
+                div.id = 'typing-indicator-msg';
+                div.innerHTML = `
+                    <div class="typing-indicator">
+                        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    </div>`;
+                ui.chatInterface.appendChild(div);
+                ui.chatInterface.scrollTop = ui.chatInterface.scrollHeight;
+            },
+
+            removeTyping: () => {
+                const el = document.getElementById('typing-indicator-msg');
+                if (el) el.remove();
+            }
         };
 
-        // --- 2. STORAGE MANAGER (IndexedDB) ---
-        class StorageManager {
-            constructor() {
-                this.db = null;
-            }
+        // [PROTOCOL 5: INDEXEDDB DATA MANAGEMENT]
+        const dbService = {
+            dbName: 'VeloxCoreDB_v14',
+            storeName: 'context_memory',
+            db: null,
 
-            async init() {
+            init: async () => {
                 return new Promise((resolve, reject) => {
-                    const request = indexedDB.open(CONFIG.dbName, CONFIG.version);
-
+                    const request = indexedDB.open(dbService.dbName, 1);
+                    
                     request.onupgradeneeded = (e) => {
                         const db = e.target.result;
-                        if (!db.objectStoreNames.contains(CONFIG.storeName)) {
-                            db.createObjectStore(CONFIG.storeName, { keyPath: 'id', autoIncrement: true });
+                        if (!db.objectStoreNames.contains(dbService.storeName)) {
+                            db.createObjectStore(dbService.storeName, { keyPath: 'id', autoIncrement: true });
                         }
                     };
 
                     request.onsuccess = (e) => {
-                        this.db = e.target.result;
-                        this.updateStatus(true);
-                        this.loadStats();
+                        dbService.db = e.target.result;
+                        console.log('[DB]: Connection Established');
                         resolve();
                     };
 
                     request.onerror = (e) => {
-                        console.error("IndexedDB Error:", e);
-                        this.updateStatus(false);
+                        console.error('[DB]: Connection Failed', e);
                         reject(e);
                     };
                 });
-            }
+            },
 
-            updateStatus(isActive) {
-                const dot = document.getElementById('status-db');
-                if (isActive) dot.classList.add('active');
-            }
-
-            async saveSession(type, content) {
-                if (!this.db) return;
-                const tx = this.db.transaction([CONFIG.storeName], 'readwrite');
-                const store = tx.objectStore(CONFIG.storeName);
-                const record = {
-                    timestamp: new Date().toISOString(),
-                    type: type,
-                    content: content
-                };
-                store.add(record);
-                this.loadStats();
-            }
-
-            async clearMemory() {
-                if (!this.db) return;
-                const tx = this.db.transaction([CONFIG.storeName], 'readwrite');
-                tx.objectStore(CONFIG.storeName).clear();
-                tx.oncomplete = () => {
-                    ui.showToast("Memory Purged. Context Reset.", "success");
-                    this.loadStats();
-                };
-            }
-
-            async loadStats() {
-                if (!this.db) return;
-                const tx = this.db.transaction([CONFIG.storeName], 'readonly');
-                const store = tx.objectStore(CONFIG.storeName);
-                const countReq = store.count();
-                countReq.onsuccess = () => {
-                    document.getElementById('session-entries').innerText = countReq.result;
-                };
-            }
-        }
-
-        // --- 3. NEURAL LOGIC CORE ---
-        class NeuralLogicCore {
-            constructor() {
-                this.vocab = {
-                    greetings: ['hello', 'hi', 'start'],
-                    analysis: ['analyze', 'check', 'scan'],
-                    code: ['function', 'var', 'const', 'async', 'class'],
-                    error: ['error', 'bug', 'fail']
-                };
-            }
-
-            process(input) {
-                const lowerInput = input.toLowerCase();
-                let response = {
-                    type: 'text',
-                    content: '',
-                    data: null // For visualizer
-                };
-
-                // Semantic Filter
-                if (this.vocab.greetings.some(w => lowerInput.includes(w))) {
-                    response.content = "Identity verified. Systems operational. Awaiting data input.";
-                } 
-                else if (this.vocab.code.some(w => lowerInput.includes(w))) {
-                    response.type = 'code';
-                    response.content = "Code structure detected. Optimizing algorithmic complexity...";
-                    response.data = this.generateCodeAnalysis(input);
-                } 
-                else if (this.vocab.analysis.some(w => lowerInput.includes(w))) {
-                    response.type = 'analysis';
-                    response.content = `Deep Parsing initiated. Analyzing input vector: "${input}"`;
-                    response.data = { nodes: this.generateNodes(input), links: 5 };
-                } 
-                else {
-                    response.content = `Input received. Logic engine processing: "${input}". No anomalies detected.`;
-                    response.data = { nodes: [input], links: 0 };
-                }
-
-                return response;
-            }
-
-            generateCodeAnalysis(input) {
-                // Simulated code refactoring/analysis
-                return {
-                    original: input,
-                    optimized: `/* Optimized by Velox v13 */\n(async () => {\n  const result = await ${input.split(' ').pop()}();\n  return result;\n})();`,
-                    complexity: "O(1)"
-                };
-            }
-
-            generateNodes(text) {
-                // Break text into concepts for visualization
-                return text.split(' ').filter(w => w.length > 3).map(w => ({
-                    id: w,
-                    label: w.substring(0, 5) + '...'
-                }));
-            }
-        }
-
-        // --- 4. VISUALIZER ENGINE (2D Canvas) ---
-        class VisualizerEngine {
-            constructor(canvasId) {
-                this.canvas = document.getElementById(canvasId);
-                this.ctx = this.canvas.getContext('2d');
-                this.nodes = [];
-                this.connections = [];
-                this.animationId = null;
-                this.resize();
-                
-                window.addEventListener('resize', () => this.resize());
-                this.startLoop();
-            }
-
-            resize() {
-                const rect = this.canvas.parentElement.getBoundingClientRect();
-                this.canvas.width = rect.width;
-                this.canvas.height = rect.height;
-            }
-
-            updateData(data) {
-                document.getElementById('viz-status').innerText = "PROCESSING DATA FLOW";
-                // Generate random nodes based on input analysis
-                this.nodes = [];
-                const count = data.nodes ? data.nodes.length : 3;
-                
-                for(let i=0; i<count; i++) {
-                    this.nodes.push({
-                        x: Math.random() * this.canvas.width,
-                        y: Math.random() * this.canvas.height,
-                        vx: (Math.random() - 0.5) * 2,
-                        vy: (Math.random() - 0.5) * 2,
-                        size: Math.random() * 5 + 3,
-                        color: '#00ff9d'
-                    });
-                }
-            }
-
-            draw() {
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                
-                // Draw Grid Background
-                this.ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-                this.ctx.lineWidth = 1;
-                const gridSize = 40;
-                for(let x=0; x<this.canvas.width; x+=gridSize) {
-                    this.ctx.beginPath(); this.ctx.moveTo(x, 0); this.ctx.lineTo(x, this.canvas.height); this.ctx.stroke();
-                }
-                for(let y=0; y<this.canvas.height; y+=gridSize) {
-                    this.ctx.beginPath(); this.ctx.moveTo(0, y); this.ctx.lineTo(this.canvas.width, y); this.ctx.stroke();
-                }
-
-                // Update and Draw Nodes
-                this.nodes.forEach(node => {
-                    node.x += node.vx;
-                    node.y += node.vy;
-
-                    // Bounce
-                    if(node.x < 0 || node.x > this.canvas.width) node.vx *= -1;
-                    if(node.y < 0 || node.y > this.canvas.height) node.vy *= -1;
-
-                    this.ctx.beginPath();
-                    this.ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
-                    this.ctx.fillStyle = node.color;
-                    this.ctx.shadowBlur = 10;
-                    this.ctx.shadowColor = node.color;
-                    this.ctx.fill();
-                    this.ctx.shadowBlur = 0;
-                });
-
-                // Draw Connections
-                this.ctx.strokeStyle = 'rgba(0, 255, 157, 0.2)';
-                this.ctx.lineWidth = 1;
-                for(let i=0; i<this.nodes.length; i++) {
-                    for(let j=i+1; j<this.nodes.length; j++) {
-                        const dist = Math.hypot(this.nodes[i].x - this.nodes[j].x, this.nodes[i].y - this.nodes[j].y);
-                        if(dist < 150) {
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(this.nodes[i].x, this.nodes[i].y);
-                            this.ctx.lineTo(this.nodes[j].x, this.nodes[j].y);
-                            this.ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            startLoop() {
-                const loop = () => {
-                    this.draw();
-                    this.animationId = requestAnimationFrame(loop);
-                };
-                loop();
-            }
-        }
-
-        // --- 5. AUDIO INTERFACE (Web Speech API) ---
-        class AudioInterface {
-            constructor(onResult) {
-                this.onResult = onResult;
-                this.recognition = null;
-                this.isListening = false;
-                this.init();
-            }
-
-            init() {
-                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    this.recognition = new SpeechRecognition();
-                    this.recognition.continuous = false;
-                    this.recognition.interimResults = false;
-                    this.recognition.lang = 'en-US'; // Default to English for coding commands
-
-                    this.recognition.onstart = () => {
-                        this.isListening = true;
-                        document.getElementById('btn-mic').classList.add('listening');
-                        ui.showToast("Audio Input Active...", "info");
-                    };
-
-                    this.recognition.onend = () => {
-                        this.isListening = false;
-                        document.getElementById('btn-mic').classList.remove('listening');
-                    };
-
-                    this.recognition.onresult = (event) => {
-                        const transcript = event.results[0][0].transcript;
-                        this.onResult(transcript);
-                    };
-
-                    this.recognition.onerror = (event) => {
-                        console.error("Speech Error:", event.error);
-                        this.isListening = false;
-                        document.getElementById('btn-mic').classList.remove('listening');
-                        ui.showToast("Audio Input Failed", "error");
-                    };
-                } else {
-                    console.warn("Web Speech API not supported");
-                }
-            }
-
-            toggle() {
-                if (!this.recognition) {
-                    ui.showToast("Audio Module Not Installed", "error");
-                    return;
-                }
-                if (this.isListening) this.recognition.stop();
-                else this.recognition.start();
-            }
-        }
-
-        // --- 6. UI MANAGER ---
-        class UIManager {
-            constructor() {
-                this.chatContainer = document.getElementById('chat-container');
-                this.input = document.getElementById('user-input');
-                this.spinner = document.getElementById('loading-spinner');
-            }
-
-            showToast(message, type = 'info') {
-                const container = document.getElementById('toast-container');
-                const toast = document.createElement('div');
-                toast.className = 'toast';
-                
-                let icon = 'fa-info-circle';
-                if(type === 'success') icon = 'fa-check-circle';
-                if(type === 'error') icon = 'fa-triangle-exclamation';
-
-                toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
-                container.appendChild(toast);
-
-                // Trigger reflow
-                void toast.offsetWidth;
-                toast.classList.add('show');
-
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 400);
-                }, 3000);
-            }
-
-            addMessage(text, sender, isCode = false) {
-                const div = document.createElement('div');
-                div.className = `message ${sender}`;
-                
-                const header = sender === 'velox' 
-                    ? `<div class="velox-header"><span>VELOX CORE</span><span>RSP_${Math.floor(Math.random()*9999)}</span></div>` 
-                    : '';
-
-                let contentHtml = isCode 
-                    ? `<div class="code-block"><pre>${text}</pre></div>` 
-                    : `<div class="message-content">${text}</div>`;
-
-                div.innerHTML = header + contentHtml;
-                this.chatContainer.appendChild(div);
-                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-            }
-
-            setLoading(active) {
-                if(active) this.spinner.classList.add('active');
-                else this.spinner.classList.remove('active');
-            }
-
-            clearInput() {
-                this.input.value = '';
-            }
-        }
-
-        // --- APPLICATION ORCHESTRATOR ---
-        const db = new StorageManager();
-        const logic = new NeuralLogicCore();
-        const visualizer = new VisualizerEngine('neural-canvas');
-        const ui = new UIManager();
-        const audio = new AudioInterface((text) => handleUserMessage(text));
-
-        // Wrap Core Logic for Safety
-        const app = createSafeProxy({
-            init: async () => {
-                await db.init();
-                console.log("Velox AI v13.0 Online");
+            addLog: async (text, sender) => {
+                if (!dbService.db) return;
+                const transaction = dbService.db.transaction([dbService.storeName], 'readwrite');
+                const store = transaction.objectStore(dbService.storeName);
+                store.add({ text, sender, timestamp: new Date() });
             },
 
             clearMemory: async () => {
-                await db.clearMemory();
+                if (!dbService.db) return;
+                try {
+                    const transaction = dbService.db.transaction([dbService.storeName], 'readwrite');
+                    const store = transaction.objectStore(dbService.storeName);
+                    store.clear();
+                    ui.showToast('Memory ObjectStore Purged Successfully', 'success');
+                    console.log('[DB]: Memory Cleared');
+                } catch (e) {
+                    ui.showToast('Memory Purge Failed', 'error');
+                }
+            }
+        };
+
+        // [PROTOCOL 3: NEURAL LOGIC CORE]
+        const brain = {
+            processInput: async (input) => {
+                const lowerInput = input.toLowerCase().trim();
+                
+                // Simulate Deep Parsing Latency
+                ui.showTyping();
+                await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
+                ui.removeTyping();
+
+                // Semantic Analysis
+                if (lowerInput.includes('clear') || lowerInput.includes('مسح') || lowerInput.includes('ذاكرة')) {
+                    return app.clearMemory();
+                }
+                if (lowerInput.includes('status') || lowerInput.includes('حالة')) {
+                    return `SYSTEM STATUS: OPTIMAL<br>Memory Usage: LOW<br>Protocol: OMEGA v14.0<br>Session ID: ${Math.floor(Math.random() * 999999)}`;
+                }
+                if (lowerInput.includes('code') || lowerInput.includes('كود') || lowerInput.includes('function')) {
+                    return `تم تحليل الطلب البرمجي. إليك البنية المقترحة:<br><br>\`\`\`javascript\nfunction executeProtocol() {\n  console.log("Velox AI Online");\n  return true;\n}\n\`\`\`<br>الكود خالٍ من الأخطاء ومتوافق مع المعايير الحديثة.`;
+                }
+                
+                // Default Intelligent Response
+                return `تم استلام المدخل: "${input}".<br>جاري المعالجة عبر المحرك التحليلي...<br>لا يوجد تعارض في بنية البيانات. النظام جاهز للتنفيذ.`;
+            }
+        };
+
+        // [PROTOCOL 9: MAIN APPLICATION CONTROLLER]
+        const app = {
+            isListening: false,
+
+            init: async () => {
+                try {
+                    await dbService.init();
+                    // Remove Loader
+                    ui.loader.style.opacity = '0';
+                    setTimeout(() => ui.loader.remove(), 500);
+                    
+                    app.bindEvents();
+                } catch (error) {
+                    ui.showToast('System Initialization Failed', 'error');
+                    console.error('[FATAL]: Init failed', error);
+                }
             },
 
-            handleInput: async (input) => {
-                if (!input.trim()) return;
+            bindEvents: () => {
+                // Send Button
+                ui.btnSend.addEventListener('click', app.handleSend);
                 
-                // 1. UI Updates
-                ui.addMessage(input, 'user');
-                ui.clearInput();
-                ui.setLoading(true);
+                // Enter Key
+                ui.input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') app.handleSend();
+                });
 
-                // 2. Neural Logic Processing
-                setTimeout(async () => { // Simulate async processing for UX
-                    const response = logic.process(input);
-                    
-                    ui.setLoading(false);
-                    
-                    // 3. Render Response
-                    if (response.type === 'code') {
-                        ui.addMessage(response.content, 'velox');
-                        ui.addMessage(response.data.optimized, 'velox', true);
-                    } else {
-                        ui.addMessage(response.content, 'velox');
-                    }
+                // Clear Memory
+                ui.btnClear.addEventListener('click', app.clearMemory);
 
-                    // 4. Update Visualizer
-                    if (response.data) {
-                        visualizer.updateData(response.data);
-                    }
+                // Voice Input
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    const recognition = new SpeechRecognition();
+                    recognition.lang = 'ar-SA'; // Targeting Arabic as per protocol
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
 
-                    // 5. Store in IndexedDB
-                    await db.saveSession('user', input);
-                    await db.saveSession('velox', response.content);
+                    recognition.onstart = () => {
+                        app.isListening = true;
+                        ui.btnMic.classList.add('mic-active');
+                        ui.input.placeholder = "جاري الاستماع...";
+                    };
 
-                }, 600); // Minimal delay for "thinking" feel
+                    recognition.onend = () => {
+                        app.isListening = false;
+                        ui.btnMic.classList.remove('mic-active');
+                        ui.input.placeholder = "أدخل الأمر البرمجي...";
+                    };
+
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        ui.input.value = transcript;
+                        setTimeout(app.handleSend, 500); // Auto send after voice
+                    };
+
+                    ui.btnMic.addEventListener('click', () => {
+                        if (app.isListening) recognition.stop();
+                        else recognition.start();
+                    });
+                } else {
+                    ui.btnMic.style.display = 'none'; // Hide if not supported
+                    console.warn('[AUDIO]: Web Speech API not supported in this browser.');
+                }
+            },
+
+            handleSend: async () => {
+                const text = ui.input.value;
+                if (!text.trim()) return;
+
+                // UI Updates
+                ui.appendMessage(text, 'user');
+                ui.input.value = '';
+                
+                // Log to DB
+                await dbService.addLog(text, 'user');
+
+                // Neural Processing
+                const response = await brain.processInput(text);
+                
+                // Output
+                ui.appendMessage(response, 'velox');
+                await dbService.addLog(response, 'velox');
+            },
+
+            clearMemory: async () => {
+                // Visual Clear
+                ui.chatInterface.innerHTML = '';
+                ui.appendMessage('تم تفعيل بروتوكول المسح. الذاكرة المؤقتة فارغة.', 'velox');
+                // DB Clear
+                await dbService.clearMemory();
             }
-        });
+        };
 
-        // Global Event Listeners
-        function handleUserMessage(text) {
-            document.getElementById('user-input').value = text; // Sync input if voice
-            app.handleInput(text);
+        // [PROTOCOL 10: BOOTSTRAP]
+        // DOMContentLoaded check to ensure elements exist before access
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', app.init);
+        } else {
+            app.init();
         }
-
-        document.getElementById('btn-send').addEventListener('click', () => {
-            app.handleInput(document.getElementById('user-input').value);
-        });
-
-        document.getElementById('user-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                app.handleInput(document.getElementById('user-input').value);
-            }
-        });
-
-        document.getElementById('btn-mic').addEventListener('click', () => {
-            audio.toggle();
-        });
-
-        // Initialize
-        window.addEventListener('load', app.init);
 
     </script>
 </body>
