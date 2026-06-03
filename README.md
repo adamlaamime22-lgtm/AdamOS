@@ -1,12 +1,23 @@
-AdamOS: Your Intelligent Digital Friend
-More than just an AI, AdamOS is designed to be your daily digital partner. It is a system that understands you, interacts with you seamlessly, and keeps pace with your daily details with intelligence and speed.
+🚀 Velox JSON Formatter
+Velox JSON Formatter is a high-performance, developer-centric tool designed for speed and precision. Engineered to streamline the workflow of developers, it allows for instant beautification, minification, and validation of JSON data directly in the browser.
 
-Why do you need AdamOS?
+✨ Key Features
+Ultra-Fast Processing: Optimized JavaScript engine for sub-second formatting.
 
-Your Constant Companion: Present at every step, ready to solve, assist, and interact whenever you need.
+Validation Suite: Real-time syntax checking to catch JSON errors instantly.
 
-Simple yet Deep: Designed for ease of use, while possessing the technical depth to truly understand what you need.
+Format & Minify: One-click switching between beautiful, readable code and minified production-ready JSON.
 
-Intelligence that Grows with You: Every interaction makes it more capable of assisting you effectively.
+Zero Dependencies: Built with pure, modern Vanilla JS for maximum stability and speed.
 
-AdamOS is not just a tool; it is a rising intelligence designed specifically to be the digital friend you can rely on.
+Seamless Export: Integrated clipboard copy and native file download capabilities.
+
+🛠 Tech Stack
+Frontend: HTML5, Modern CSS (Glassmorphism UI), Vanilla JavaScript.
+
+Design: Dark-themed, responsive, and cross-platform compatible.
+
+👤 Engineering
+Engineered by: Adam Laamime
+
+Philosophy: Efficiency meets simplicity.
