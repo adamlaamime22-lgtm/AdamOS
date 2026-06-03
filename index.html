@@ -3,394 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI | Omega Core v11.0.1 [SILENT_MODE]</title>
+    <title>Velox AI | OMEGA FINAL</title>
     <style>
+        /* VELOX UI SYSTEM - PURE CSS */
         :root {
-            --bg-void: #030303;
-            --glass-panel: rgba(10, 10, 10, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.06);
-            --accent-sigma: #00ff9d;
-            --accent-logic: #00f0ff;
-            --text-primary: #ffffff;
-            --text-secondary: #8899a6;
-            --font-tech: 'Fira Code', 'Courier New', monospace;
-            --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --grid-line: rgba(0, 255, 157, 0.03);
+            --bg: #000;
+            --surface: #111;
+            --primary: #00ff9d;
+            --text: #eee;
+            --dim: #666;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
-
         body {
-            background-color: var(--bg-void);
-            color: var(--text-primary);
-            font-family: var(--font-ui);
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace; /* Tech feel */
             height: 100vh;
-            width: 100vw;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 40px 40px;
+            margin: 0;
         }
-
-        /* Boot Screen */
-        #boot-sequence {
-            position: fixed; inset: 0; background: #000; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-family: var(--font-tech); transition: opacity 0.8s;
+        #app {
+            width: 90vw;
+            height: 85vh;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            background: var(--surface);
+            box-shadow: 0 0 50px rgba(0,255,157,0.1);
         }
-        .boot-text { color: var(--accent-sigma); margin-bottom: 10px; font-size: 14px; letter-spacing: 2px;}
-        .boot-bar { width: 200px; height: 2px; background: #222; position: relative; }
-        .boot-progress { position: absolute; left: 0; top: 0; height: 100%; background: var(--accent-sigma); width: 0%; transition: width 0.2s; }
-
-        /* Main Grid */
-        #omega-container {
-            width: 96vw; height: 92vh;
-            display: grid; grid-template-columns: 70px 1fr;
-            background: var(--glass-panel);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-            opacity: 0; transform: scale(0.98);
-            transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        /* Sidebar */
-        aside {
-            background: rgba(0, 0, 0, 0.3); border-right: 1px solid var(--glass-border);
-            display: flex; flex-direction: column; align-items: center; padding: 24px 0; z-index: 10;
-        }
-        .sys-brand {
-            width: 36px; height: 36px; border: 1px solid var(--accent-sigma);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--accent-sigma); font-family: var(--font-tech); font-weight: 900;
-            font-size: 14px; margin-bottom: 32px;
-        }
-        .cmd-btn {
-            width: 44px; height: 44px; margin-bottom: 16px; background: transparent; border: none;
-            color: var(--text-secondary); cursor: pointer; transition: all 0.3s;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .cmd-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
-        .cmd-btn.active { color: var(--accent-sigma); background: rgba(0, 255, 157, 0.05); }
-        .cmd-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
-        
-        .sys-status-core { margin-top: auto; display: flex; flex-direction: column; align-items: center; }
-        .led { width: 6px; height: 6px; background: #333; border-radius: 50%; transition: all 0.5s; }
-        .led.online { background: var(--accent-sigma); box-shadow: 0 0 8px var(--accent-sigma); }
-
-        /* Main Area */
-        main { display: flex; flex-direction: column; position: relative; }
-        
         header {
-            height: 50px; border-bottom: 1px solid var(--glass-border);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
-            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            color: var(--primary);
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
         }
-        .header-identity { font-family: var(--font-tech); font-size: 12px; color: var(--accent-sigma); }
-
-        /* Chat Stream */
-        #data-stream {
-            flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 24px;
+        #chat {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 14px;
         }
-        #data-stream::-webkit-scrollbar { width: 4px; }
-        #data-stream::-webkit-scrollbar-thumb { background: #333; }
-
-        .data-node {
-            max-width: 85%; line-height: 1.6; font-size: 14px;
-            animation: nodeEntry 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .msg { margin-bottom: 15px; line-height: 1.5; }
+        .msg.user { color: #fff; text-align: right; }
+        .msg.ai { color: var(--primary); }
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: white;
+            font-family: inherit;
+            border-top: 1px solid #333;
         }
-        @keyframes nodeEntry { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        .data-node.user {
-            align-self: flex-end; background: rgba(0, 240, 255, 0.08);
-            border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 2px 12px 2px 12px;
-            padding: 16px 20px; color: #e0f7fa;
-        }
-        .data-node.velox {
-            align-self: flex-start; background: transparent; border-left: 2px solid var(--accent-sigma);
-            padding: 0 20px; color: #d1d5db;
-        }
-        .data-node.velox .node-meta {
-            font-family: var(--font-tech); font-size: 10px; color: var(--accent-sigma);
-            margin-bottom: 8px; display: block; opacity: 0.8;
-        }
-        pre {
-            background: #080808; border: 1px solid #222; padding: 12px;
-            margin-top: 12px; font-family: var(--font-tech); font-size: 12px; color: #a9b7c6;
-        }
-        code { font-family: var(--font-tech); background: rgba(255,255,255,0.1); padding: 2px 4px; font-size: 0.9em; }
-
-        /* Input Deck */
-        .input-deck {
-            height: 80px; border-top: 1px solid var(--glass-border);
-            background: rgba(0,0,0,0.4); padding: 0 24px;
-            display: flex; align-items: center; gap: 16px;
-        }
-        .terminal-input-wrapper {
-            flex: 1; position: relative; background: rgba(255,255,255,0.02);
-            border: 1px solid #222; transition: border-color 0.3s;
-        }
-        .terminal-input-wrapper:focus-within { border-color: var(--accent-sigma); }
-        #command-input {
-            width: 100%; background: transparent; border: none; color: white;
-            font-family: var(--font-tech); font-size: 13px; padding: 14px 50px 14px 16px;
-        }
-        .voice-trigger {
-            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-            background: none; border: none; color: #555; cursor: pointer;
-        }
-        #exec-btn {
-            width: 44px; height: 44px; background: var(--accent-sigma); border: none;
-            color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Panel */
-        .sys-panel {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 50;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s;
-        }
-        .sys-panel.active { opacity: 1; pointer-events: all; }
-        .panel-content {
-            width: 400px; background: #0a0a0a; border: 1px solid var(--glass-border); padding: 24px;
-        }
-        .panel-header {
-            color: var(--accent-sigma); font-family: var(--font-tech); font-size: 14px;
-            border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 16px; display: flex; justify-content: space-between;
-        }
-        .sys-btn {
-            width: 100%; padding: 10px; margin-top: 10px; background: #111;
-            border: 1px solid #333; color: #fff; cursor: pointer;
-        }
+        input:focus { outline: 1px solid var(--primary); }
     </style>
 </head>
 <body>
 
-<div id="boot-sequence">
-    <div class="boot-text">VELOX OMEGA CORE v11.0.1</div>
-    <div class="boot-text" style="font-size: 10px; color: #555;">SILENT_MODE ACTIVATED // SUPPRESSING NOISE</div>
-    <div class="boot-bar"><div class="boot-progress" id="boot-prog"></div></div>
-</div>
-
-<div id="omega-container">
-    <aside>
-        <div class="sys-brand">V11</div>
-        <button class="cmd-btn active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        </button>
-        <button class="cmd-btn" id="nav-config">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        </button>
-        <div class="sys-status-core">
-            <div class="led online" id="sys-led"></div>
-        </div>
-    </aside>
-
-    <main>
-        <header>
-            <div class="header-identity">VELOX_AI_CORE [CLEAN]</div>
-        </header>
-
-        <div id="data-stream">
-            <div class="data-node velox">
-                <span class="node-meta">SYSTEM_READY</span>
-                External interference suppressed. Environment stable.
-            </div>
-        </div>
-
-        <div class="input-deck">
-            <div class="terminal-input-wrapper">
-                <input type="text" id="command-input" placeholder="> Enter directive..." autocomplete="off">
-                <button class="voice-trigger" id="voice-act">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-                </button>
-            </div>
-            <button id="exec-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-            </button>
-        </div>
-    </main>
-
-    <div class="sys-panel" id="panel-config">
-        <div class="panel-content">
-            <div class="panel-header">
-                <span>SYSTEM_CONFIG</span>
-                <span style="cursor: pointer;" onclick="ui.togglePanel('panel-config')">[X]</span>
-            </div>
-            <p style="color: #888; font-size: 12px; margin-bottom: 10px;">
-                All extension errors are logged internally but hidden from view to maintain focus.
-            </p>
-            <button class="sys-btn danger" id="btn-wipe">PURGE_MEMORY</button>
-        </div>
+<div id="app">
+    <header>
+        <span>VELOX_AI [OMEGA_FINAL]</span>
+        <span style="color: #666">EXT_INTERFERENCE_DETECTED (IGNORE)</span>
+    </header>
+    
+    <div id="chat">
+        <div class="msg ai">> System Ready. External AdBlock noise detected in Console. System functionality: Unaffected.</div>
     </div>
+
+    <input type="text" id="inp" placeholder="> Enter command..." onkeypress="if(event.key==='Enter') send()">
 </div>
 
 <script>
-/**
- * VELOX AI v11.0.1 - SILENT PROTOCOL
- * Immediate Error Suppression
- */
+    // SIMPLE ROBUST ENGINE
+    function send() {
+        const inp = document.getElementById('inp');
+        const chat = document.getElementById('chat');
+        const txt = inp.value;
+        if(!txt) return;
 
-// 1. AGGRESSIVE ERROR HANDLING (Runs First)
-// This intercepts errors from extensions like AdBlock immediately
-window.addEventListener('unhandledrejection', function(event) {
-    // Check for the specific "no ad" error or any error from content.js
-    if (event.reason && 
-        (event.reason.toString().includes('no ad') || 
-         event.reason.toString().includes('content.js') ||
-         (event.reason.stack && event.reason.stack.includes('content.js')))) {
-        
-        // Stop the error from showing in the console
-        event.preventDefault();
-        
-        // Optional: Log silently to our internal system only
-        console.log('%c[Velox Shield]', 'color: #00ff9d', 'External noise blocked.');
+        // User msg
+        const u = document.createElement('div');
+        u.className = 'msg user';
+        u.innerText = '> ' + txt;
+        chat.appendChild(u);
+
+        inp.value = '';
+
+        // AI Response (Simulated)
+        setTimeout(() => {
+            const a = document.createElement('div');
+            a.className = 'msg ai';
+            a.innerText = 'Processed: ' + txt + '\nStatus: OK';
+            chat.appendChild(a);
+            chat.scrollTop = chat.scrollHeight;
+        }, 500);
     }
-});
-
-window.addEventListener('error', function(event) {
-    if (event.filename && event.filename.includes('content.js')) {
-        event.preventDefault();
-        event.stopPropagation();
-        return true; // Suppresses the error
-    }
-}, true); // Use capture phase
-
-const OMEGA = (function() {
-    'use strict';
-
-    const CFG = {
-        db: { name: 'VeloxOmegaDB_v11', ver: 1 },
-        session: { id: localStorage.getItem('velox_sid') || 'V-' + Math.random().toString(36).substr(2, 9) }
-    };
-
-    const $ = (s) => document.querySelector(s);
-
-    class StorageEngine {
-        async init() {
-            return new Promise((resolve) => {
-                const req = indexedDB.open(CFG.db.name, CFG.db.ver);
-                req.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains('logs')) db.createObjectStore('logs', { keyPath: 'id', autoIncrement: true });
-                };
-                req.onsuccess = (e) => { this.db = e.target.result; resolve(); };
-                req.onerror = () => resolve(); // Fail silently to prevent boot hang
-            });
-        }
-        async append(role, content) {
-            if (!this.db) return;
-            try {
-                const tx = this.db.transaction(['logs'], 'readwrite');
-                tx.objectStore('logs').add({ role, content, ts: Date.now() });
-            } catch(e) {}
-        }
-    }
-
-    class LogicCore {
-        async process(input) {
-            const clean = input.trim();
-            if (!clean) return null;
-            await new Promise(r => setTimeout(r, 500)); // Simulate thought
-            
-            if (clean.includes('status')) return "System Integrity: 100%. Extension Interference: BLOCKED.";
-            if (clean.includes('code')) return "```javascript\nfunction silentExecution() {\n  return 'Operation Complete';\n}\n```";
-            return "Command processed within the Omega Protocol.";
-        }
-    }
-
-    class UIManager {
-        constructor(core, storage) {
-            this.core = core;
-            this.storage = storage;
-            this.initUI();
-        }
-
-        async initUI() {
-            await this.storage.init();
-            this.bind();
-            this.animateBoot();
-        }
-
-        animateBoot() {
-            const prog = $('#boot-prog');
-            setTimeout(() => prog.style.width = '50%', 200);
-            setTimeout(() => {
-                prog.style.width = '100%';
-                setTimeout(() => {
-                    $('#boot-sequence').style.opacity = '0';
-                    $('#omega-container').style.opacity = '1';
-                    $('#omega-container').style.transform = 'scale(1)';
-                    setTimeout(() => $('#boot-sequence').remove(), 800);
-                }, 400);
-            }, 600);
-        }
-
-        bind() {
-            $('#exec-btn').onclick = () => this.handle();
-            $('#command-input').onkeypress = (e) => { if(e.key === 'Enter') this.handle(); };
-            $('#nav-config').onclick = () => this.togglePanel('panel-config');
-            $('#btn-wipe').onclick = async () => {
-                await this.storage.init(); // Ensure DB is ready
-                const tx = this.storage.db.transaction(['logs'], 'readwrite');
-                tx.objectStore('logs').clear();
-                $('#data-stream').innerHTML = '<div class="data-node velox"><span class="node-meta">SYSTEM</span>Memory wiped.</div>';
-            };
-            $('#voice-act').onclick = () => {
-                if('webkitSpeechRecognition' in window) {
-                    const r = new webkitSpeechRecognition();
-                    r.onresult = (e) => { $('#command-input').value = e.results[0][0].transcript; this.handle(); };
-                    r.start();
-                }
-            };
-        }
-
-        togglePanel(id) {
-            document.getElementById(id).classList.toggle('active');
-        }
-
-        async handle() {
-            const val = $('#command-input').value;
-            if(!val) return;
-
-            this.render('user', val);
-            $('#command-input').value = '';
-            await this.storage.append('user', val);
-
-            const res = await this.core.process(val);
-            if(res) {
-                this.render('velox', res);
-                await this.storage.append('velox', res);
-            }
-        }
-
-        render(role, text) {
-            const div = document.createElement('div');
-            div.className = `data-node ${role}`;
-            
-            if(role === 'velox') {
-                div.innerHTML = `<span class="node-meta">VELOX_CORE</span>`;
-                text = text
-                    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            }
-            
-            div.innerHTML += text;
-            $('#data-stream').appendChild(div);
-            $('#data-stream').scrollTop = $('#data-stream').scrollHeight;
-        }
-    }
-
-    return { init: () => new UIManager(new LogicCore(), new StorageEngine()) };
-
-})();
-
-window.onload = OMEGA.init;
 </script>
+
 </body>
 </html>
