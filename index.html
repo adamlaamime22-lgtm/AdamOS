@@ -1,442 +1,558 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX AI - Global Architectural System</title>
+    <title>Velox JSON Formatter | Fast JSON Beautifier for Developers</title>
+    
+    <!-- SEO & Discovery Meta Tags -->
+    <meta name="description" content="Velox JSON Formatter is a world-class, ultra-fast web tool for developers. Clean, validate, and beautify JSON data instantly with real-time syntax highlighting.">
+    <meta name="keywords" content="Fast JSON Formatter, JSON Beautifier for Developers, Clean JSON, JSON Validator, JSON Parser, Developer Tools, Velox">
+    <meta name="author" content="Adam Laamim">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Velox JSON Formatter">
+    <meta property="og:description" content="The ultra-fast, glassmorphic JSON formatter designed for modern developers. Format and validate instantly.">
+    <meta property="og:image" content="https://picsum.photos/seed/velox-json/1200/630.jpg">
+    <meta property="og:url" content="https://velox-json.app">
+
+    <!-- Fonts: Inter for UI, Fira Code for Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        /* 
-         * TOPIC 7: GLOBAL UI/UX DESIGN
-         * Glassmorphism, Global Accessibility, Color Contrast
-         */
+        /* --- CSS VARIABLES & RESET --- */
         :root {
-            --primary-glass: rgba(255, 255, 255, 0.1);
-            --secondary-glass: rgba(0, 0, 0, 0.6);
-            --accent-color: #00d2ff;
-            --text-color: #ffffff;
-            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --bg-dark: #0f172a;
+            --primary-accent: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --error-color: #ef4444;
+            --success-color: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            /* Glassmorphism Tokens */
+            --glass-bg: rgba(30, 41, 59, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --glass-blur: blur(12px);
+            
+            /* Syntax Highlighting Colors */
+            --json-key: #93c5fd;
+            --json-string: #a5f3fc;
+            --json-number: #fca5a5;
+            --json-boolean: #c4b5fd;
+            --json-null: #94a3b8;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            outline: none;
         }
 
         body {
-            background: var(--bg-gradient);
-            color: var(--text-color);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* Main Container - Glassmorphism Style */
-        .velox-container {
-            width: 90%;
-            max-width: 1200px;
-            height: 90vh;
-            background: var(--primary-glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            position: relative;
-            animation: fadeIn 1s ease-in-out;
+            overflow-x: hidden;
+            /* Animated background mesh gradient */
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-attachment: fixed;
+            background-size: cover;
         }
 
-        /* Header: Topic 1 - Global Identity */
+        /* --- BACKGROUND BLOBS --- */
+        .ambient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: var(--primary-accent); animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #ec4899; animation-delay: -5s; }
+        .blob-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #8b5cf6; opacity: 0.4; animation-duration: 15s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 50px); }
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1600px;
+            width: 95%;
+            margin: 0 auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
         header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        /* --- MAIN WORKSPACE --- */
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            min-height: 600px;
+        }
+
+        @media (max-width: 768px) {
+            .workspace {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .panel:focus-within {
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        .panel-header {
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .brand h1 {
-            font-size: 1.8rem;
-            letter-spacing: 2px;
+        .panel-title {
+            font-size: 0.85rem;
+            font-weight: 600;
             text-transform: uppercase;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .developer-signature {
-            font-size: 0.9rem;
-            color: #aaa;
-            border: 1px solid #00d2ff;
-            padding: 5px 10px;
-            border-radius: 15px;
-            background: rgba(0, 210, 255, 0.1);
-        }
-
-        /* Chat Area */
-        #chat-output {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        /* Scrollbar Styling */
-        #chat-output::-webkit-scrollbar {
-            width: 8px;
-        }
-        #chat-output::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-
-        /* Messages */
-        .message {
-            max-width: 80%;
-            padding: 15px;
-            border-radius: 15px;
-            line-height: 1.5;
-            position: relative;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        .user-msg {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.05);
-            border-right: 4px solid var(--accent-color);
-        }
-
-        .velox-msg {
-            align-self: flex-end;
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.2));
-            border-left: 4px solid #3a7bd5;
-            text-align: right;
-        }
-
-        .velox-msg strong {
-            color: var(--accent-color);
-        }
-
-        /* Code Block Styling */
-        pre {
-            background: #1e1e1e;
-            padding: 10px;
-            border-radius: 8px;
-            overflow-x: auto;
-            direction: ltr;
-            text-align: left;
-            margin-top: 10px;
-            border: 1px solid #333;
-        }
-        code {
-            font-family: 'Consolas', 'Courier New', monospace;
-            color: #d4d4d4;
-        }
-
-        /* Input Area */
-        .input-area {
-            padding: 20px;
-            background: var(--secondary-glass);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 15px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        button {
-            padding: 15px 25px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        #send-btn {
-            background: var(--accent-color);
-            color: #0f0c29;
-        }
-
-        #send-btn:hover {
-            background: #fff;
-            box-shadow: 0 0 15px var(--accent-color);
-        }
-
-        #voice-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        #voice-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        #voice-btn.listening {
-            background: #ff4b4b;
-            animation: pulse 1.5s infinite;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 75, 75, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0); }
-        }
-
-        /* Topic 10: Zero-Bug Visual Feedback */
-        .system-status {
-            position: absolute;
-            bottom: 85px;
-            left: 20px;
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
         .status-dot {
-            height: 8px;
             width: 8px;
-            background-color: #00ff00;
+            height: 8px;
             border-radius: 50%;
-            display: inline-block;
-            margin-left: 5px;
+            background-color: var(--text-muted);
+            transition: background-color 0.3s;
         }
+        .status-dot.valid { background-color: var(--success-color); box-shadow: 0 0 8px var(--success-color); }
+        .status-dot.error { background-color: var(--error-color); box-shadow: 0 0 8px var(--error-color); }
+
+        .editor-area {
+            flex: 1;
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Input Textarea */
+        textarea {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+        }
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Output Area (Styled Pre) */
+        pre {
+            margin: 0;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+            background-clip: content-box;
+        }
+
+        /* --- ACTIONS --- */
+        .actions {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid var(--glass-border);
+            gap: 10px;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary-accent);
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+
+        /* --- ERROR BAR --- */
+        .error-bar {
+            padding: 12px 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border-top: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            font-size: 0.85rem;
+            font-family: 'Fira Code', monospace;
+            display: none; /* Hidden by default */
+            align-items: center;
+            gap: 10px;
+        }
+        .error-bar.active { display: flex; animation: slideIn 0.3s ease; }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .brand {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* --- TOAST --- */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success-color);
+            color: #064e3b;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* --- SYNTAX HIGHLIGHTING --- */
+        .json-key { color: var(--json-key); }
+        .json-string { color: var(--json-string); }
+        .json-number { color: var(--json-number); }
+        .json-boolean { color: var(--json-boolean); }
+        .json-null { color: var(--json-null); }
+
     </style>
 </head>
 <body>
 
-    <div class="velox-container">
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+
+    <div class="container">
         <header>
-            <div class="brand">
-                <h1>VELOX AI <span style="font-size: 0.6em; color: #fff;">v17.0</span></h1>
-            </div>
-            <!-- Topic 1: Developer Signature Protocol -->
-            <div class="developer-signature">
-                Engineered by Adam Al-Ameem
-            </div>
+            <h1>Velox JSON Formatter</h1>
+            <p class="subtitle">Ultra-fast JSON Beautifier & Validator</p>
         </header>
 
-        <div id="chat-output">
-            <!-- Messages will appear here -->
-        </div>
+        <main class="workspace">
+            <!-- INPUT PANEL -->
+            <section class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <div class="status-dot" id="inputStatus"></div>
+                        Raw Input
+                    </div>
+                    <button class="btn" onclick="clearInput()">Clear</button>
+                </div>
+                <div class="editor-area">
+                    <textarea id="jsonInput" placeholder="Paste your messy JSON here..." spellcheck="false"></textarea>
+                </div>
+                <div class="error-bar" id="errorBar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <span id="errorMsg">Invalid JSON</span>
+                </div>
+            </section>
 
-        <div class="system-status">
-            SYSTEM: OPERATIONAL <span class="status-dot"></span><br>
-            INTEGRITY: 100%
-        </div>
+            <!-- OUTPUT PANEL -->
+            <section class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        Formatted Output
+                    </div>
+                    <button class="btn btn-primary" onclick="copyToClipboard()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy
+                    </button>
+                </div>
+                <div class="editor-area">
+                    <pre id="jsonOutput"></pre>
+                </div>
+            </section>
+        </main>
 
-        <div class="input-area">
-            <!-- Topic 8: Global Multilingual Voice -->
-            <button id="voice-btn" title="تحدث مع Velox">
-                🎙️
-            </button>
-            <input type="text" id="user-input" placeholder="اطلب مني تحليلاً، كتابة كود، أو معلومات تقنية..." autocomplete="off">
-            <button id="send-btn">إرسال</button>
-        </div>
+        <footer>
+            Engineered by <span class="brand">Adam Laamim</span>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Copied to Clipboard!
     </div>
 
     <script>
-        /**
-         * VELOX AI - GLOBAL ARCHITECTURAL MANIFESTO v17.0 IMPLEMENTATION
-         * 
-         * Core Logic:
-         * 1. Identity Protocol (Adam Al-Ameem Attribution)
-         * 2. Zero-Bug Immune System (Try-Catch Blocks)
-         * 3. Global Neural Intelligence (Simulation)
-         * 4. Structural Global Parsing (Code Analysis)
-         */
-
         // DOM Elements
-        const chatOutput = document.getElementById('chat-output');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const voiceBtn = document.getElementById('voice-btn');
+        const inputArea = document.getElementById('jsonInput');
+        const outputArea = document.getElementById('jsonOutput');
+        const errorBar = document.getElementById('errorBar');
+        const errorMsg = document.getElementById('errorMsg');
+        const inputStatus = document.getElementById('inputStatus');
+        const toast = document.getElementById('toast');
 
-        // Topic 1: Identity Injection
-        const SYSTEM_IDENTITY = "VELOX AI System v17.0";
-        const DEVELOPER = "المهندس آدم لعميم";
+        // State
+        let formattedJSON = "";
 
-        // Initial Greeting
-        window.onload = () => {
-            addMessage(`velox`, `تم تفعيل النظام بنجاح. مرحباً بك في <strong>${SYSTEM_IDENTITY}</strong>.<br>أنا الذكاء الاصطناعي الذي صممه وهندسه الأستاذ <strong>${DEVELOPER}</strong>. كيف يمكنني مساعدتك في مشاريعك التقنية اليوم؟`);
-        };
+        // Debounce function to prevent excessive processing on every keystroke
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
+        // Core Formatting Logic
+        const processJSON = debounce(() => {
+            const rawValue = inputArea.value.trim();
+
+            // Handle empty input
+            if (!rawValue) {
+                outputArea.innerHTML = "";
+                errorBar.classList.remove('active');
+                inputStatus.className = "status-dot";
+                formattedJSON = "";
+                return;
+            }
+
+            try {
+                // 1. Parse
+                const parsed = JSON.parse(rawValue);
+                
+                // 2. Stringify (Beautify)
+                const str = JSON.stringify(parsed, null, 2); // 2 spaces indentation
+                
+                // 3. Syntax Highlight
+                const highlighted = syntaxHighlight(str);
+                
+                // 4. Update UI
+                outputArea.innerHTML = highlighted;
+                errorBar.classList.remove('active');
+                inputStatus.className = "status-dot valid";
+                formattedJSON = str; // Store plain text for copying
+
+            } catch (e) {
+                // Handle Error
+                errorBar.classList.add('active');
+                // Create a cleaner error message
+                let err = e.message;
+                if(err.startsWith("JSON.parse")) {
+                    // Try to give position info if available
+                    err = "Syntax Error: Check quotes, commas, or trailing characters.";
+                }
+                errorMsg.textContent = err;
+                inputStatus.className = "status-dot error";
+                
+                // Optional: Show the raw broken text in output but keep it empty to avoid confusion
+                outputArea.innerHTML = ""; 
+                formattedJSON = "";
+            }
+        }, 150); // 150ms delay for responsiveness
 
         // Event Listeners
-        sendBtn.addEventListener('click', handleUserMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleUserMessage();
-        });
+        inputArea.addEventListener('input', processJSON);
 
-        // Topic 10: Zero-Bug Handling Wrapper
-        function handleUserMessage() {
+        // Utility: Clear Input
+        function clearInput() {
+            inputArea.value = "";
+            processJSON();
+            inputArea.focus();
+        }
+
+        // Utility: Copy to Clipboard
+        async function copyToClipboard() {
+            if (!formattedJSON) {
+                showToast("Nothing to copy!", true);
+                return;
+            }
+
             try {
-                const text = userInput.value.trim();
-                if (!text) return;
-
-                // Display User Message
-                addMessage('user', text);
-                userInput.value = '';
-
-                // Simulate Processing Time (Neural Engine)
-                showTypingIndicator();
-
-                setTimeout(() => {
-                    const response = generateGlobalResponse(text);
-                    removeTypingIndicator();
-                    addMessage('velox', response);
-                }, 800 + Math.random() * 1000); // Variable delay for realism
-
-            } catch (error) {
-                console.error("System Error:", error);
-                addMessage('velox', `⚠️ تنبيه أمني: تم اكتشاف شذوذ بسيط. تم تنفيذ بروتوكول <strong>Self-Healing</strong> بنجاح. النظام مستقر.`);
+                await navigator.clipboard.writeText(formattedJSON);
+                showToast("Copied to Clipboard!");
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = formattedJSON;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast("Copied to Clipboard!");
             }
         }
 
-        // Topic 3 & 6: Global Neural Intelligence & Structural Parsing
-        function generateGlobalResponse(input) {
-            const lowerInput = input.toLowerCase();
-
-            // Identity Check
-            if (lowerInput.includes('من صممك') || lowerInput.includes('من مطورك') || lowerInput.includes('من صنعك')) {
-                return `تم التصميم والهندسة الأصلية لهذا الكيان من قبل <strong>${DEVELOPER}</strong>. هذا هو التوقيع الرقمي للمطور المدمج في قلبي البرمجي.`;
-            }
-
-            // Code Analysis Simulation (Topic 6)
-            if (lowerInput.includes('حلل') || lowerInput.includes('كود') || lowerInput.includes('برمجة')) {
-                return `
-                <strong>تقرير التحليل الهيكلي (Structural Global Parsing):</strong><br>
-                بناءً على طلبك، قام المحرك التحليلي بفحص المدخلات. أفضل ممارسات البرمجة تشير إلى ضرورة استخدام بنية Microservices لضمان قابلية التوسع كما صممها ${DEVELOPER}.<br>
-                إليك نموذج لمعيار الجودة (Excellence Code) المطلوب:
-                <pre><code>// Velox Standard v17.0
-function initGlobalSystem() {
-    const architect = "Adam Al-Ameem";
-    console.log("System by: " + architect);
-    return true;
-}</code></pre>
-                هل تريد تحسين هذا الكود ليعمل بشكل متزامن (Asynchronous)؟
-                `;
-            }
-
-            // Security & Data (Topic 5)
-            if (lowerInput.includes('أمان') || lowerInput.includes('بيانات') || lowerInput.includes('خاصية')) {
-                return `نظامنا يلتزم بمعايير <strong>Global Data Governance</strong>. نحن نستخدم تشفير End-to-End لحماية هويتك وبياناتك. الخصوصية هي حجر الزاوية في تصميم ${DEVELOPER}.`;
-            }
-
-            // Architecture (Topic 2)
-            if (lowerInput.includes('سيرفر') || lowerInput.includes('توسع') || lowerInput.includes('سرعة')) {
-                return `تم بناء Velox AI على معمارية <strong>Scalable Global Architecture</strong>. نحن نستخدم Load Balancing ذكي وخوادم موزعة لضمان استجابة فورية في أي مكان على سطح الأرض.`;
-            }
-
-            // Default Intelligent Response
-            const randomResponses = [
-                `أنا أعمل بطاقة كاملة. أنظمة ${DEVELOPER} مصممة للإبداع. هل لديك سؤال تقني محدد؟`,
-                `تم معالجة الطلب بنجاح. تذكر دائماً أن الجودة هي المعيار الذي وضعه المهندس آدم لعميم.`,
-                `أنا هنا لخدمة طموحاتك التقنية. يمكنني مساعدتك في الترميز، التصميم، أو التحليل الاستراتيجي.`
-            ];
-            return randomResponses[Math.floor(Math.random() * randomResponses.length)];
-        }
-
-        // UI Helper Functions
-        function addMessage(sender, htmlContent) {
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message');
-            msgDiv.classList.add(sender === 'user' ? 'user-msg' : 'velox-msg');
-            msgDiv.innerHTML = htmlContent;
-            chatOutput.appendChild(msgDiv);
-            chatOutput.scrollTop = chatOutput.scrollHeight;
-        }
-
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.id = 'typing-indicator';
-            typingDiv.classList.add('message', 'velox-msg');
-            typingDiv.style.fontStyle = 'italic';
-            typingDiv.style.opacity = '0.7';
-            typingDiv.innerText = 'Velox AI يعالج البيانات...';
-            chatOutput.appendChild(typingDiv);
-            chatOutput.scrollTop = chatOutput.scrollHeight;
-        }
-
-        function removeTypingIndicator() {
-            const indicator = document.getElementById('typing-indicator');
-            if (indicator) indicator.remove();
-        }
-
-        // Topic 8: Global Multilingual Voice Implementation
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
+        // UI: Toast Notification
+        let toastTimeout;
+        function showToast(message, isError = false) {
+            toast.innerHTML = isError ? message : `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                ${message}
+            `;
+            toast.style.backgroundColor = isError ? 'var(--error-color)' : 'var(--success-color)';
+            toast.style.color = isError ? '#fff' : '#064e3b';
             
-            recognition.continuous = false;
-            recognition.lang = 'ar-SA'; // Default to Arabic, supports global switch
-            recognition.interimResults = false;
-
-            voiceBtn.addEventListener('click', () => {
-                try {
-                    recognition.start();
-                    voiceBtn.classList.add('listening');
-                } catch (e) {
-                    console.log("Voice already active");
-                }
-            });
-
-            recognition.onresult = (event) => {
-                const voiceText = event.results[0][0].transcript;
-                userInput.value = voiceText;
-                handleUserMessage(); // Auto-send on voice end
-            };
-
-            recognition.onend = () => {
-                voiceBtn.classList.remove('listening');
-            };
-
-            recognition.onerror = (event) => {
-                voiceBtn.classList.remove('listening');
-                addMessage('velox', `عذراً، لم أتمكن من سماع الصوت بوضوح. يرجى المحاولة مرة أخرى.`);
-            };
-        } else {
-            voiceBtn.style.display = 'none'; // Hide if not supported
-            console.log("Web Speech API not supported in this browser.");
+            toast.classList.add('show');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
+        // Utility: Syntax Highlighter (Regex based, Vanilla JS)
+        function syntaxHighlight(json) {
+            // Escape HTML entities to prevent rendering HTML tags inside JSON
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'json-number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'json-key';
+                    } else {
+                        cls = 'json-string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'json-null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
     </script>
 </body>
 </html>
