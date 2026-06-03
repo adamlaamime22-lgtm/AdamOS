@@ -3,49 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox JSON Formatter | Fast JSON Beautifier for Developers</title>
+    <title>Velox JSON Formatter | Fast JSON Beautifier & Validator</title>
+    <meta name="description" content="Velox JSON Formatter: A professional, ultra-fast JSON beautifier, validator, and converter. Real-time syntax checking, glassmorphism UI, and secure client-side processing.">
+    <meta name="keywords" content="Fast JSON Formatter, JSON Beautifier, JSON Validator, Velox JSON, Online JSON Tool">
+    <meta name="author" content="Adam Laamime">
     
-    <!-- SEO & Discovery Meta Tags -->
-    <meta name="description" content="Velox JSON Formatter is a world-class, ultra-fast web tool for developers. Clean, validate, and beautify JSON data instantly with real-time syntax highlighting.">
-    <meta name="keywords" content="Fast JSON Formatter, JSON Beautifier for Developers, Clean JSON, JSON Validator, JSON Parser, Developer Tools, Velox">
-    <meta name="author" content="Adam Laamim">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph / Social Sharing -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Velox JSON Formatter">
-    <meta property="og:description" content="The ultra-fast, glassmorphic JSON formatter designed for modern developers. Format and validate instantly.">
-    <meta property="og:image" content="https://picsum.photos/seed/velox-json/1200/630.jpg">
-    <meta property="og:url" content="https://velox-json.app">
-
-    <!-- Fonts: Inter for UI, Fira Code for Code -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* 
+         * CORE CSS VARIABLES & RESET 
+         */
         :root {
-            --bg-dark: #0f172a;
-            --primary-accent: #6366f1; /* Indigo */
-            --primary-glow: rgba(99, 102, 241, 0.4);
-            --error-color: #ef4444;
-            --success-color: #10b981;
-            --text-main: #f8fafc;
+            --bg-color: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --text-main: #f1f5f9;
             --text-muted: #94a3b8;
-            
-            /* Glassmorphism Tokens */
-            --glass-bg: rgba(30, 41, 59, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --glass-blur: blur(12px);
-            
-            /* Syntax Highlighting Colors */
-            --json-key: #93c5fd;
-            --json-string: #a5f3fc;
-            --json-number: #fca5a5;
-            --json-boolean: #c4b5fd;
-            --json-null: #94a3b8;
+            --code-key: #93c5fd; /* Light Blue */
+            --code-string: #86efac; /* Light Green */
+            --code-number: #fca5a5; /* Light Red */
+            --code-boolean: #c4b5fd; /* Light Purple */
+            --code-null: #94a3b8; /* Gray */
+            --font-ui: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-code: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            --radius: 16px;
         }
 
         * {
@@ -56,503 +41,601 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            /* Animated background mesh gradient */
+            font-family: var(--font-ui);
+            background-color: var(--bg-color);
             background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
             background-attachment: fixed;
-            background-size: cover;
-        }
-
-        /* --- BACKGROUND BLOBS --- */
-        .ambient-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.6;
-            animation: float 10s infinite ease-in-out alternate;
-        }
-        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: var(--primary-accent); animation-delay: 0s; }
-        .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #ec4899; animation-delay: -5s; }
-        .blob-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #8b5cf6; opacity: 0.4; animation-duration: 15s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(30px, 50px); }
-        }
-
-        /* --- LAYOUT --- */
-        .container {
-            max-width: 1600px;
-            width: 95%;
-            margin: 0 auto;
-            flex: 1;
+            color: var(--text-main);
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: 20px 0;
+            overflow: hidden; /* Prevent body scroll, let panels scroll */
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-top: 20px;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-top: 5px;
-        }
-
-        /* --- MAIN WORKSPACE --- */
-        .workspace {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            flex: 1;
-            min-height: 600px;
-        }
-
-        @media (max-width: 768px) {
-            .workspace {
-                grid-template-columns: 1fr;
-                min-height: auto;
-            }
-        }
-
-        .panel {
-            display: flex;
-            flex-direction: column;
+        /* 
+         * UTILITIES & GLASSMORPHISM 
+         */
+        .glass-panel {
             background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: var(--glass-shadow);
-            overflow: hidden;
-            transition: border-color 0.3s ease;
+            border-radius: var(--radius);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .panel:focus-within {
-            border-color: rgba(99, 102, 241, 0.5);
-        }
-
-        .panel-header {
-            padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .panel-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            display: flex;
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--text-muted);
-            transition: background-color 0.3s;
+        .btn:hover {
+            background: var(--glass-highlight);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
         }
-        .status-dot.valid { background-color: var(--success-color); box-shadow: 0 0 8px var(--success-color); }
-        .status-dot.error { background-color: var(--error-color); box-shadow: 0 0 8px var(--error-color); }
 
-        .editor-area {
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #0f172a;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        /* 
+         * LAYOUT 
+         */
+        header {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .brand h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        main {
             flex: 1;
+            display: flex;
+            padding: 0 2rem 2rem 2rem;
+            gap: 2rem;
+            min-height: 0; /* Flexbox scroll fix */
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             position: relative;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: rgba(0, 0, 0, 0.2);
         }
 
-        /* Input Textarea */
-        textarea {
+        .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .editor-body {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 
+         * INPUT & OUTPUT AREAS 
+         */
+        textarea#jsonInput {
             width: 100%;
             height: 100%;
             background: transparent;
             border: none;
             color: var(--text-main);
-            padding: 20px;
-            font-family: 'Fira Code', monospace;
+            font-family: var(--font-code);
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.5;
+            padding: 1rem;
             resize: none;
         }
-        textarea::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-        }
 
-        /* Output Area (Styled Pre) */
-        pre {
-            margin: 0;
-            padding: 20px;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--text-main);
-        }
-
-        /* Scrollbar Styling */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
             height: 10px;
         }
         ::-webkit-scrollbar-track {
-            background: transparent;
+            background: rgba(0, 0, 0, 0.2);
         }
         ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
-            border: 2px solid transparent;
-            background-clip: content-box;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.2);
-            background-clip: content-box;
         }
 
-        /* --- ACTIONS --- */
-        .actions {
-            padding: 15px 20px;
-            display: flex;
-            justify-content: flex-end;
-            border-top: 1px solid var(--glass-border);
-            gap: 10px;
+        /* Output View */
+        #outputView {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            padding: 1rem;
+            font-family: var(--font-code);
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap; /* Wrap text */
         }
 
-        .btn {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            border: 1px solid var(--glass-border);
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        /* Syntax Highlighting Classes */
+        .json-key { color: var(--code-key); }
+        .json-string { color: var(--code-string); }
+        .json-number { color: var(--code-number); }
+        .json-boolean { color: var(--code-boolean); }
+        .json-null { color: var(--code-null); font-style: italic; }
 
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary {
-            background: var(--primary-accent);
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: #4f46e5;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-        }
-
-        /* --- ERROR BAR --- */
-        .error-bar {
-            padding: 12px 20px;
-            background: rgba(239, 68, 68, 0.1);
-            border-top: 1px solid rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
+        /* 
+         * STATUS BAR & FOOTER 
+         */
+        .status-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 0.5rem 1rem;
             font-size: 0.85rem;
-            font-family: 'Fira Code', monospace;
-            display: none; /* Hidden by default */
+            color: var(--text-muted);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
             align-items: center;
             gap: 10px;
-        }
-        .error-bar.active { display: flex; animation: slideIn 0.3s ease; }
-
-        @keyframes slideIn {
-            from { transform: translateY(-10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            z-index: 5;
         }
 
-        /* --- FOOTER --- */
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+        }
+        .status-valid { background-color: var(--success); box-shadow: 0 0 8px var(--success); }
+        .status-error { background-color: var(--danger); box-shadow: 0 0 8px var(--danger); }
+
         footer {
-            margin-top: 40px;
-            padding: 20px;
             text-align: center;
+            padding: 0.8rem;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .brand {
-            font-weight: 600;
-            color: var(--text-main);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.5);
         }
 
-        /* --- TOAST --- */
-        #toast {
+        /* Toast Notification */
+        .toast {
             position: fixed;
-            bottom: 30px;
+            top: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--success-color);
-            color: #064e3b;
-            padding: 12px 24px;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--success);
+            color: #fff;
+            padding: 0.8rem 2rem;
             border-radius: 50px;
             font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 100;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
-        #toast.show {
+        .toast.show {
             transform: translateX(-50%) translateY(0);
-            opacity: 1;
         }
 
-        /* --- SYNTAX HIGHLIGHTING --- */
-        .json-key { color: var(--json-key); }
-        .json-string { color: var(--json-string); }
-        .json-number { color: var(--json-number); }
-        .json-boolean { color: var(--json-boolean); }
-        .json-null { color: var(--json-null); }
-
+        /* 
+         * RESPONSIVE 
+         */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                padding: 1rem;
+                overflow-y: auto;
+            }
+            body {
+                overflow: auto;
+            }
+            .editor-container {
+                min-height: 400px;
+            }
+            .action-group {
+                display: none; /* Simplify mobile view if needed, or make scrollable */
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="ambient-blob blob-1"></div>
-    <div class="ambient-blob blob-2"></div>
-    <div class="ambient-blob blob-3"></div>
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="toastMsg">Action Successful</span>
+    </div>
 
-    <div class="container">
-        <header>
+    <header>
+        <div class="brand">
+            <div class="brand-icon">{}</div>
             <h1>Velox JSON Formatter</h1>
-            <p class="subtitle">Ultra-fast JSON Beautifier & Validator</p>
-        </header>
+        </div>
+        <div class="action-group">
+            <!-- Could add GitHub link or social icons here -->
+        </div>
+    </header>
 
-        <main class="workspace">
-            <!-- INPUT PANEL -->
-            <section class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <div class="status-dot" id="inputStatus"></div>
-                        Raw Input
-                    </div>
+    <main>
+        <!-- INPUT SECTION -->
+        <section class="editor-container glass-panel">
+            <div class="editor-header">
+                <span class="label">Raw JSON Input</span>
+                <div style="display: flex; gap: 8px;">
                     <button class="btn" onclick="clearInput()">Clear</button>
+                    <button class="btn" onclick="loadSample()">Sample</button>
                 </div>
-                <div class="editor-area">
-                    <textarea id="jsonInput" placeholder="Paste your messy JSON here..." spellcheck="false"></textarea>
-                </div>
-                <div class="error-bar" id="errorBar">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                    <span id="errorMsg">Invalid JSON</span>
-                </div>
-            </section>
+            </div>
+            <div class="editor-body">
+                <textarea id="jsonInput" placeholder="Paste or type your JSON here..." spellcheck="false"></textarea>
+            </div>
+            <div class="status-bar">
+                <div id="inputStatusDot" class="status-indicator"></div>
+                <span id="inputStatusText">Waiting for input...</span>
+            </div>
+        </section>
 
-            <!-- OUTPUT PANEL -->
-            <section class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                        Formatted Output
-                    </div>
-                    <button class="btn btn-primary" onclick="copyToClipboard()">
+        <!-- OUTPUT SECTION -->
+        <section class="editor-container glass-panel">
+            <div class="editor-header">
+                <span class="label">Formatted Output</span>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary" onclick="formatJson()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+                        Format
+                    </button>
+                    <button class="btn" onclick="minifyJson()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                        Minify
+                    </button>
+                    <button class="btn" onclick="copyToClipboard()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                         Copy
                     </button>
+                    <button class="btn" onclick="downloadJson()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Download
+                    </button>
                 </div>
-                <div class="editor-area">
-                    <pre id="jsonOutput"></pre>
-                </div>
-            </section>
-        </main>
+            </div>
+            <div class="editor-body">
+                <div id="outputView"></div>
+            </div>
+            <div class="status-bar">
+                <span id="outputStats">0 chars | 0 lines</span>
+            </div>
+        </section>
+    </main>
 
-        <footer>
-            Engineered by <span class="brand">Adam Laamim</span>
-        </footer>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        Copied to Clipboard!
-    </div>
+    <footer>
+        Engineered by Adam Laamime
+    </footer>
 
     <script>
-        // DOM Elements
-        const inputArea = document.getElementById('jsonInput');
-        const outputArea = document.getElementById('jsonOutput');
-        const errorBar = document.getElementById('errorBar');
-        const errorMsg = document.getElementById('errorMsg');
-        const inputStatus = document.getElementById('inputStatus');
-        const toast = document.getElementById('toast');
+        /**
+         * VELOX JSON FORMATTER
+         * Professional Core Logic
+         */
 
-        // State
-        let formattedJSON = "";
+        const inputEl = document.getElementById('jsonInput');
+        const outputEl = document.getElementById('outputView');
+        const inputStatusDot = document.getElementById('inputStatusDot');
+        const inputStatusText = document.getElementById('inputStatusText');
+        const outputStats = document.getElementById('outputStats');
+        const toastEl = document.getElementById('toast');
+        const toastMsgEl = document.getElementById('toastMsg');
 
-        // Debounce function to prevent excessive processing on every keystroke
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), wait);
-            };
-        }
+        let currentJsonString = "";
 
-        // Core Formatting Logic
-        const processJSON = debounce(() => {
-            const rawValue = inputArea.value.trim();
+        // --- Event Listeners ---
 
-            // Handle empty input
-            if (!rawValue) {
-                outputArea.innerHTML = "";
-                errorBar.classList.remove('active');
-                inputStatus.className = "status-dot";
-                formattedJSON = "";
+        // Debounced real-time validation
+        let debounceTimer;
+        inputEl.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(validateInput, 500); // 500ms delay
+        });
+
+        // --- Core Functions ---
+
+        function validateInput() {
+            const raw = inputEl.value.trim();
+            if (!raw) {
+                setStatus('waiting');
+                outputEl.innerHTML = '';
+                outputStats.innerText = '0 chars | 0 lines';
                 return;
             }
 
             try {
-                // 1. Parse
-                const parsed = JSON.parse(rawValue);
-                
-                // 2. Stringify (Beautify)
-                const str = JSON.stringify(parsed, null, 2); // 2 spaces indentation
-                
-                // 3. Syntax Highlight
-                const highlighted = syntaxHighlight(str);
-                
-                // 4. Update UI
-                outputArea.innerHTML = highlighted;
-                errorBar.classList.remove('active');
-                inputStatus.className = "status-dot valid";
-                formattedJSON = str; // Store plain text for copying
-
+                JSON.parse(raw);
+                setStatus('valid');
+                // Optional: Auto-format on valid pause? 
+                // For now, let's just validate as requested, but keep output empty until Format is clicked
+                // or update silently. Let's wait for user to click Format to avoid UI jumping.
             } catch (e) {
-                // Handle Error
-                errorBar.classList.add('active');
-                // Create a cleaner error message
-                let err = e.message;
-                if(err.startsWith("JSON.parse")) {
-                    // Try to give position info if available
-                    err = "Syntax Error: Check quotes, commas, or trailing characters.";
-                }
-                errorMsg.textContent = err;
-                inputStatus.className = "status-dot error";
-                
-                // Optional: Show the raw broken text in output but keep it empty to avoid confusion
-                outputArea.innerHTML = ""; 
-                formattedJSON = "";
+                setStatus('error', e.message);
             }
-        }, 150); // 150ms delay for responsiveness
-
-        // Event Listeners
-        inputArea.addEventListener('input', processJSON);
-
-        // Utility: Clear Input
-        function clearInput() {
-            inputArea.value = "";
-            processJSON();
-            inputArea.focus();
         }
 
-        // Utility: Copy to Clipboard
-        async function copyToClipboard() {
-            if (!formattedJSON) {
-                showToast("Nothing to copy!", true);
+        function formatJson() {
+            const raw = inputEl.value.trim();
+            if (!raw) {
+                showToast('Please enter JSON first', 'error');
                 return;
             }
 
             try {
-                await navigator.clipboard.writeText(formattedJSON);
-                showToast("Copied to Clipboard!");
-            } catch (err) {
-                console.error('Failed to copy: ', err);
-                // Fallback for older browsers
-                const textarea = document.createElement('textarea');
-                textarea.value = formattedJSON;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast("Copied to Clipboard!");
+                const parsed = JSON.parse(raw);
+                // Pretty print with 4 spaces
+                currentJsonString = JSON.stringify(parsed, null, 4);
+                renderOutput(currentJsonString);
+                setStatus('valid');
+                showToast('Formatted Successfully');
+            } catch (e) {
+                setStatus('error', e.message);
+                // Highlight error visualization could go here
             }
         }
 
-        // UI: Toast Notification
-        let toastTimeout;
-        function showToast(message, isError = false) {
-            toast.innerHTML = isError ? message : `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                ${message}
-            `;
-            toast.style.backgroundColor = isError ? 'var(--error-color)' : 'var(--success-color)';
-            toast.style.color = isError ? '#fff' : '#064e3b';
+        function minifyJson() {
+            const raw = inputEl.value.trim();
+            if (!raw) {
+                showToast('Please enter JSON first', 'error');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(raw);
+                currentJsonString = JSON.stringify(parsed);
+                renderOutput(currentJsonString);
+                setStatus('valid');
+                showToast('Minified Successfully');
+            } catch (e) {
+                setStatus('error', e.message);
+            }
+        }
+
+        /**
+         * Renders the JSON string with syntax highlighting
+         */
+        function renderOutput(jsonString) {
+            // Escape HTML characters first to prevent XSS
+            let safeHtml = jsonString.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Apply Regex coloring
+            // 1. Strings (keys and values)
+            // Note: This simple regex handles most cases. 
+            // Order matters: Keys usually end with ':', values don't.
+            safeHtml = safeHtml.replace(/"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)/g, (match) => {
+                return '<span class="json-key">' + match.slice(0, -1) + '</span>' + match.slice(-1);
+            });
             
-            toast.classList.add('show');
+            safeHtml = safeHtml.replace(/"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"/g, '<span class="json-string">"$1"</span>');
             
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
+            // Re-fix the string replacement logic (simpler approach):
+            // Let's restart the coloring logic on the clean string to be safer and more precise.
+            
+            // Reset
+            let html = jsonString;
+            
+            // HTML Escape
+            html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Numbers
+            html = html.replace(/\b(-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)\b/g, '<span class="json-number">$1</span>');
+
+            // Booleans & Null
+            html = html.replace(/\b(true|false)\b/g, '<span class="json-boolean">$1</span>');
+            html = html.replace(/\b(null)\b/g, '<span class="json-null">$1</span>');
+
+            // Strings (Keys)
+            // Looks for "text": (key pattern)
+            html = html.replace(/<span class="json-number">-?\d+<\/span>(\s*:)?/g, (match) => {
+                // temporary fix to undo number formatting if it was part of a string (unlikely with \b) but regex is tricky.
+                // Actually, let's stick to standard formatting:
+                return match; 
+            });
+
+            // Complex string replacement to differentiate keys vs values
+            // We iterate character by character or use a tokenizer. 
+            // For this constraints, a smart regex is fastest:
+            
+            // Re-processing string tokens
+            html = html.replace(/"(?:[^"\\]|\\.)*"/g, function(match) {
+                // If it ends with ':', it's a key (most likely)
+                // But we are in the middle of HTML, so we look at the raw string match.
+                // We need to peek ahead in the original string, but here we just look at the match itself.
+                // Simplified: If the match itself has a colon at the end? No, colon is outside quotes.
+                
+                // Heuristic: Check what follows in the HTML stream.
+                return '<span class="json-string">' + match + '</span>';
+            });
+
+            // Key Highlighting: Find pattern "span class="json-string">..."</span> followed by : 
+            html = html.replace(/<span class="json-string">"(.*?)"<\/span>(\s*:)/g, function(match, p1, p2) {
+                return '<span class="json-key">"' + p1 + '"</span>' + p2;
+            });
+
+            outputEl.innerHTML = html;
+            
+            // Update stats
+            outputStats.innerText = `${jsonString.length} chars | ${jsonString.split('\n').length} lines`;
+        }
+
+        // --- Utility Functions ---
+
+        function setStatus(state, msg = "") {
+            inputStatusDot.className = 'status-indicator';
+            if (state === 'valid') {
+                inputStatusDot.classList.add('status-valid');
+                inputStatusText.innerText = 'Valid JSON';
+                inputStatusText.style.color = 'var(--success)';
+            } else if (state === 'error') {
+                inputStatusDot.classList.add('status-error');
+                inputStatusText.innerText = 'Error: ' + msg;
+                inputStatusText.style.color = 'var(--danger)';
+            } else {
+                inputStatusText.innerText = 'Waiting for input...';
+                inputStatusText.style.color = 'var(--text-muted)';
+            }
+        }
+
+        function copyToClipboard() {
+            if (!currentJsonString) {
+                // Try to copy raw input if no formatted version exists yet
+                currentJsonString = inputEl.value;
+            }
+            if (!currentJsonString) return;
+
+            navigator.clipboard.writeText(currentJsonString).then(() => {
+                showToast('Copied to Clipboard');
+            }).catch(err => {
+                showToast('Failed to copy', 'error');
+                console.error(err);
+            });
+        }
+
+        function downloadJson() {
+            if (!currentJsonString) {
+                // Attempt to format first if empty
+                formatJson();
+            }
+            if (!currentJsonString) {
+                showToast('No valid JSON to download', 'error');
+                return;
+            }
+
+            const blob = new Blob([currentJsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'formatted-data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Download Started');
+        }
+
+        function clearInput() {
+            inputEl.value = '';
+            outputEl.innerHTML = '';
+            currentJsonString = '';
+            setStatus('waiting');
+            inputEl.focus();
+        }
+
+        function loadSample() {
+            const sample = {
+                "project": "Velox JSON Formatter",
+                "version": 2.0,
+                "features": [
+                    "Syntax Validation",
+                    "Beautify",
+                    "Minify",
+                    "Download"
+                ],
+                "settings": {
+                    "theme": "Glassmorphism",
+                    "darkMode": true,
+                    "author": "Adam Laamime"
+                },
+                "isAwesome": true
+            };
+            inputEl.value = JSON.stringify(sample); // Load raw string
+            validateInput();
+            formatJson(); // Auto format sample
+        }
+
+        function showToast(message, type = 'success') {
+            toastMsgEl.innerText = message;
+            toastEl.style.background = type === 'error' ? 'var(--danger)' : 'var(--success)';
+            toastEl.classList.add('show');
+            setTimeout(() => {
+                toastEl.classList.remove('show');
             }, 3000);
         }
 
-        // Utility: Syntax Highlighter (Regex based, Vanilla JS)
-        function syntaxHighlight(json) {
-            // Escape HTML entities to prevent rendering HTML tags inside JSON
-            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            
-            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                let cls = 'json-number';
-                if (/^"/.test(match)) {
-                    if (/:$/.test(match)) {
-                        cls = 'json-key';
-                    } else {
-                        cls = 'json-string';
-                    }
-                } else if (/true|false/.test(match)) {
-                    cls = 'json-boolean';
-                } else if (/null/.test(match)) {
-                    cls = 'json-null';
-                }
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
-        }
+        // Initialize with focus
+        inputEl.focus();
+
     </script>
 </body>
 </html>
