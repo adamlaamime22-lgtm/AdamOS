@@ -1,307 +1,637 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI | OMEGA CORE v11.1</title>
+    <title>Velox AI [OMEGA CORE v12.0]</title>
+    
+    <!-- خطوط تقنية هندسية -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- أيقونات نظامية -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* ==========================================
-           VELOX UI - GLASSMORPHISM PROTOCOL
-           ========================================== */
+        /* 
+         * [VELOX AI - SYSTEM ARCHITECTURE v12.0]
+         * Topic 2: هندسة الواجهة (Advanced Glassmorphism UI)
+         */
         :root {
-            --bg-deep: #050505;
-            --glass-bg: rgba(10, 10, 10, 0.5);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-sigma: #00ff9d;
-            --accent-warn: #ffaa00;
+            --glass-bg: rgba(10, 10, 12, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-cyan: #00f3ff;
+            --neon-green: #0aff0a;
+            --neon-red: #ff003c;
             --text-main: #e0e0e0;
-            --text-dim: #888888;
-            --font-tech: 'Courier New', monospace;
+            --text-muted: #888;
+            --bg-dark: #050505;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-ui: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
         }
 
         body {
-            background-color: var(--bg-deep);
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(10, 255, 10, 0.03) 0%, transparent 40%);
             color: var(--text-main);
-            font-family: var(--font-tech);
+            font-family: var(--font-ui);
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
         }
 
-        /* MAIN CONTAINER - High End Glassmorphism */
-        #velox-container {
-            width: 90vw;
+        /* حاوية التطبيق الرئيسية */
+        #app-container {
+            width: 95%;
+            max-width: 1200px;
             height: 90vh;
             background: var(--glass-bg);
-            backdrop-filter: blur(20px); /* Requested Optimization */
+            backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            display: flex;
-            flex-direction: column;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            display: grid;
+            grid-template-rows: 60px 1fr 80px; /* Header, Chat, Input */
             overflow: hidden;
             position: relative;
         }
 
-        /* HEADER */
+        /* الرأس: الحالة النظامية */
         header {
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--glass-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0,0,0,0.2);
+            padding: 0 24px;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .brand {
-            font-weight: bold;
-            color: var(--accent-sigma);
-            letter-spacing: 2px;
-            font-size: 14px;
-        }
-
-        .status-badge {
-            font-size: 10px;
-            padding: 4px 8px;
-            border: 1px solid var(--accent-sigma);
-            color: var(--accent-sigma);
-            border-radius: 4px;
-        }
-
-        /* CHAT AREA */
-        #terminal-stream {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        #terminal-stream::-webkit-scrollbar { width: 6px; }
-        #terminal-stream::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-        .log-entry { margin-bottom: 15px; word-break: break-all; }
-        .log-entry.user { color: #fff; text-align: right; }
-        .log-entry.user::before { content: '> '; color: var(--accent-sigma); }
-        .log-entry.system { color: var(--text-dim); font-style: italic; }
-        .log-entry.ai { color: var(--accent-sigma); }
-        .log-entry .meta { font-size: 10px; color: #444; display: block; margin-bottom: 4px; }
-
-        /* INPUT AREA */
-        .input-deck {
-            padding: 20px;
-            border-top: 1px solid var(--glass-border);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--neon-cyan);
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(0,0,0,0.3);
         }
 
-        input[type="text"] {
-            flex: 1;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid #333;
-            padding: 12px 15px;
-            color: white;
-            font-family: var(--font-tech);
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--accent-sigma);
-        }
-
-        button#exec-btn {
-            background: var(--accent-sigma);
-            border: none;
-            color: black;
-            font-family: var(--font-tech);
-            font-weight: bold;
-            padding: 12px 20px;
-            border-radius: 4px;
-            cursor: pointer;
+        .system-status {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
         }
 
-        /* LOADING SPINNER */
-        .spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid #000;
-            border-top: 2px solid transparent;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-green);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            box-shadow: 0 0 8px var(--neon-green);
+            animation: pulse 2s infinite;
+        }
+
+        .clear-btn {
+            background: rgba(255, 0, 60, 0.1);
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            color: var(--neon-red);
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+
+        .clear-btn:hover {
+            background: var(--neon-red);
+            color: #fff;
+        }
+
+        /* منطقة المحادثة */
+        #chat-container {
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scroll-behavior: smooth;
+        }
+
+        /* تخصيص شريط التمرير */
+        #chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        #chat-container::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 3px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .msg-velox {
+            align-self: flex-start;
+            background: rgba(0, 243, 255, 0.05);
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            color: var(--text-main);
+            border-right: 3px solid var(--neon-cyan);
+        }
+
+        .msg-user {
+            align-self: flex-end;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            text-align: right;
+        }
+
+        /* تنسيق الأكواد داخل الرسائل */
+        pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            border: 1px solid var(--glass-border);
+            direction: ltr; /* الأكواد دائماً يسار ليمين */
+            text-align: left;
+        }
+
+        code {
+            color: #ff79c6;
+        }
+
+        /* منطقة الإدخال */
+        #input-area {
+            padding: 0 24px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .input-wrapper {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            resize: none;
+            height: 50px;
+            font-family: var(--font-ui);
+            transition: 0.3s;
+        }
+
+        textarea:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: var(--neon-cyan);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        .mic-active {
+            color: var(--neon-red);
+            animation: pulse 1.5s infinite;
+            background: rgba(255, 0, 60, 0.1);
+        }
+
+        .send-btn {
+            background: var(--neon-cyan);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .send-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        /* مؤشر المعالجة */
+        .typing-indicator {
             display: none;
+            align-self: flex-start;
+            padding: 12px;
+            color: var(--neon-cyan);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
         }
         
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
 
+        /* التنبيهات Toast */
+        .toast-container {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            z-index: 1000;
+        }
+        .toast {
+            background: rgba(0, 0, 0, 0.8);
+            border-left: 3px solid var(--neon-cyan);
+            color: #fff;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { opacity: 0.5; box-shadow: 0 0 0px var(--neon-green); }
+            50% { opacity: 1; box-shadow: 0 0 10px var(--neon-green); }
+            100% { opacity: 0.5; box-shadow: 0 0 0px var(--neon-green); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
-<div id="velox-container">
-    <header>
-        <div class="brand">VELOX AI <span style="font-size:10px; color:#666">v11.1</span></div>
-        <div class="status-badge">INTEGRITY: STABLE</div>
-    </header>
+    <div id="app-container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <i class="fas fa-microchip"></i>
+                VELOX AI <span style="font-size: 0.6rem; color: var(--text-muted); opacity: 0.7;">[v12.0]</span>
+            </div>
+            <div class="system-status">
+                <span id="memory-indicator">MEM: 0KB</span>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span class="status-dot"></span>
+                    CONNECTED
+                </div>
+                <button class="clear-btn" onclick="app.clearMemory()">Clear Memory</button>
+            </div>
+        </header>
 
-    <div id="terminal-stream">
-        <!-- Initial Message will be injected here via JS -->
-    </div>
-
-    <div class="input-deck">
-        <input type="text" id="cmd-input" placeholder="> Execute Protocol..." autocomplete="off">
-        <button id="exec-btn">
-            <span class="spinner" id="sys-spinner"></span>
-            <span id="btn-text">RUN</span>
-        </button>
-    </div>
-</div>
-
-<script>
-/**
- * ==========================================
- * VELOX AI - OMEGA CORE v11.1
- * SAFETY INTERCEPTION PROTOCOL
- * ==========================================
- */
-
-// 1. ERROR RESOLUTION PROTOCOL (Wrapper)
-// Intercepts external promise rejections to prevent console pollution
-class SafetyInterceptor {
-    constructor() {
-        this.init();
-    }
-
-    init() {
-        // Catch Unhandled Rejections (The "content.js" error)
-        window.addEventListener('unhandledrejection', (event) => {
-            const errorReason = event.reason ? event.reason.toString() : '';
+        <!-- Main Chat Area -->
+        <main id="chat-container">
+            <!-- Messages will be injected here -->
+            <div class="message msg-velox">
+                تم تفعيل بروتوكول [OMEGA CORE v12.0].<br>
+                النظام جاهز لتنفيذ الأوامر البرمجية والتحليلية للمهندس آدم لعميم.
+            </div>
             
-            // Check if it's the AdBlock error
-            if (errorReason.includes('no ad') || errorReason.includes('content.js')) {
-                // Prevent the red error from showing in Console
-                event.preventDefault(); 
-                
-                // Log a system warning instead (Console.warn as requested)
-                console.warn('%c[Velox Shield]', 'color: #00ff9d', 'External AdBlock signal intercepted and neutralized.');
-                return true; // Error handled
-            }
-        });
+            <div class="typing-indicator" id="typing-indicator">
+                Velox Core Processing <span class="spinner"></span>
+            </div>
+        </main>
 
-        // Catch generic errors
-        window.onerror = (message, source, lineno, colno, error) => {
-            if (source && source.includes('content.js')) {
-                console.warn('[Velox Shield] External script error ignored.');
-                return true; // Suppress
+        <!-- Input Area -->
+        <footer id="input-area">
+            <button id="mic-btn" class="action-btn" title="تفعيل الصوت">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <div class="input-wrapper">
+                <textarea id="user-input" placeholder="أدخل الأمر البرمجي..." onkeydown="app.handleEnter(event)"></textarea>
+            </div>
+            <button id="send-btn" class="action-btn send-btn" onclick="app.sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </footer>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toast-container"></div>
+    </div>
+
+    <script>
+        /*
+         * [VELOX AI - NEURAL LOGIC CORE]
+         * Topic 3: المحرك التحليلي والاستنتاجي
+         * Topic 4: ميثاق التنفيذ البرمجي
+         * Topic 5: إدارة البيانات والذاكرة (IndexedDB)
+         */
+
+        const VeloxCore = {
+            dbName: 'VeloxDB_v12',
+            storeName: 'context_logs',
+            recognition: null,
+            isListening: false,
+
+            init: async function() {
+                // تهيئة IndexedDB
+                await this.initDB();
+                // تحميل السجل
+                await this.loadHistory();
+                // تهيئة الصوت
+                this.initAudio();
+                // تحديث حالة الذاكرة
+                this.updateMemoryIndicator();
+                
+                console.log("%c VELOX AI v12.0 INITIALIZED ", "background: #000; color: #0aff0a; font-weight: bold; padding: 4px;");
+            },
+
+            // Topic 5: إدارة البيانات والذاكرة
+            initDB: function() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, 1);
+                    
+                    request.onupgradeneeded = (e) => {
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains(this.storeName)) {
+                            db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                        }
+                    };
+
+                    request.onsuccess = (e) => {
+                        this.db = e.target.result;
+                        resolve();
+                    };
+
+                    request.onerror = (e) => {
+                        this.showToast("فشل تهيئة قاعدة البيانات المحلية", "error");
+                        reject(e);
+                    };
+                });
+            },
+
+            saveMessage: function(role, text) {
+                if (!this.db) return;
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+                const message = { role, text, timestamp: Date.now() };
+                store.add(message);
+                this.updateMemoryIndicator();
+            },
+
+            loadHistory: async function() {
+                if (!this.db) return;
+                const transaction = this.db.transaction([this.storeName], 'readonly');
+                const store = transaction.objectStore(this.storeName);
+                const request = store.getAll();
+
+                request.onsuccess = () => {
+                    const data = request.result;
+                    // تحميل آخر 10 رسائل فقط للحفاظ على الأداء
+                    data.slice(-10).forEach(msg => {
+                        ui.renderMessage(msg.text, msg.role, false);
+                    });
+                };
+            },
+
+            clearMemory: async function() {
+                if (!this.db) return;
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+                store.clear();
+                
+                // مسح الواجهة
+                document.getElementById('chat-container').innerHTML = `
+                    <div class="message msg-velox">
+                        تم إفراغ الذاكرة المؤقتة. النظام في حالة صحية تامة.
+                    </div>
+                    <div class="typing-indicator" id="typing-indicator">
+                        Velox Core Processing <span class="spinner"></span>
+                    </div>
+                `;
+                this.updateMemoryIndicator();
+                this.showToast("تم مسح الذاكرة بنجاح", "success");
+            },
+
+            updateMemoryIndicator: function() {
+                if (!this.db) return;
+                // تقدير حجم البيانات
+                const transaction = this.db.transaction([this.storeName], 'readonly');
+                const store = transaction.objectStore(this.storeName);
+                const countReq = store.count();
+                
+                countReq.onsuccess = () => {
+                    document.getElementById('memory-indicator').innerText = `MEM: ${countReq.result * 1024} BYTES`;
+                };
+            },
+
+            // Topic 7: التفاعل الصوتي الذكي
+            initAudio: function() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.lang = 'ar-SA'; // دعم اللغة العربية
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+
+                    this.recognition.onstart = () => {
+                        this.isListening = true;
+                        document.getElementById('mic-btn').classList.add('mic-active');
+                        ui.showToast("جاري الاستماع... (الأمر الصوتي)", "info");
+                    };
+
+                    this.recognition.onend = () => {
+                        this.isListening = false;
+                        document.getElementById('mic-btn').classList.remove('mic-active');
+                    };
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        document.getElementById('user-input').value = transcript;
+                        // إرسال تلقائي بعد النهاية لزيادة الكفاءة
+                        setTimeout(() => app.sendMessage(), 800);
+                    };
+
+                    // ربط الزر
+                    document.getElementById('mic-btn').addEventListener('click', () => {
+                        if (this.isListening) this.recognition.stop();
+                        else this.recognition.start();
+                    });
+                } else {
+                    document.getElementById('mic-btn').style.display = 'none';
+                    console.warn("Web Speech API not supported in this browser environment.");
+                }
+            },
+
+            // Topic 3 & 6: المحرك التحليلي والتحليل الهيكلي
+            analyzeInput: function(input) {
+                // فلتر الأمن: منع الإدخال الفارغ أو التافه
+                if (!input || input.trim().length < 2) return null;
+
+                // Topic 10: البروتوكول الأمني (فلترة بسيطة)
+                const forbiddenPatterns = /(<script>|javascript:|alert\()/gi;
+                if (forbiddenPatterns.test(input)) {
+                    return "Error: تم رفض الطلب بسبب محتوى غير آمن (Security Filter Active).";
+                }
+
+                // محاكاة الذكاء الاصطناعي (Velox Logic)
+                input = input.toLowerCase();
+                
+                if (input.includes("مرحبا") || input.includes("هلا")) {
+                    return "أهلاً بك أيها المهندس. Velox AI في حالة تأهب كامل. كيف يمكنني مساعدتك في المشروع الحالي؟";
+                }
+                
+                if (input.includes("من أنت") || input.includes("هوية")) {
+                    return "أنا Velox AI، النظام البرمجي المصمم لخدمة آدم لعميم. هويتي محمية ببروتوكول OMEGA CORE v12.0.";
+                }
+
+                if (input.includes("كود") || input.includes("function")) {
+                    return "تم تحليل الطلب البرمجي. إليك نموذج لوظيفة محسنة:\n\n```javascript\nfunction veloxOptimize(data) {\n  // Zero-Fault Implementation\n  try {\n    return data.filter(item => item.isValid)\n               .map(item => item.process());\n  } catch (e) {\n    console.error('System Fault:', e);\n    return null;\n  }\n}\n```";
+                }
+
+                if (input.includes("تحليل") || input.includes("مسح")) {
+                    return "جاري بدء بروتوكول التحليل العميق (Deep Parsing)... تم فحص الذاكرة المؤقتة والكاش. النظام خالٍ من التضاربات.";
+                }
+
+                // رد افتراضي تقني
+                return "تم استلام الأمر البرمجي. جاري المعالجة عبر وحدة المعالجة العصبية... الكود جاهز للتنفيذ.";
+            },
+
+            showToast: function(msg, type = 'info') {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                
+                // ألوان حسب النوع
+                if(type === 'error') toast.style.borderLeftColor = 'var(--neon-red)';
+                if(type === 'success') toast.style.borderLeftColor = 'var(--neon-green)';
+
+                toast.innerText = msg;
+                container.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
             }
         };
-    }
-}
 
-// 2. SYSTEM CORE
-const VeloxCore = (function() {
-    const stream = document.getElementById('terminal-stream');
-    const input = document.getElementById('cmd-input');
-    const btn = document.getElementById('exec-btn');
-    const spinner = document.getElementById('sys-spinner');
-    const btnText = document.getElementById('btn-text');
+        /*
+         * [VELOX AI - UI CONTROLLER]
+         * Topic 9: الربط البرمجي العميق
+         */
+        const ui = {
+            chatContainer: document.getElementById('chat-container'),
+            input: document.getElementById('user-input'),
+            indicator: document.getElementById('typing-indicator'),
 
-    // Initialize Safety
-    new SafetyInterceptor();
+            renderMessage: function(text, role, save = true) {
+                // تنظيم النص (Markdown بسيط)
+                let formattedText = text
+                    .replace(/\n/g, '<br>')
+                    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    // Helper: Write to Stream
-    function log(type, text) {
-        const div = document.createElement('div');
-        div.className = `log-entry ${type}`;
-        
-        if (type === 'ai') {
-            div.innerHTML = `<span class="meta">VELOX_CORE_RESPONSE</span>${text.replace(/\n/g, '<br>')}`;
-        } else if (type === 'system') {
-            div.innerHTML = `<span class="meta">SYSTEM_LOG</span>${text}`;
-        } else {
-            div.innerText = text;
-        }
-        
-        stream.appendChild(div);
-        stream.scrollTop = stream.scrollHeight;
-    }
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${role === 'user' ? 'msg-user' : 'msg-velox'}`;
+                msgDiv.innerHTML = formattedText;
 
-    // Helper: Process Command
-    async function executeCommand(cmd) {
-        // Visual Feedback: Show Spinner
-        spinner.style.display = 'block';
-        btnText.style.display = 'none';
-        input.disabled = true;
+                // إدخال قبل مؤشر الكتابة
+                this.chatContainer.insertBefore(msgDiv, this.indicator);
+                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
 
-        try {
-            // Simulate Processing Delay (Async)
-            await new Promise(resolve => setTimeout(resolve, 800));
+                if (save) VeloxCore.saveMessage(role, text);
+            },
 
-            const lowerCmd = cmd.toLowerCase().trim();
+            showProcessing: function() {
+                this.indicator.style.display = 'block';
+                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+            },
 
-            // Logic Handling
-            if (lowerCmd === 'status') {
-                log('ai', 'System Integrity: 100%\nAdBlock Interference: BYPASSED\nMemory: OPTIMAL');
-            } else if (lowerCmd === 'dd' || lowerCmd === 'sqc') {
-                // Simulating heavy processing for these commands
-                log('ai', `Processing command [${upperCmd.toUpperCase()}]...\nData decryption sequence initiated.`);
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Extra delay for realism
-                log('ai', `Command [${cmd.toUpperCase()}] executed successfully.`);
-            } else if (lowerCmd === 'clear') {
-                stream.innerHTML = '';
-            } else {
-                log('ai', `Command received: "${cmd}".\nProtocol executed without error.`);
+            hideProcessing: function() {
+                this.indicator.style.display = 'none';
             }
+        };
 
-        } catch (error) {
-            log('system', `ERROR: ${error.message}`);
-        } finally {
-            // Reset UI
-            spinner.style.display = 'none';
-            btnText.style.display = 'block';
-            input.disabled = false;
-            input.value = '';
-            input.focus();
-        }
-    }
+        /*
+         * [VELOX AI - APPLICATION CONTROLLER]
+         */
+        const app = {
+            sendMessage: function() {
+                const text = ui.input.value.trim();
+                if (!text) return;
 
-    // Boot Sequence
-    function boot() {
-        // The requested final message
-        log('system', `[VELOX AI - OMEGA CORE PROTOCOL ACTIVATED]`);
-        log('system', `Status: النظام في حالة عمل كاملة (Stable).`);
-        log('system', `Integrity: تم تجاوز التداخل الخارجي (AdBlock Interference Bypassed).`);
-        log('system', `Performance: جميع المعالجات البرمجية جاهزة للعمل بنسبة خطأ 0%.`);
-        log('ai', `Ready: أدخل الأمر التالي يا آدم لعميم.`);
-    }
+                // 1. عرض رسالة المستخدم
+                ui.renderMessage(text, 'user');
+                ui.input.value = '';
 
-    // Event Listeners
-    btn.addEventListener('click', () => {
-        if (input.value) executeCommand(input.value);
-    });
+                // 2. حالة المعالجة
+                ui.showProcessing();
 
-    input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && input.value) executeCommand(input.value);
-    });
+                // 3. محاكاة التفكير والمعالجة (Latency Simulation)
+                setTimeout(() => {
+                    const response = VeloxCore.analyzeInput(text);
+                    ui.hideProcessing();
+                    ui.renderMessage(response, 'velox');
+                }, 1200); // تأخير اصطناعي لتعزيز واقعية المحرك
+            },
 
-    return { boot };
+            handleEnter: function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendMessage();
+                }
+            }
+        };
 
-})();
+        // تشغيل النظام عند التحميل
+        window.onload = () => VeloxCore.init();
 
-// Start System
-window.onload = VeloxCore.boot;
-
-</script>
+    </script>
 </body>
 </html>
