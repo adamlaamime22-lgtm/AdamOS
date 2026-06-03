@@ -3,105 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI | OMEGA FINAL</title>
+    <title>Velox AI | OMEGA CORE v11.1</title>
     <style>
-        /* VELOX UI SYSTEM - PURE CSS */
+        /* ==========================================
+           VELOX UI - GLASSMORPHISM PROTOCOL
+           ========================================== */
         :root {
-            --bg: #000;
-            --surface: #111;
-            --primary: #00ff9d;
-            --text: #eee;
-            --dim: #666;
+            --bg-deep: #050505;
+            --glass-bg: rgba(10, 10, 10, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-sigma: #00ff9d;
+            --accent-warn: #ffaa00;
+            --text-main: #e0e0e0;
+            --text-dim: #888888;
+            --font-tech: 'Courier New', monospace;
         }
+
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Courier New', monospace; /* Tech feel */
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-tech);
             height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
+            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
         }
-        #app {
+
+        /* MAIN CONTAINER - High End Glassmorphism */
+        #velox-container {
             width: 90vw;
-            height: 85vh;
-            border: 1px solid #333;
+            height: 90vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px); /* Requested Optimization */
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             display: flex;
             flex-direction: column;
-            background: var(--surface);
-            box-shadow: 0 0 50px rgba(0,255,157,0.1);
+            overflow: hidden;
+            position: relative;
         }
+
+        /* HEADER */
         header {
-            padding: 15px;
-            border-bottom: 1px solid #333;
-            color: var(--primary);
-            font-size: 14px;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
         }
-        #chat {
+
+        .brand {
+            font-weight: bold;
+            color: var(--accent-sigma);
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            border: 1px solid var(--accent-sigma);
+            color: var(--accent-sigma);
+            border-radius: 4px;
+        }
+
+        /* CHAT AREA */
+        #terminal-stream {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
             font-size: 14px;
+            line-height: 1.6;
         }
-        .msg { margin-bottom: 15px; line-height: 1.5; }
-        .msg.user { color: #fff; text-align: right; }
-        .msg.ai { color: var(--primary); }
-        input {
-            width: 100%;
-            padding: 15px;
-            background: #0a0a0a;
+
+        #terminal-stream::-webkit-scrollbar { width: 6px; }
+        #terminal-stream::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        .log-entry { margin-bottom: 15px; word-break: break-all; }
+        .log-entry.user { color: #fff; text-align: right; }
+        .log-entry.user::before { content: '> '; color: var(--accent-sigma); }
+        .log-entry.system { color: var(--text-dim); font-style: italic; }
+        .log-entry.ai { color: var(--accent-sigma); }
+        .log-entry .meta { font-size: 10px; color: #444; display: block; margin-bottom: 4px; }
+
+        /* INPUT AREA */
+        .input-deck {
+            padding: 20px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: rgba(0,0,0,0.4);
             border: 1px solid #333;
+            padding: 12px 15px;
             color: white;
-            font-family: inherit;
-            border-top: 1px solid #333;
+            font-family: var(--font-tech);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
         }
-        input:focus { outline: 1px solid var(--primary); }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-sigma);
+        }
+
+        button#exec-btn {
+            background: var(--accent-sigma);
+            border: none;
+            color: black;
+            font-family: var(--font-tech);
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* LOADING SPINNER */
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #000;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
-<div id="app">
+<div id="velox-container">
     <header>
-        <span>VELOX_AI [OMEGA_FINAL]</span>
-        <span style="color: #666">EXT_INTERFERENCE_DETECTED (IGNORE)</span>
+        <div class="brand">VELOX AI <span style="font-size:10px; color:#666">v11.1</span></div>
+        <div class="status-badge">INTEGRITY: STABLE</div>
     </header>
-    
-    <div id="chat">
-        <div class="msg ai">> System Ready. External AdBlock noise detected in Console. System functionality: Unaffected.</div>
+
+    <div id="terminal-stream">
+        <!-- Initial Message will be injected here via JS -->
     </div>
 
-    <input type="text" id="inp" placeholder="> Enter command..." onkeypress="if(event.key==='Enter') send()">
+    <div class="input-deck">
+        <input type="text" id="cmd-input" placeholder="> Execute Protocol..." autocomplete="off">
+        <button id="exec-btn">
+            <span class="spinner" id="sys-spinner"></span>
+            <span id="btn-text">RUN</span>
+        </button>
+    </div>
 </div>
 
 <script>
-    // SIMPLE ROBUST ENGINE
-    function send() {
-        const inp = document.getElementById('inp');
-        const chat = document.getElementById('chat');
-        const txt = inp.value;
-        if(!txt) return;
+/**
+ * ==========================================
+ * VELOX AI - OMEGA CORE v11.1
+ * SAFETY INTERCEPTION PROTOCOL
+ * ==========================================
+ */
 
-        // User msg
-        const u = document.createElement('div');
-        u.className = 'msg user';
-        u.innerText = '> ' + txt;
-        chat.appendChild(u);
-
-        inp.value = '';
-
-        // AI Response (Simulated)
-        setTimeout(() => {
-            const a = document.createElement('div');
-            a.className = 'msg ai';
-            a.innerText = 'Processed: ' + txt + '\nStatus: OK';
-            chat.appendChild(a);
-            chat.scrollTop = chat.scrollHeight;
-        }, 500);
+// 1. ERROR RESOLUTION PROTOCOL (Wrapper)
+// Intercepts external promise rejections to prevent console pollution
+class SafetyInterceptor {
+    constructor() {
+        this.init();
     }
-</script>
 
+    init() {
+        // Catch Unhandled Rejections (The "content.js" error)
+        window.addEventListener('unhandledrejection', (event) => {
+            const errorReason = event.reason ? event.reason.toString() : '';
+            
+            // Check if it's the AdBlock error
+            if (errorReason.includes('no ad') || errorReason.includes('content.js')) {
+                // Prevent the red error from showing in Console
+                event.preventDefault(); 
+                
+                // Log a system warning instead (Console.warn as requested)
+                console.warn('%c[Velox Shield]', 'color: #00ff9d', 'External AdBlock signal intercepted and neutralized.');
+                return true; // Error handled
+            }
+        });
+
+        // Catch generic errors
+        window.onerror = (message, source, lineno, colno, error) => {
+            if (source && source.includes('content.js')) {
+                console.warn('[Velox Shield] External script error ignored.');
+                return true; // Suppress
+            }
+        };
+    }
+}
+
+// 2. SYSTEM CORE
+const VeloxCore = (function() {
+    const stream = document.getElementById('terminal-stream');
+    const input = document.getElementById('cmd-input');
+    const btn = document.getElementById('exec-btn');
+    const spinner = document.getElementById('sys-spinner');
+    const btnText = document.getElementById('btn-text');
+
+    // Initialize Safety
+    new SafetyInterceptor();
+
+    // Helper: Write to Stream
+    function log(type, text) {
+        const div = document.createElement('div');
+        div.className = `log-entry ${type}`;
+        
+        if (type === 'ai') {
+            div.innerHTML = `<span class="meta">VELOX_CORE_RESPONSE</span>${text.replace(/\n/g, '<br>')}`;
+        } else if (type === 'system') {
+            div.innerHTML = `<span class="meta">SYSTEM_LOG</span>${text}`;
+        } else {
+            div.innerText = text;
+        }
+        
+        stream.appendChild(div);
+        stream.scrollTop = stream.scrollHeight;
+    }
+
+    // Helper: Process Command
+    async function executeCommand(cmd) {
+        // Visual Feedback: Show Spinner
+        spinner.style.display = 'block';
+        btnText.style.display = 'none';
+        input.disabled = true;
+
+        try {
+            // Simulate Processing Delay (Async)
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            const lowerCmd = cmd.toLowerCase().trim();
+
+            // Logic Handling
+            if (lowerCmd === 'status') {
+                log('ai', 'System Integrity: 100%\nAdBlock Interference: BYPASSED\nMemory: OPTIMAL');
+            } else if (lowerCmd === 'dd' || lowerCmd === 'sqc') {
+                // Simulating heavy processing for these commands
+                log('ai', `Processing command [${upperCmd.toUpperCase()}]...\nData decryption sequence initiated.`);
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Extra delay for realism
+                log('ai', `Command [${cmd.toUpperCase()}] executed successfully.`);
+            } else if (lowerCmd === 'clear') {
+                stream.innerHTML = '';
+            } else {
+                log('ai', `Command received: "${cmd}".\nProtocol executed without error.`);
+            }
+
+        } catch (error) {
+            log('system', `ERROR: ${error.message}`);
+        } finally {
+            // Reset UI
+            spinner.style.display = 'none';
+            btnText.style.display = 'block';
+            input.disabled = false;
+            input.value = '';
+            input.focus();
+        }
+    }
+
+    // Boot Sequence
+    function boot() {
+        // The requested final message
+        log('system', `[VELOX AI - OMEGA CORE PROTOCOL ACTIVATED]`);
+        log('system', `Status: النظام في حالة عمل كاملة (Stable).`);
+        log('system', `Integrity: تم تجاوز التداخل الخارجي (AdBlock Interference Bypassed).`);
+        log('system', `Performance: جميع المعالجات البرمجية جاهزة للعمل بنسبة خطأ 0%.`);
+        log('ai', `Ready: أدخل الأمر التالي يا آدم لعميم.`);
+    }
+
+    // Event Listeners
+    btn.addEventListener('click', () => {
+        if (input.value) executeCommand(input.value);
+    });
+
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && input.value) executeCommand(input.value);
+    });
+
+    return { boot };
+
+})();
+
+// Start System
+window.onload = VeloxCore.boot;
+
+</script>
 </body>
 </html>
