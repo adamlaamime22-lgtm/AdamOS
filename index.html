@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox AI | Omega Core Protocol</title>
+    <title>Velox AI | OMEGA CORE PROTOCOL v9.0</title>
     <style>
         /* 
-         * [OMEGA UI CORE - GLASSMORPHISM SYSTEM]
-         * Design Philosophy: High Contrast, Dark Mode, Functional Aesthetics.
+         * [SYSTEM ARCHITECTURE: VELOX AI - UI DESIGN]
+         * Glassmorphism & Dark Mode Implementation
+         * High Contrast & Performance Optimized CSS
          */
         :root {
-            --bg-color: #050505;
-            --glass-bg: rgba(20, 20, 20, 0.6);
+            --bg-dark: #050505;
+            --glass-bg: rgba(20, 20, 20, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-color: #00ff9d; /* System Green */
-            --accent-glow: rgba(0, 255, 157, 0.2);
-            --text-primary: #e0e0e0;
-            --text-secondary: #a0a0a0;
-            --danger-color: #ff4d4d;
-            --blur-amount: 12px;
-            --font-mono: 'Courier New', Courier, monospace;
-            --font-ui: system-ui, -apple-system, sans-serif;
+            --accent-green: #00ff9d;
+            --accent-blue: #00d2ff;
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+            --font-tech: 'SF Mono', 'Fira Code', 'Roboto Mono', monospace;
+            --blur-strength: 20px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            outline: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-green) var(--bg-dark);
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.03) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(0, 150, 255, 0.03) 0%, transparent 20%);
-            color: var(--text-primary);
-            font-family: var(--font-ui);
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.05) 0%, transparent 20%);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -44,98 +44,116 @@
             align-items: center;
         }
 
-        /* LAYOUT STRUCTURE */
-        #app-container {
-            display: flex;
+        /* Main Layout Grid */
+        .app-container {
+            display: grid;
+            grid-template-columns: 80px 1fr;
             width: 95vw;
             height: 90vh;
-            max-width: 1600px;
-            gap: 20px;
-            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* SIDEBAR (Functional Navigation) */
-        aside {
-            width: 80px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
+        /* Sidebar Navigation */
+        .sidebar {
+            background: rgba(0, 0, 0, 0.4);
+            border-right: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px 0;
-            justify-content: space-between;
-            z-index: 10;
-        }
-
-        .nav-group {
-            display: flex;
-            flex-direction: column;
             gap: 20px;
-            align-items: center;
         }
 
-        .nav-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            font-weight: bold;
+            color: #000;
+            font-size: 18px;
+        }
+
+        .nav-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
 
         .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
-        .nav-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
+        .nav-btn.active {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
         }
 
-        /* Connection Status Indicator */
+        /* Tooltip */
+        .nav-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 60px;
+            background: #000;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            border: 1px solid var(--glass-border);
+            font-family: var(--font-tech);
+            z-index: 100;
+        }
+
+        .nav-btn:hover::after {
+            opacity: 1;
+        }
+
         .status-indicator {
+            margin-top: auto;
             width: 10px;
             height: 10px;
-            background-color: var(--accent-color);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-color);
+            background-color: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; box-shadow: 0 0 5px var(--accent-color); }
-            50% { opacity: 0.5; box-shadow: 0 0 20px var(--accent-color); }
-            100% { opacity: 1; box-shadow: 0 0 5px var(--accent-color); }
-        }
-
-        /* MAIN INTERFACE */
-        main {
-            flex: 1;
+        /* Main Chat Area */
+        .chat-interface {
             display: flex;
             flex-direction: column;
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            overflow: hidden;
             position: relative;
         }
 
-        /* HEADER */
-        header {
+        .chat-header {
             padding: 20px;
             border-bottom: 1px solid var(--glass-border);
             display: flex;
@@ -143,28 +161,24 @@
             align-items: center;
         }
 
-        .brand {
-            font-family: var(--font-mono);
-            font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .system-tag {
-            font-size: 0.7rem;
-            background: rgba(0, 255, 157, 0.1);
-            color: var(--accent-color);
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 255, 157, 0.2);
+        .system-title {
+            font-family: var(--font-tech);
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--text-muted);
         }
 
-        /* CHAT AREA */
-        #chat-container {
+        .system-version {
+            font-size: 10px;
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(0, 255, 157, 0.1);
+        }
+
+        /* Messages Container */
+        .messages-container {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
@@ -174,61 +188,64 @@
             scroll-behavior: smooth;
         }
 
-        /* Scrollbar Styling */
-        #chat-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        #chat-container::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        #chat-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
         .message {
             max-width: 80%;
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 12px;
-            font-size: 0.95rem;
             line-height: 1.6;
+            font-size: 15px;
             position: relative;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            animation: slideIn 0.3s ease-out;
         }
 
         .message.user {
             align-self: flex-end;
-            background: rgba(0, 255, 157, 0.05);
-            border: 1px solid rgba(0, 255, 157, 0.1);
+            background: rgba(0, 210, 255, 0.15);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: #fff;
             border-bottom-right-radius: 2px;
-            color: var(--text-primary);
         }
 
-        .message.velox {
+        .message.system {
             align-self: flex-start;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
+            color: var(--text-main);
             border-bottom-left-radius: 2px;
-            color: var(--text-primary);
         }
 
-        .message-header {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            margin-bottom: 8px;
-            opacity: 0.7;
-            display: flex;
-            justify-content: space-between;
+        .message.system .role-label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 10px;
+            background: #000;
+            color: var(--accent-green);
+            padding: 2px 5px;
+            font-family: var(--font-tech);
+            border: 1px solid var(--glass-border);
         }
 
-        /* INPUT AREA */
-        #input-area {
+        /* Code Block Styling */
+        pre {
+            background: #0d0d0d;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 10px;
+            border: 1px solid #333;
+            font-family: var(--font-tech);
+            font-size: 13px;
+        }
+        
+        code {
+            color: #a5d6ff;
+        }
+
+        /* Input Area */
+        .input-area {
             padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
             border-top: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
@@ -236,612 +253,661 @@
             position: relative;
         }
 
-        #user-input {
+        .input-wrapper {
             flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-            resize: none;
-            height: 54px; /* Matches button height roughly */
-            min-height: 54px;
-            transition: border-color 0.3s;
+            position: relative;
         }
 
-        #user-input:focus {
-            border-color: var(--accent-color);
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 15px;
+            border-radius: 8px;
+            resize: none;
+            height: 56px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.1);
         }
 
         .action-btn {
-            width: 54px;
-            height: 54px;
-            border-radius: 12px;
+            background: transparent;
             border: none;
             cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
         }
 
         .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
         }
 
-        #mic-btn {
-            position: relative;
-        }
-        
-        #mic-btn.listening {
-            background: rgba(0, 150, 255, 0.2);
-            color: #0096ff;
-            box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
-            animation: breathe 1.5s infinite;
+        .mic-btn.listening {
+            color: var(--accent-blue);
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            border-radius: 50%;
+            background: rgba(0, 210, 255, 0.1);
         }
 
-        @keyframes breathe {
-            0% { box-shadow: 0 0 5px rgba(0, 150, 255, 0.2); }
-            50% { box-shadow: 0 0 20px rgba(0, 150, 255, 0.5); }
-            100% { box-shadow: 0 0 5px rgba(0, 150, 255, 0.2); }
+        .send-btn {
+            background: var(--accent-green);
+            color: #000;
+            border-radius: 8px;
+            width: 48px;
+            height: 48px;
         }
 
-        /* SPINNER */
+        .send-btn:hover {
+            background: #33ffb5;
+            transform: scale(1.05);
+        }
+
+        /* Spinner */
         .spinner {
             width: 20px;
             height: 20px;
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top: 2px solid var(--accent-color);
+            border-top-color: var(--accent-green);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            display: none; /* Hidden by default */
+            display: none;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: rgba(10, 10, 10, 0.9);
+            border-left: 4px solid var(--accent-green);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            font-family: var(--font-tech);
+            font-size: 13px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: #ff3366;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 157, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0); }
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* MODALS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Utility */
+        .hidden { display: none !important; }
+        
+        /* System Status Modal */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
-            display: none;
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
         }
 
         .modal-content {
             background: #111;
-            border: 1px solid var(--glass-border);
-            width: 400px;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--accent-green);
+            width: 500px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.1);
+            font-family: var(--font-tech);
         }
 
-        .modal-title {
-            font-family: var(--font-mono);
-            margin-bottom: 15px;
-            color: var(--accent-color);
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 10px;
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 5px;
         }
-
-        .modal-body {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .modal-btn {
-            background: var(--accent-color);
-            color: #000;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            float: left;
-        }
-
-        /* CODE BLOCKS STYLING */
-        pre {
-            background: #000;
-            padding: 10px;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin-top: 10px;
-            border: 1px solid #333;
-        }
-        code {
-            font-family: var(--font-mono);
-            color: #d63384;
-        }
-
     </style>
 </head>
 <body>
 
-    <div id="app-container">
-        <!-- SIDEBAR -->
-        <aside>
-            <div class="nav-group">
-                <button class="nav-btn" id="btn-new-chat" title="New Chat">
-                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                </button>
-                <button class="nav-btn" id="btn-settings" title="Settings">
-                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.58 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-                </button>
-            </div>
-            
-            <div class="nav-group">
-                <div class="status-indicator" id="status-led" title="System Connected"></div>
-                <button class="nav-btn" id="btn-export" title="Export Data">
-                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                </button>
-                <button class="nav-btn" id="btn-status" title="System Status">
-                    <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-                </button>
-            </div>
-        </aside>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
-        <!-- MAIN INTERFACE -->
-        <main>
-            <header>
-                <div class="brand">
-                    <span>VELOX AI</span>
-                    <span class="system-tag">OMEGA v5.0</span>
-                </div>
-                <div class="system-info" style="font-size: 0.8rem; color: var(--text-secondary);">
-                    ID: <span id="guest-id">LOADING...</span>
-                </div>
+    <!-- Main Application -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="brand-logo">V</div>
+            
+            <button class="nav-btn" id="btnNewChat" data-tooltip="New Chat">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+            </button>
+            
+            <button class="nav-btn" id="btnSettings" data-tooltip="Settings">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+            </button>
+
+            <button class="nav-btn" id="btnExport" data-tooltip="Export Data">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            </button>
+
+            <button class="nav-btn" id="btnSystemStatus" data-tooltip="System Status">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            </button>
+
+            <div class="status-indicator" id="connectionStatus" title="WebSocket Connected"></div>
+        </nav>
+
+        <!-- Chat Interface -->
+        <main class="chat-interface">
+            <header class="chat-header">
+                <div class="system-title">VELOX AI <span style="color:var(--accent-green)">//</span> CORE</div>
+                <div class="system-version">v9.0.1</div>
             </header>
 
-            <div id="chat-container">
-                <!-- Messages will be injected here -->
-                <div class="message velox">
-                    <div class="message-header">VELOX CORE // SYSTEM_INIT</div>
-                    <div>
-                        [SYSTEM READY]<br>
-                        بروتوكول أوميجا v5.0 مفعل. الخصوصية محفوظة. الأداء في أقصى حد.<br>
-                        أنا جاهز للتحليل والتنفيذ البرمجي. قدم طلبك التقني.
-                    </div>
+            <div class="messages-container" id="messagesContainer">
+                <!-- Initial System Message -->
+                <div class="message system">
+                    <span class="role-label">VELOX AI</span>
+                    [SYSTEM INITIALIZED]<br>
+                    Omega Core Protocol v9.0 Active.<br>
+                    51SO Inference Engine: Ready.<br>
+                    Awaiting technical input...
                 </div>
             </div>
 
-            <div id="input-area">
-                <button class="action-btn" id="mic-btn" title="Voice Command">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+            <div class="input-area">
+                <button class="action-btn mic-btn" id="micBtn" title="Activate Voice Command">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
                 </button>
-                <input type="text" id="user-input" placeholder="أدخل الأمر البرمجي أو الاستعلام التقني..." autocomplete="off">
-                <button class="action-btn" id="send-btn">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                <div class="input-wrapper">
+                    <textarea id="userInput" placeholder="Enter technical command or query..." rows="1"></textarea>
+                </div>
+                <div class="spinner" id="processingSpinner"></div>
+                <button class="action-btn send-btn" id="sendBtn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
                 </button>
-                <div class="spinner" id="loading-spinner"></div>
             </div>
         </main>
     </div>
 
-    <!-- MODALS -->
     <!-- System Status Modal -->
-    <div class="modal-overlay" id="modal-status">
+    <div class="modal-overlay" id="statusModal">
         <div class="modal-content">
-            <div class="modal-title">System Diagnostics</div>
-            <div class="modal-body" id="status-body">
-                Loading diagnostic data...
+            <h2 style="color:var(--accent-green); margin-bottom:20px;">SYSTEM DIAGNOSTICS</h2>
+            <div class="stat-row">
+                <span>CPU Load</span>
+                <span id="statCpu">12%</span>
             </div>
-            <button class="modal-btn" onclick="closeModal('modal-status')">Close</button>
-        </div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div class="modal-overlay" id="modal-settings">
-        <div class="modal-content">
-            <div class="modal-title">Core Configuration</div>
-            <div class="modal-body">
-                <div style="margin-bottom: 15px;">
-                    <label style="display:block; margin-bottom:5px;">Memory Management</label>
-                    <button class="modal-btn" style="background:var(--danger-color); color:white;" onclick="VeloxApp.clearMemory()">Clear Memory (Reset)</button>
-                </div>
-                <p style="font-size:0.8rem; margin-top:20px;">Zero-Fault Protocol: Active<br>
-                Glassmorphism Engine: Active<br>
-                WebSocket Simulation: Connected</p>
+            <div class="stat-row">
+                <span>Memory Allocation</span>
+                <span id="statMem">142 MB</span>
             </div>
-            <button class="modal-btn" onclick="closeModal('modal-settings')">Close</button>
+            <div class="stat-row">
+                <span>Latency</span>
+                <span id="statLatency">14ms</span>
+            </div>
+            <div class="stat-row">
+                <span>Protocol</span>
+                <span>OMEGA v9.0 (Secure)</span>
+            </div>
+            <div class="stat-row">
+                <span>Database</span>
+                <span id="statDb">IndexedDB (Active)</span>
+            </div>
+            <button onclick="document.getElementById('statusModal').classList.remove('active')" 
+                    style="margin-top:20px; background:var(--accent-green); border:none; padding:10px; width:100%; cursor:pointer; font-weight:bold;">
+                CLOSE DIAGNOSTICS
+            </button>
         </div>
     </div>
 
     <script>
         /**
-         * VELOX AI - OMEGA CORE PROTOCOL v5.0
-         * Single File Architecture
-         * No Frameworks. Pure Logic.
+         * [OMEGA CORE PROTOCOL v9.0] - Source Implementation
+         * Architecture: Modular, Event-Driven, Asynchronous.
+         * Author: Velox AI (Internal Build)
          */
 
-        // --- DATA LAYER (IndexedDB) ---
-        class VeloxDB {
+        // --- Configuration & Constants ---
+        const CONFIG = {
+            DB_NAME: 'VeloxOmegaDB',
+            DB_VERSION: 1,
+            STORE_NAME: 'sessions',
+            MAX_HISTORY: 100,
+            REJECTION_MSG: "هذا الطلب خارج نطاق صلاحيات النظام التقنية",
+            PROCESSING_DELAY: 600 // ms minimum delay to simulate "thinking" and UI smoothness
+        };
+
+        // --- Data Management Layer (IndexedDB) ---
+        class StorageManager {
             constructor() {
-                this.dbName = 'VeloxOmegaDB';
-                this.storeName = 'chats';
                 this.db = null;
+                this.guestId = localStorage.getItem('velox_guest_id') || this._generateGuestId();
+                if(!localStorage.getItem('velox_guest_id')) localStorage.setItem('velox_guest_id', this.guestId);
+            }
+
+            _generateGuestId() {
+                return 'GUEST-' + Math.random().toString(36).substr(2, 9).toUpperCase();
             }
 
             async init() {
                 return new Promise((resolve, reject) => {
-                    const request = indexedDB.open(this.dbName, 1);
+                    const request = indexedDB.open(CONFIG.DB_NAME, CONFIG.DB_VERSION);
+                    
+                    request.onerror = (e) => {
+                        console.error("Database Error:", e);
+                        reject(e);
+                    };
 
                     request.onupgradeneeded = (e) => {
-                        this.db = e.target.result;
-                        if (!this.db.objectStoreNames.contains(this.storeName)) {
-                            const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains(CONFIG.STORE_NAME)) {
+                            const store = db.createObjectStore(CONFIG.STORE_NAME, { keyPath: 'id', autoIncrement: true });
                             store.createIndex('timestamp', 'timestamp', { unique: false });
                         }
                     };
 
                     request.onsuccess = (e) => {
                         this.db = e.target.result;
-                        resolve();
+                        console.log(`[Storage] Database initialized. Guest: ${this.guestId}`);
+                        resolve(this.db);
                     };
-
-                    request.onerror = (e) => reject(e);
                 });
             }
 
-            async addMessage(role, content) {
-                return new Promise((resolve, reject) => {
-                    const transaction = this.db.transaction([this.storeName], 'readwrite');
-                    const store = transaction.objectStore(this.storeName);
-                    const message = {
-                        role, 
-                        content, 
-                        timestamp: new Date().getTime(),
-                        guestId: VeloxApp.guestId
-                    };
-                    const request = store.add(message);
-                    request.onsuccess = () => resolve(message);
-                    request.onerror = () => reject(request.error);
-                });
+            async saveMessage(role, content) {
+                if (!this.db) return;
+                const transaction = this.db.transaction([CONFIG.STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(CONFIG.STORE_NAME);
+                
+                const record = {
+                    guestId: this.guestId,
+                    role,
+                    content,
+                    timestamp: Date.now()
+                };
+
+                store.add(record);
             }
 
             async getAllMessages() {
-                return new Promise((resolve, reject) => {
-                    const transaction = this.db.transaction([this.storeName], 'readonly');
-                    const store = transaction.objectStore(this.storeName);
-                    // Using a cursor to get all data for simplicity in this prototype
-                    // In production, pagination should be used
-                    const request = store.getAll();
-                    request.onsuccess = () => resolve(request.result);
-                    request.onerror = () => reject(request.error);
+                if (!this.db) return [];
+                return new Promise((resolve) => {
+                    const transaction = this.db.transaction([CONFIG.STORE_NAME], 'readonly');
+                    const store = transaction.objectStore(CONFIG.STORE_NAME);
+                    const index = store.index('timestamp');
+                    const request = index.getAll();
+                    
+                    request.onsuccess = () => {
+                        // Filter only current guest messages
+                        const messages = request.result.filter(r => r.guestId === this.guestId);
+                        resolve(messages);
+                    };
                 });
             }
 
-            async clearStore() {
-                return new Promise((resolve, reject) => {
-                    const transaction = this.db.transaction([this.storeName], 'readwrite');
-                    const store = transaction.objectStore(this.storeName);
-                    const request = store.clear();
-                    request.onsuccess = () => resolve();
-                    request.onerror = () => reject(request.error);
-                });
+            async clearMemory() {
+                if (!this.db) return;
+                const transaction = this.db.transaction([CONFIG.STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(CONFIG.STORE_NAME);
+                store.clear();
+                console.log("[Storage] Memory cleared.");
+            }
+
+            async exportData() {
+                const messages = await this.getAllMessages();
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(messages, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", `velox_backup_${this.guestId}_${Date.now()}.json`);
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
             }
         }
 
-        // --- LOGIC CORE ---
-        class VeloxCore {
-            constructor() {
-                this.isProcessing = false;
+        // --- Logic Core (51SO Inference Simulation) ---
+        class LogicCore {
+            constructor(storage) {
+                this.storage = storage;
+                this.technicalKeywords = [
+                    'function', 'code', 'api', 'database', 'algorithm', 'logic', 
+                    'html', 'css', 'javascript', 'python', 'bug', 'fix', 'syntax',
+                    'system', 'server', 'protocol', 'دالة', 'كود', 'برمجة', 'نظام'
+                ];
             }
 
-            // Simulate "Sigma-Level" Analysis
             async processInput(input) {
-                this.isProcessing = true;
-                VeloxUI.toggleSpinner(true);
-
-                // Simulate Network/Processing Latency for "Realism" (min 600ms)
-                await new Promise(r => setTimeout(r, 800));
-
-                let response = "";
+                // Normalize input
+                const cleanInput = input.toLowerCase().trim();
                 
-                // Keyword Analysis (The "Semantic Filter")
-                const lowerInput = input.toLowerCase();
-                
-                try {
-                    if (lowerInput.includes('error') || lowerInput.includes('bug')) {
-                        response = `**[DIAGNOSTIC MODE]**\nتحليل المدخلات: "${input}"\n\nالسبب المحتمل: Unhandled Exception في المنطق التسلسلي.\n\nالحل المقترح (Zero-Fault):\n\`\`\`javascript\ntry {\n  // criticalOperation\n} catch (e) {\n  console.error('Sigma Protocol Intercept:', e);\n  // Self-healing trigger\n}\n\`\`\`\nتم تسجيل الخطأ في سجل الجلسة.`;
-                    } 
-                    else if (lowerInput.includes('status') || lowerInput.includes('health')) {
-                        const mem = performance.memory ? (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2) + ' MB' : 'N/A (Restricted)';
-                        response = `**[SYSTEM INTEGRITY REPORT]**\n- Protocol: OMEGA v5.0\n- Uptime: ${performance.now().toFixed(0)}ms\n- Heap Usage: ${mem}\n- WebSocket: CONNECTED (Latency: 12ms)\n- Threads: Active\n\nالنظام يعمل ضمن المعايير المسموحة.`;
-                    }
-                    else if (lowerInput.includes('code') || lowerInput.includes('function')) {
-                        response = `**[GENERATING OPTIMIZED CODE]**\nتم تفكيك الطلب البرمجي. جارٍ تطبيق Best Practices...\n\n\`\`\`javascript\n/**\n * Optimized Execution Path\n * Generated by Velox Core\n */\nconst executeTask = async (data) => {\n  if (!data) throw new Error("Invalid Input");\n  // Parallel processing simulation\n  return await Promise.resolve(data.process());\n};\n\`\`\`\nالكود جاهز للتنفيذ.`;
-                    }
-                    else if (lowerInput === 'clear') {
-                        VeloxApp.clearMemory();
-                        response = "[SYSTEM] Memory flushed. ObjectStores reset.";
-                    }
-                    else {
-                        // Default Technical Response
-                        response = `**[ACKNOWLEDGED]**\nتم استلام المدخلات: "${input}".\n\nالنظام يقوم بتحليل السياق الدلالي... البيانات غير كافية لاستنتاج حل هندسي محدد، ولكن البنية المنطقية سليمة.\n\nيرجى تحديد المتطلبات التقنية (كود، تحليل أخطاء، بنية النظام) لتفعيل المحرك الكامل.`;
-                    }
-                } catch (e) {
-                    response = "[CRITICAL ERROR] Failure in Logic Core. Initiating Self-Healing...";
+                // 1. Security & Protocol Filter
+                if (this._isNonTechnical(cleanInput)) {
+                    return CONFIG.REJECTION_MSG;
                 }
 
-                this.isProcessing = false;
-                VeloxUI.toggleSpinner(false);
-                return response;
+                // 2. Semantic Analysis & Inference
+                if (cleanInput.includes('clear') || cleanInput.includes('delete')) {
+                    return "Command received: Clearing session memory buffer...";
+                }
+
+                if (cleanInput.includes('status')) {
+                    return "System Status: All protocols nominal. 51SO Engine operating at 99.8% efficiency.";
+                }
+
+                // 3. Code/Technical Response Generation
+                if (cleanInput.includes('function') || cleanInput.includes('create')) {
+                    return this._generateCodeSnippet();
+                }
+
+                if (cleanInput.includes('analysis') || cleanInput.includes('analyze')) {
+                    return "Deep Parsing Initiated...\n\nAnalysis indicates a modular architecture is required. Recommended pattern: Singleton or Factory based on current memory constraints.";
+                }
+
+                // Default Technical Response
+                return "Input received by Logic Core. \nProcessing semantic structure... \nResult: Technical parameters acknowledged. Awaiting specific command execution parameters.";
+            }
+
+            _isNonTechnical(text) {
+                // Heuristic: if text is short and contains no technical keywords
+                const isShort = text.length < 15;
+                const hasTech = this.technicalKeywords.some(kw => text.includes(kw));
+                // Exception: "hello", "hi" etc are non-technical
+                if (isShort && !hasTech) return true;
+                // Explicit checks for purely social words
+                if (/^(hello|hi|thanks|شكرا|مرحبا|شلونك)$/i.test(text)) return true;
+                
+                return false;
+            }
+
+            _generateCodeSnippet() {
+                return `Here is an optimized modular structure based on your request:\n\n\`\`\`javascript\n// Velox Optimized Module\nclass SystemModule {\n    constructor(config) {\n        this.core = new Core(config);\n        this.init();\n    }\n\n    async init() {\n        try {\n            await this.core.boot();\n            console.log('System Ready');\n        } catch (error) {\n            this.handleFailure(error);\n        }\n    }\n\n    handleFailure(err) {\n        // Sigma-Level Error Handling\n        console.error(err);\n    }\n}\n\`\`\`\n\nThis ensures zero-fault execution.`;
             }
         }
 
-        // --- UI CONTROLLER ---
-        class VeloxUI {
-            constructor() {
-                this.chatContainer = document.getElementById('chat-container');
-                this.inputField = document.getElementById('user-input');
-                this.micBtn = document.getElementById('mic-btn');
-                this.spinner = document.getElementById('loading-spinner');
-                this.statusLed = document.getElementById('status-led');
-            }
-
-            static appendMessage(role, text) {
-                const container = document.getElementById('chat-container');
-                const msgDiv = document.createElement('div');
-                msgDiv.className = `message ${role}`;
+        // --- UI Manager ---
+        class UIManager {
+            constructor(storage, logic) {
+                this.storage = storage;
+                this.logic = logic;
+                this.elements = {
+                    container: document.getElementById('messagesContainer'),
+                    input: document.getElementById('userInput'),
+                    sendBtn: document.getElementById('sendBtn'),
+                    micBtn: document.getElementById('micBtn'),
+                    spinner: document.getElementById('processingSpinner'),
+                    statusModal: document.getElementById('statusModal'),
+                    statusInd: document.getElementById('connectionStatus')
+                };
                 
-                // Markdown Parsing (Simplified for vanilla JS)
-                // Handle bold, code blocks, newlines
-                let formattedText = text
-                    .replace(/\n/g, '<br>')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-
-                msgDiv.innerHTML = `
-                    <div class="message-header">
-                        <span>${role === 'user' ? 'USER_INPUT' : 'VELOX_CORE'}</span>
-                        <span>${new Date().toLocaleTimeString('en-US', {hour12: false})}</span>
-                    </div>
-                    <div>${formattedText}</div>
-                `;
-                
-                container.appendChild(msgDiv);
-                container.scrollTop = container.scrollHeight;
+                this.isListening = false;
+                this.recognition = null;
+                this._initSpeechRecognition();
+                this._attachEventListeners();
+                this._startSystemMonitoring();
             }
 
-            static toggleSpinner(show) {
-                const spinner = document.getElementById('loading-spinner');
-                spinner.style.display = show ? 'block' : 'none';
-            }
-
-            setMicState(active) {
-                if (active) {
-                    this.micBtn.classList.add('listening');
-                } else {
-                    this.micBtn.classList.remove('listening');
-                }
-            }
-        }
-
-        // --- APP CONTROLLER (Main Entry) ---
-        const VeloxApp = {
-            db: new VeloxDB(),
-            core: new VeloxCore(),
-            ui: new VeloxUI(),
-            guestId: null,
-            recognition: null,
-
-            async init() {
-                // 1. Generate/Load Guest ID
-                this.guestId = localStorage.getItem('velox_guest_id');
-                if (!this.guestId) {
-                    this.guestId = 'GID-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-                    localStorage.setItem('velox_guest_id', this.guestId);
-                }
-                document.getElementById('guest-id').textContent = this.guestId;
-
-                // 2. Init DB
-                try {
-                    await this.db.init();
-                    const history = await this.db.getAllMessages();
-                    if (history.length > 0) {
-                        history.forEach(msg => {
-                            // Only restore if guestId matches (Security)
-                            if(msg.guestId === this.guestId) {
-                                VeloxUI.appendMessage(msg.role, msg.content);
-                            }
-                        });
-                    }
-                } catch (e) {
-                    console.error("DB Init Failed:", e);
-                    VeloxUI.appendMessage('velox', '[WARNING] IndexDB Mount Failed. Running in volatile mode.');
-                }
-
-                // 3. Setup Event Listeners
-                this.setupEvents();
-                
-                // 4. Init Audio
-                this.initAudio();
-
-                // 5. Start Self-Healing Monitor
-                this.startSelfHealing();
-
-                // 6. Simulate Connection Pulse
-                this.simulateConnection();
-            },
-
-            setupEvents() {
+            _attachEventListeners() {
                 // Send Button
-                document.getElementById('send-btn').addEventListener('click', () => this.handleSend());
+                this.elements.sendBtn.addEventListener('click', () => this.handleUserMessage());
                 
                 // Enter Key
-                document.getElementById('user-input').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.handleSend();
+                this.elements.input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.handleUserMessage();
+                    }
                 });
 
-                // Nav Buttons
-                document.getElementById('btn-new-chat').addEventListener('click', () => {
-                     document.getElementById('chat-container').innerHTML = '';
-                     // Optional: Keep DB but clear UI
-                     VeloxUI.appendMessage('velox', 'New session context initialized.');
+                // Sidebar Buttons
+                document.getElementById('btnNewChat').addEventListener('click', () => {
+                    this.elements.container.innerHTML = '';
+                    this.storage.clearMemory();
+                    this.showToast('Session Memory Cleared');
+                    this._addSystemMessage("[SESSION RESTARTED] Context reset. Ready.");
                 });
 
-                document.getElementById('btn-status').addEventListener('click', () => this.showStatus());
-                document.getElementById('btn-settings').addEventListener('click', () => document.getElementById('modal-settings').style.display = 'flex');
-                document.getElementById('btn-export').addEventListener('click', () => this.exportData());
-            },
+                document.getElementById('btnExport').addEventListener('click', () => {
+                    this.storage.exportData();
+                    this.showToast('Data Exported to JSON');
+                });
 
-            async handleSend() {
-                const input = document.getElementById('user-input');
-                const text = input.value.trim();
-                
-                if (!text) return;
+                document.getElementById('btnSystemStatus').addEventListener('click', () => {
+                    this.elements.statusModal.classList.add('active');
+                });
 
-                // UI Update
-                VeloxUI.appendMessage('user', text);
-                input.value = '';
+                document.getElementById('btnSettings').addEventListener('click', () => {
+                    this.showToast('Settings Panel locked in Read-Only mode.');
+                });
 
-                // Logic Core Processing
-                const response = await this.core.processInput(text);
-                
-                // UI Update Response
-                VeloxUI.appendMessage('velox', response);
+                // Mic Button
+                this.elements.micBtn.addEventListener('click', () => this._toggleSpeech());
+            }
 
-                // Persist to DB
-                try {
-                    await this.db.addMessage('user', text);
-                    await this.db.addMessage('velox', response);
-                } catch(e) {
-                    console.error("Storage Error:", e);
-                }
-            },
-
-            initAudio() {
+            _initSpeechRecognition() {
                 if ('webkitSpeechRecognition' in window) {
                     this.recognition = new webkitSpeechRecognition();
                     this.recognition.continuous = false;
-                    this.recognition.lang = 'en-US'; // Defaulting to EN for code commands
+                    this.recognition.lang = 'en-US'; // Default to English for tech terms, can be 'ar-SA'
                     this.recognition.interimResults = false;
 
                     this.recognition.onstart = () => {
-                        this.ui.setMicState(true);
+                        this.isListening = true;
+                        this.elements.micBtn.classList.add('listening');
+                        this.showToast('Listening for command...');
                     };
 
                     this.recognition.onend = () => {
-                        this.ui.setMicState(false);
+                        this.isListening = false;
+                        this.elements.micBtn.classList.remove('listening');
                     };
 
                     this.recognition.onresult = (event) => {
                         const transcript = event.results[0][0].transcript;
-                        document.getElementById('user-input').value = transcript;
-                        // Optional: Auto-send
-                        // this.handleSend(); 
+                        this.elements.input.value = transcript;
+                        this.handleUserMessage();
                     };
 
-                    document.getElementById('mic-btn').addEventListener('click', () => {
-                        this.recognition.start();
-                    });
+                    this.recognition.onerror = (event) => {
+                        console.error("Speech Error:", event.error);
+                        this.isListening = false;
+                        this.elements.micBtn.classList.remove('listening');
+                        this.showToast('Voice input error', 'error');
+                    };
                 } else {
-                    document.getElementById('mic-btn').style.display = 'none'; // Hide if not supported
-                    console.warn("Web Speech API not supported in this browser environment.");
+                    this.elements.micBtn.style.display = 'none';
+                    console.warn("Web Speech API not supported.");
                 }
-            },
-
-            async clearMemory() {
-                try {
-                    await this.db.clearStore();
-                    document.getElementById('chat-container').innerHTML = '';
-                    VeloxUI.appendMessage('velox', '[SYSTEM] Memory flushed. ObjectStores reset.');
-                    closeModal('modal-settings');
-                } catch(e) {
-                    console.error(e);
-                }
-            },
-
-            async exportData() {
-                try {
-                    const data = await this.db.getAllMessages();
-                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-                    const downloadAnchorNode = document.createElement('a');
-                    downloadAnchorNode.setAttribute("href", dataStr);
-                    downloadAnchorNode.setAttribute("download", "velox_backup_" + new Date().toISOString() + ".json");
-                    document.body.appendChild(downloadAnchorNode);
-                    downloadAnchorNode.click();
-                    downloadAnchorNode.remove();
-                } catch(e) {
-                    console.error(e);
-                }
-            },
-
-            showStatus() {
-                const modal = document.getElementById('modal-status');
-                const body = document.getElementById('status-body');
-                
-                // Collect Metrics
-                const mem = performance.memory ? `Heap Used: ${(performance.memory.usedJSHeapSize / 1048576).toFixed(2)} MB` : "Heap: Restricted Mode";
-                const latency = Math.floor(Math.random() * 20) + 5; // Simulated WebSocket Latency
-
-                body.innerHTML = `
-                    <ul style="list-style:none; line-height: 2;">
-                        <li><strong>Protocol:</strong> OMEGA v5.0</li>
-                        <li><strong>Security:</strong> Zero-Fault Active</li>
-                        <li><strong>WebSocket:</strong> Connected (${latency}ms)</li>
-                        <li><strong>Memory:</strong> ${mem}</li>
-                        <li><strong>Integrity:</strong> 100%</li>
-                        <li><strong>Guest ID:</strong> ${this.guestId}</li>
-                    </ul>
-                `;
-                
-                modal.style.display = 'flex';
-            },
-
-            startSelfHealing() {
-                // Monitor loop every 10 seconds
-                setInterval(() => {
-                    if (performance.memory) {
-                        const used = performance.memory.usedJSHeapSize;
-                        const limit = performance.memory.jsHeapSizeLimit;
-                        // If usage > 80%, suggest garbage collection (Browser handles it, but we can log optimization)
-                        if (used / limit > 0.8) {
-                            console.warn("[VELOX HEALER] High Memory Usage Detected. Optimizing DOM references...");
-                            // Logic to clear heavy elements if any would go here
-                        }
-                    }
-                }, 10000);
-            },
-
-            simulateConnection() {
-                const led = document.getElementById('status-led');
-                // Blink logic is in CSS, here we verify "System Status" logic
-                setInterval(() => {
-                    // Randomly check connection (Simulated)
-                    const isOnline = navigator.onLine;
-                    if(!isOnline) {
-                        led.style.backgroundColor = 'red';
-                        led.style.boxShadow = '0 0 10px red';
-                    } else {
-                        led.style.backgroundColor = '#00ff9d';
-                        led.style.boxShadow = '0 0 10px #00ff9d';
-                    }
-                }, 5000);
             }
-        };
 
-        // Utility: Close Modals
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
+            _toggleSpeech() {
+                if (!this.recognition) return;
+                if (this.isListening) {
+                    this.recognition.stop();
+                } else {
+                    this.recognition.start();
+                }
+            }
+
+            async handleUserMessage() {
+                const text = this.elements.input.value.trim();
+                if (!text) return;
+
+                // 1. UI Updates
+                this.elements.input.value = '';
+                this.elements.sendBtn.disabled = true;
+                this._addUserMessage(text);
+                this._setSpinner(true);
+
+                // 2. Persistence
+                await this.storage.saveMessage('user', text);
+
+                // 3. Processing Delay (Sigma-Level UX)
+                await new Promise(r => setTimeout(r, CONFIG.PROCESSING_DELAY));
+
+                try {
+                    // 4. Logic Core Execution
+                    const response = await this.logic.processInput(text);
+                    
+                    // 5. Display Response
+                    this._addSystemMessage(response);
+                    await this.storage.saveMessage('system', response);
+                } catch (err) {
+                    this._addSystemMessage("[ERROR] Logic Core Exception: " + err.message);
+                } finally {
+                    this._setSpinner(false);
+                    this.elements.sendBtn.disabled = false;
+                    this.elements.input.focus();
+                }
+            }
+
+            _addUserMessage(text) {
+                const div = document.createElement('div');
+                div.className = 'message user';
+                div.textContent = text;
+                this.elements.container.appendChild(div);
+                this._scrollToBottom();
+            }
+
+            _addSystemMessage(text) {
+                const div = document.createElement('div');
+                div.className = 'message system';
+                
+                const label = document.createElement('span');
+                label.className = 'role-label';
+                label.textContent = 'VELOX AI';
+                div.appendChild(label);
+
+                // Simple Markdown Parsing for Code Blocks
+                const formattedText = this._parseMarkdown(text);
+                div.innerHTML += formattedText; // safe innerHTML usage as content is controlled internally
+
+                this.elements.container.appendChild(div);
+                this._scrollToBottom();
+            }
+
+            _parseMarkdown(text) {
+                // Replace ```code``` with <pre><code>...</code></pre>
+                return text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                           .replace(/\n/g, '<br>');
+            }
+
+            _scrollToBottom() {
+                this.elements.container.scrollTop = this.elements.container.scrollHeight;
+            }
+
+            _setSpinner(active) {
+                this.elements.spinner.style.display = active ? 'block' : 'none';
+            }
+
+            showToast(msg, type = 'info') {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `<span>${type === 'error' ? '⚠' : 'ℹ'}</span> ${msg}`;
+                container.appendChild(toast);
+
+                // Trigger animation
+                requestAnimationFrame(() => toast.classList.add('show'));
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            _startSystemMonitoring() {
+                // Simulate WebSocket Heartbeat
+                setInterval(() => {
+                    const isOnline = Math.random() > 0.05; // 95% uptime simulation
+                    if (isOnline) {
+                        this.elements.statusInd.style.backgroundColor = 'var(--accent-green)';
+                        this.elements.statusInd.style.boxShadow = '0 0 10px var(--accent-green)';
+                    } else {
+                        this.elements.statusInd.style.backgroundColor = '#ff3366';
+                        this.elements.statusInd.style.boxShadow = 'none';
+                    }
+
+                    // Update random stats in modal if open
+                    if (this.elements.statusModal.classList.contains('active')) {
+                        document.getElementById('statCpu').textContent = Math.floor(Math.random() * 30 + 10) + '%';
+                        document.getElementById('statMem').textContent = Math.floor(Math.random() * 50 + 100) + ' MB';
+                        document.getElementById('statLatency').textContent = Math.floor(Math.random() * 20 + 5) + 'ms';
+                    }
+                }, 2000);
+            }
         }
 
-        // --- BOOTSTRAP ---
-        window.addEventListener('DOMContentLoaded', () => {
-            VeloxApp.init();
+        // --- System Initialization ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log("Initializing Velox AI Protocol v9.0...");
+            
+            try {
+                const storage = new StorageManager();
+                await storage.init();
+                
+                const logic = new LogicCore(storage);
+                const ui = new UIManager(storage, logic);
+
+                console.log("System Online. Omega Core Active.");
+            } catch (e) {
+                console.error("Critical System Failure:", e);
+                alert("System Initialization Failed. Check Console.");
+            }
         });
 
     </script>
