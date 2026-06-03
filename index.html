@@ -1,643 +1,719 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="34ssOmoyBQzUEpdJe12ths9hxim17cte86USfqrnfgw" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velox JSON Formatter | Fast JSON Beautifier & Validator</title>
-    <meta name="description" content="Velox JSON Formatter: A professional, ultra-fast JSON beautifier, validator, and converter. Real-time syntax checking, glassmorphism UI, and secure client-side processing.">
-    <meta name="keywords" content="Fast JSON Formatter, JSON Beautifier, JSON Validator, Velox JSON, Online JSON Tool">
-    <meta name="author" content="Adam Laamime">
-    <meta name="apple-mobile-web-app-title" content="VELOX">
-    </head>
+    <title>VELOX JSON PLATFORM | Enterprise Edition</title>
+    <!-- Icons (Using FontAwesome CDN for Professional Iconography) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         /* 
-         * CORE CSS VARIABLES & RESET 
+         * VELOX DESIGN SYSTEM v2.0
+         * Theme: Obsidian & Neon (Enterprise Dark)
          */
         :root {
-            --bg-color: #0f172a;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-highlight: rgba(255, 255, 255, 0.05);
-            --primary: #38bdf8;
-            --primary-hover: #0ea5e9;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --code-key: #93c5fd; /* Light Blue */
-            --code-string: #86efac; /* Light Green */
-            --code-number: #fca5a5; /* Light Red */
-            --code-boolean: #c4b5fd; /* Light Purple */
-            --code-null: #94a3b8; /* Gray */
+            --bg-app: #0b0c10;
+            --bg-panel: #1f2833;
+            --bg-input: #121418;
+            --accent: #66fcf1;       /* Neon Cyan */
+            --accent-dim: #45a29e;
+            --text-main: #ffffff;
+            --text-muted: #c5c6c7;
+            --border: #2b3642;
+            --pro-gold: #ffd700;
+            --danger: #ff4d4d;
+            --success: #00e676;
+            
             --font-ui: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            --font-code: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
-            --radius: 16px;
+            --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            outline: none;
-        }
-
+        * { box-sizing: border-box; outline: none; }
+        
         body {
-            font-family: var(--font-ui);
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
-            background-attachment: fixed;
+            margin: 0; padding: 0;
+            background-color: var(--bg-app);
             color: var(--text-main);
+            font-family: var(--font-ui);
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Prevent body scroll, let panels scroll */
+            overflow: hidden;
         }
 
-        /* 
-         * UTILITIES & GLASSMORPHISM 
-         */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--glass-highlight);
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: translateY(-1px);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: #0f172a;
-            border: none;
-            font-weight: 600;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-        }
-
-        /* 
-         * LAYOUT 
-         */
+        /* --- LAYOUT --- */
         header {
-            padding: 1rem 2rem;
+            height: 60px;
+            background: rgba(11, 12, 16, 0.95);
+            border-bottom: 1px solid var(--border);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
             z-index: 10;
         }
 
-        .brand {
+        .logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 2px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--accent); }
+
+        .app-container {
             display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .brand h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        main {
             flex: 1;
-            display: flex;
-            padding: 0 2rem 2rem 2rem;
-            gap: 2rem;
-            min-height: 0; /* Flexbox scroll fix */
-        }
-
-        .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
             overflow: hidden;
         }
 
-        .editor-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--glass-border);
+        /* --- SIDEBAR --- */
+        aside {
+            width: 260px;
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.2s;
+            display: flex; align-items: center; gap: 12px;
+            font-size: 0.95rem;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(102, 252, 241, 0.1); color: var(--accent); border-right: 3px solid var(--accent); }
+        
+        .nav-group-title {
+            padding: 20px 25px 10px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            flex: 1;
+            position: relative;
+            background: var(--bg-app);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- VIEWS --- */
+        .view { display: none; height: 100%; flex-direction: column; }
+        .view.active { display: flex; }
+
+        /* Editor View */
+        .editor-split { display: flex; flex: 1; height: calc(100% - 60px); }
+        .pane { flex: 1; display: flex; flex-direction: column; border-right: 1px solid var(--border); min-width: 0; }
+        .pane-header {
+            padding: 10px 20px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .label {
             font-size: 0.85rem;
-            color: var(--text-muted);
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-
-        .editor-body {
+        .code-area {
             flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* 
-         * INPUT & OUTPUT AREAS 
-         */
-        textarea#jsonInput {
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border: none;
+            background: var(--bg-input);
             color: var(--text-main);
             font-family: var(--font-code);
             font-size: 14px;
-            line-height: 1.5;
-            padding: 1rem;
+            padding: 20px;
+            overflow: auto;
+            white-space: pre-wrap;
+            border: none;
             resize: none;
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Output View */
-        #outputView {
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            padding: 1rem;
-            font-family: var(--font-code);
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-wrap; /* Wrap text */
-        }
-
-        /* Syntax Highlighting Classes */
-        .json-key { color: var(--code-key); }
-        .json-string { color: var(--code-string); }
-        .json-number { color: var(--code-number); }
-        .json-boolean { color: var(--code-boolean); }
-        .json-null { color: var(--code-null); font-style: italic; }
-
-        /* 
-         * STATUS BAR & FOOTER 
-         */
-        .status-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 23, 42, 0.9);
-            padding: 0.5rem 1rem;
+        
+        /* --- COMPONENTS --- */
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
             font-size: 0.85rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--glass-border);
+            transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-primary { background: var(--accent); color: #000; border: none; font-weight: bold; }
+        .btn-primary:hover { background: #fff; color: #000; }
+        
+        .btn-pro { border-color: var(--pro-gold); color: var(--pro-gold); position: relative; }
+        .btn-pro:hover { background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 10px rgba(255,215,0,0.2); }
+        .lock-icon { font-size: 0.7em; }
+
+        .toolbar {
+            padding: 10px 20px;
+            background: var(--bg-app);
+            border-bottom: 1px solid var(--border);
             display: flex;
-            align-items: center;
             gap: 10px;
-            z-index: 5;
+            align-items: center;
         }
 
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--text-muted);
-        }
-        .status-valid { background-color: var(--success); box-shadow: 0 0 8px var(--success); }
-        .status-error { background-color: var(--danger); box-shadow: 0 0 8px var(--danger); }
-
+        /* --- FOOTER --- */
         footer {
-            text-align: center;
-            padding: 0.8rem;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            border-top: 1px solid var(--glass-border);
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: var(--success);
-            color: #fff;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
+            height: 30px;
+            background: #000;
+            border-top: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
-        /* 
-         * RESPONSIVE 
-         */
-        @media (max-width: 768px) {
-            main {
-                flex-direction: column;
-                padding: 1rem;
-                overflow-y: auto;
-            }
-            body {
-                overflow: auto;
-            }
-            .editor-container {
-                min-height: 400px;
-            }
-            .action-group {
-                display: none; /* Simplify mobile view if needed, or make scrollable */
-            }
+        /* --- MODALS --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: 0.3s;
         }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        
+        .modal {
+            background: var(--bg-panel);
+            width: 400px;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-muted); }
+        .form-input { width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); color: white; border-radius: 4px; }
+        
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 50px; right: 20px;
+            background: var(--bg-panel); border-left: 4px solid var(--accent);
+            padding: 15px 25px; border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateX(120%); transition: 0.3s;
+            z-index: 200;
+        }
+        .toast.show { transform: translateX(0); }
+
+        /* Syntax Highlighting */
+        .k { color: #ff79c6; } /* Key */
+        .s { color: #f1fa8c; } /* String */
+        .n { color: #bd93f9; } /* Number */
+        .b { color: #8be9fd; } /* Bool */
+        .z { color: #6272a4; font-style: italic; } /* Null */
+
+        /* File List for Cloud/Bulk */
+        .file-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px; padding: 20px; overflow-y: auto;
+        }
+        .file-card {
+            background: var(--bg-panel); padding: 15px; border-radius: 6px;
+            border: 1px solid var(--border); cursor: pointer;
+            transition: 0.2s;
+        }
+        .file-card:hover { border-color: var(--accent); transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="toast">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        <span id="toastMsg">Action Successful</span>
-    </div>
-
+    <!-- HEADER -->
     <header>
-        <div class="brand">
-            <div class="brand-icon">{}</div>
-            <h1>Velox JSON Formatter</h1>
+        <div class="logo">
+            <i class="fa-solid fa-cube"></i> VELOX
         </div>
-        <div class="action-group">
-            <!-- Could add GitHub link or social icons here -->
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span id="userBadge" style="font-size: 0.8rem; color: var(--text-muted);">Guest</span>
+            <button id="authBtn" class="btn btn-primary" onclick="Auth.toggleModal()">Login</button>
         </div>
     </header>
 
-    <main>
-        <!-- INPUT SECTION -->
-        <section class="editor-container glass-panel">
-            <div class="editor-header">
-                <span class="label">Raw JSON Input</span>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn" onclick="clearInput()">Clear</button>
-                    <button class="btn" onclick="loadSample()">Sample</button>
-                </div>
-            </div>
-            <div class="editor-body">
-                <textarea id="jsonInput" placeholder="Paste or type your JSON here..." spellcheck="false"></textarea>
-            </div>
-            <div class="status-bar">
-                <div id="inputStatusDot" class="status-indicator"></div>
-                <span id="inputStatusText">Waiting for input...</span>
-            </div>
-        </section>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside>
+            <div class="nav-group-title">Workspace</div>
+            <div class="nav-item active" onclick="Router.go('editor')"><i class="fa-solid fa-code"></i> Editor</div>
+            <div class="nav-item" onclick="Router.go('history')"><i class="fa-solid fa-clock-rotate-left"></i> History & Diff</div>
+            
+            <div class="nav-group-title">Pro Tools</div>
+            <div class="nav-item" onclick="Router.go('bulk')"><i class="fa-solid fa-layer-group"></i> Bulk Processor</div>
+            <div class="nav-item" onclick="Router.go('cloud')"><i class="fa-solid fa-cloud"></i> Cloud Dashboard</div>
+            <div class="nav-item" onclick="Router.go('schema')"><i class="fa-solid fa-shield-halved"></i> Schema Validator</div>
+            <div class="nav-item" onclick="Router.go('api')"><i class="fa-solid fa-key"></i> API Keys</div>
+        </aside>
 
-        <!-- OUTPUT SECTION -->
-        <section class="editor-container glass-panel">
-            <div class="editor-header">
-                <span class="label">Formatted Output</span>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn btn-primary" onclick="formatJson()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
-                        Format
+        <!-- MAIN -->
+        <main>
+            <!-- VIEW: EDITOR -->
+            <div id="view-editor" class="view active">
+                <div class="toolbar">
+                    <button class="btn" onclick="Editor.format()"><i class="fa-solid fa-wand-magic-sparkles"></i> Format</button>
+                    <button class="btn" onclick="Editor.minify()"><i class="fa-solid fa-compress"></i> Minify</button>
+                    <div style="width: 1px; height: 20px; background: var(--border); margin: 0 5px;"></div>
+                    <button class="btn" onclick="Editor.copy()"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <button class="btn" onclick="Editor.download('json')"><i class="fa-solid fa-download"></i> JSON</button>
+                    
+                    <!-- Pro Features -->
+                    <button class="btn btn-pro" onclick="ProExport.toExcel()">
+                        <i class="fa-solid fa-file-excel"></i> Excel <i class="fa-solid fa-lock lock-icon"></i>
                     </button>
-                    <button class="btn" onclick="minifyJson()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
-                        Minify
-                    </button>
-                    <button class="btn" onclick="copyToClipboard()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copy
-                    </button>
-                    <button class="btn" onclick="downloadJson()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Download
+                    <button class="btn btn-pro" onclick="ProAI.analyze()">
+                        <i class="fa-solid fa-brain"></i> AI Explain <i class="fa-solid fa-lock lock-icon"></i>
                     </button>
                 </div>
-            </div>
-            <div class="editor-body">
-                <div id="outputView"></div>
-            </div>
-            <div class="status-bar">
-                <span id="outputStats">0 chars | 0 lines</span>
-            </div>
-        </section>
-    </main>
 
+                <div class="editor-split">
+                    <div class="pane">
+                        <div class="pane-header">INPUT <span id="validStatus" style="color: var(--text-muted); margin-left: auto;"></span></div>
+                        <textarea id="jsonInput" class="code-area" placeholder="Paste JSON here..." spellcheck="false"></textarea>
+                    </div>
+                    <div class="pane">
+                        <div class="pane-header">OUTPUT</div>
+                        <div id="jsonOutput" class="code-area"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: CLOUD DASHBOARD -->
+            <div id="view-cloud" class="view">
+                <div style="padding: 20px; border-bottom: 1px solid var(--border);">
+                    <h2>Cloud Storage</h2>
+                    <p style="color: var(--text-muted);">Securely stored projects tied to your account.</p>
+                </div>
+                <div class="file-grid" id="cloudFiles">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- VIEW: BULK PROCESSOR -->
+            <div id="view-bulk" class="view">
+                <div style="padding: 20px;">
+                    <h2>Bulk Processing</h2>
+                    <p>Upload multiple JSON files to beautify or convert them simultaneously.</p>
+                    <br>
+                    <input type="file" id="bulkInput" multiple accept=".json" style="display: none;" onchange="BulkProcessor.handleFiles(this.files)">
+                    <button class="btn btn-primary" onclick="document.getElementById('bulkInput').click()">Select Files</button>
+                    <div id="bulkResults" style="margin-top: 20px; display: grid; gap: 10px;"></div>
+                </div>
+            </div>
+
+            <!-- VIEW: HISTORY/DIFF -->
+            <div id="view-history" class="view">
+                <div style="padding: 20px;">
+                    <h2>Version History</h2>
+                    <p>Track changes and diff versions.</p>
+                    <br>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+            
+            <!-- VIEW: SCHEMA (Placeholder) -->
+            <div id="view-schema" class="view">
+                <div style="padding: 20px; text-align: center; color: var(--text-muted);">
+                    <i class="fa-solid fa-shield-halved" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                    <h2>Schema Validator</h2>
+                    <p>Validate JSON against Draft-7 schemas.</p>
+                    <button class="btn btn-pro" style="margin-top:20px;">Upload Schema <i class="fa-solid fa-lock lock-icon"></i></button>
+                </div>
+            </div>
+
+            <!-- VIEW: API KEYS (Placeholder) -->
+            <div id="view-api" class="view">
+                <div style="padding: 20px;">
+                    <h2>Developer API</h2>
+                    <p>Use Velox formatting engine in your own scripts.</p>
+                    <br>
+                    <div style="background: #000; padding: 15px; font-family: monospace; border: 1px solid var(--border);">
+                        curl -X POST https://api.velox.io/format \<br>
+                        &nbsp;&nbsp;-H "Authorization: Bearer YOUR_KEY" \<br>
+                        &nbsp;&nbsp;-d '{"json": "..."}'
+                    </div>
+                    <br>
+                    <button class="btn btn-pro">Generate New Key <i class="fa-solid fa-lock lock-icon"></i></button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
     <footer>
-        Engineered by Adam Laamime
+        VELOX JSON FORMATTER | Developed by Adam Laamime
     </footer>
+
+    <!-- AUTH MODAL -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <h2 id="authTitle" style="margin-top:0; color: var(--accent);">Account Access</h2>
+            <form id="authForm" onsubmit="Auth.handleSubmit(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-input" id="emailInput" required placeholder="user@company.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-input" id="passInput" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Continue</button>
+                <div style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;" onclick="Auth.switchMode()">
+                    Switch to <span id="authSwitchText">Register</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast">Operation Successful</div>
 
     <script>
         /**
-         * VELOX JSON FORMATTER
-         * Professional Core Logic
+         * VELOX ARCHITECTURE
+         * 
+         * 1. Store: Centralized State Management
+         * 2. API: Simulated Backend Layer (Mock DB & Auth)
+         * 3. Router: View Management
+         * 4. Modules: Editor, Cloud, Pro, Auth
          */
 
-        const inputEl = document.getElementById('jsonInput');
-        const outputEl = document.getElementById('outputView');
-        const inputStatusDot = document.getElementById('inputStatusDot');
-        const inputStatusText = document.getElementById('inputStatusText');
-        const outputStats = document.getElementById('outputStats');
-        const toastEl = document.getElementById('toast');
-        const toastMsgEl = document.getElementById('toastMsg');
-
-        let currentJsonString = "";
-
-        // --- Event Listeners ---
-
-        // Debounced real-time validation
-        let debounceTimer;
-        inputEl.addEventListener('input', () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(validateInput, 500); // 500ms delay
-        });
-
-        // --- Core Functions ---
-
-        function validateInput() {
-            const raw = inputEl.value.trim();
-            if (!raw) {
-                setStatus('waiting');
-                outputEl.innerHTML = '';
-                outputStats.innerText = '0 chars | 0 lines';
-                return;
-            }
-
-            try {
-                JSON.parse(raw);
-                setStatus('valid');
-                // Optional: Auto-format on valid pause? 
-                // For now, let's just validate as requested, but keep output empty until Format is clicked
-                // or update silently. Let's wait for user to click Format to avoid UI jumping.
-            } catch (e) {
-                setStatus('error', e.message);
-            }
-        }
-
-        function formatJson() {
-            const raw = inputEl.value.trim();
-            if (!raw) {
-                showToast('Please enter JSON first', 'error');
-                return;
-            }
-
-            try {
-                const parsed = JSON.parse(raw);
-                // Pretty print with 4 spaces
-                currentJsonString = JSON.stringify(parsed, null, 4);
-                renderOutput(currentJsonString);
-                setStatus('valid');
-                showToast('Formatted Successfully');
-            } catch (e) {
-                setStatus('error', e.message);
-                // Highlight error visualization could go here
-            }
-        }
-
-        function minifyJson() {
-            const raw = inputEl.value.trim();
-            if (!raw) {
-                showToast('Please enter JSON first', 'error');
-                return;
-            }
-
-            try {
-                const parsed = JSON.parse(raw);
-                currentJsonString = JSON.stringify(parsed);
-                renderOutput(currentJsonString);
-                setStatus('valid');
-                showToast('Minified Successfully');
-            } catch (e) {
-                setStatus('error', e.message);
-            }
-        }
-
-        /**
-         * Renders the JSON string with syntax highlighting
-         */
-        function renderOutput(jsonString) {
-            // Escape HTML characters first to prevent XSS
-            let safeHtml = jsonString.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-            // Apply Regex coloring
-            // 1. Strings (keys and values)
-            // Note: This simple regex handles most cases. 
-            // Order matters: Keys usually end with ':', values don't.
-            safeHtml = safeHtml.replace(/"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)/g, (match) => {
-                return '<span class="json-key">' + match.slice(0, -1) + '</span>' + match.slice(-1);
-            });
+        // --- 1. STATE MANAGEMENT ---
+        const Store = {
+            user: null, // { id, email, token, isPro }
+            projects: [],
             
-            safeHtml = safeHtml.replace(/"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"/g, '<span class="json-string">"$1"</span>');
-            
-            // Re-fix the string replacement logic (simpler approach):
-            // Let's restart the coloring logic on the clean string to be safer and more precise.
-            
-            // Reset
-            let html = jsonString;
-            
-            // HTML Escape
-            html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            init() {
+                const savedUser = localStorage.getItem('velox_user');
+                if (savedUser) {
+                    this.user = JSON.parse(savedUser);
+                    this.updateUI();
+                    Cloud.load();
+                }
+            },
 
-            // Numbers
-            html = html.replace(/\b(-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)\b/g, '<span class="json-number">$1</span>');
+            login(user) {
+                this.user = user;
+                localStorage.setItem('velox_user', JSON.stringify(user));
+                this.updateUI();
+                UI.showToast(`Welcome back, ${user.email}`);
+                document.getElementById('authModal').classList.remove('open');
+                Cloud.load();
+            },
 
-            // Booleans & Null
-            html = html.replace(/\b(true|false)\b/g, '<span class="json-boolean">$1</span>');
-            html = html.replace(/\b(null)\b/g, '<span class="json-null">$1</span>');
+            logout() {
+                this.user = null;
+                localStorage.removeItem('velox_user');
+                location.reload();
+            },
 
-            // Strings (Keys)
-            // Looks for "text": (key pattern)
-            html = html.replace(/<span class="json-number">-?\d+<\/span>(\s*:)?/g, (match) => {
-                // temporary fix to undo number formatting if it was part of a string (unlikely with \b) but regex is tricky.
-                // Actually, let's stick to standard formatting:
-                return match; 
-            });
+            updateUI() {
+                const btn = document.getElementById('authBtn');
+                const badge = document.getElementById('userBadge');
+                if (this.user) {
+                    btn.textContent = 'Logout';
+                    btn.classList.replace('btn-primary', 'btn');
+                    btn.onclick = () => Store.logout();
+                    badge.textContent = this.user.isPro ? 'PRO ACCOUNT' : 'STANDARD';
+                    badge.style.color = this.user.isPro ? 'var(--pro-gold)' : 'var(--text-muted)';
+                } else {
+                    btn.textContent = 'Login';
+                    btn.onclick = () => Auth.toggleModal();
+                    badge.textContent = 'Guest';
+                }
+            }
+        };
 
-            // Complex string replacement to differentiate keys vs values
-            // We iterate character by character or use a tokenizer. 
-            // For this constraints, a smart regex is fastest:
-            
-            // Re-processing string tokens
-            html = html.replace(/"(?:[^"\\]|\\.)*"/g, function(match) {
-                // If it ends with ':', it's a key (most likely)
-                // But we are in the middle of HTML, so we look at the raw string match.
-                // We need to peek ahead in the original string, but here we just look at the match itself.
-                // Simplified: If the match itself has a colon at the end? No, colon is outside quotes.
+        // --- 2. MOCK BACKEND API ---
+        const API = {
+            // Simulate Network Latency
+            async delay(ms) { return new Promise(res => setTimeout(res, ms)); },
+
+            async login(email, password) {
+                await this.delay(800); // Fake network request
+                // Mock JWT generation
+                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." + btoa(email) + ".mock_signature";
+                return {
+                    id: 'user_' + Date.now(),
+                    email: email,
+                    token: token,
+                    isPro: email.includes('pro') // Mock Pro check (if email contains 'pro', it's a pro user)
+                };
+            },
+
+            async register(email, password) {
+                await this.delay(800);
+                return this.login(email, password);
+            },
+
+            async saveProject(name, content) {
+                if (!Store.user) throw new Error("Unauthorized");
+                await this.delay(500);
+                const proj = {
+                    id: Date.now(),
+                    name,
+                    content,
+                    date: new Date().toISOString()
+                };
+                // In real app: POST to /api/projects
+                let projs = JSON.parse(localStorage.getItem('velox_cloud_' + Store.user.id) || '[]');
+                projs.unshift(proj);
+                localStorage.setItem('velox_cloud_' + Store.user.id, JSON.stringify(projs));
+                return proj;
+            },
+
+            async getProjects() {
+                if (!Store.user) return [];
+                return JSON.parse(localStorage.getItem('velox_cloud_' + Store.user.id) || '[]');
+            }
+        };
+
+        // --- 3. ROUTER ---
+        const Router = {
+            go(viewId) {
+                document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+                document.getElementById(`view-${viewId}`).classList.add('active');
                 
-                // Heuristic: Check what follows in the HTML stream.
-                return '<span class="json-string">' + match + '</span>';
-            });
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                // Simple active state logic (omitted for brevity)
+                
+                if (viewId === 'history') History.render();
+                if (viewId === 'cloud') Cloud.render();
+            }
+        };
 
-            // Key Highlighting: Find pattern "span class="json-string">..."</span> followed by : 
-            html = html.replace(/<span class="json-string">"(.*?)"<\/span>(\s*:)/g, function(match, p1, p2) {
-                return '<span class="json-key">"' + p1 + '"</span>' + p2;
-            });
+        // --- 4. MODULES ---
 
-            outputEl.innerHTML = html;
+        const Editor = {
+            input: document.getElementById('jsonInput'),
+            output: document.getElementById('jsonOutput'),
+            status: document.getElementById('validStatus'),
+            historyStack: [],
+
+            init() {
+                this.input.addEventListener('input', () => this.process());
+                this.input.value = '{"project": "Velox", "status": "Enterprise", "ready": true}';
+                this.process();
+            },
+
+            process() {
+                const raw = this.input.value;
+                try {
+                    const parsed = JSON.parse(raw);
+                    this.status.textContent = "Valid JSON";
+                    this.status.style.color = "var(--success)";
+                    const formatted = JSON.stringify(parsed, null, 4);
+                    this.output.innerHTML = this.highlight(formatted);
+                    
+                    // Auto-save to history stack
+                    if(this.historyStack.length === 0 || this.historyStack[this.historyStack.length-1] !== raw) {
+                        this.historyStack.push(raw);
+                    }
+                } catch (e) {
+                    this.status.textContent = "Syntax Error";
+                    this.status.style.color = "var(--danger)";
+                    this.output.textContent = e.message;
+                }
+            },
+
+            highlight(json) {
+                return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                    let cls = 'n';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            cls = 'k';
+                            return '<span class="' + cls + '">' + match.slice(0, -1) + '</span>:';
+                        } else {
+                            cls = 's';
+                        }
+                    } else if (/true|false/.test(match)) cls = 'b';
+                    else if (/null/.test(match)) cls = 'z';
+                    return '<span class="' + cls + '">' + match + '</span>';
+                });
+            },
+
+            format() { this.input.value = JSON.stringify(JSON.parse(this.input.value), null, 4); this.process(); },
+            minify() { this.input.value = JSON.stringify(JSON.parse(this.input.value)); this.process(); },
+            copy() { navigator.clipboard.writeText(this.input.value); UI.showToast("Copied to Clipboard"); },
+            download(type) {
+                const blob = new Blob([this.input.value], {type: "application/json"});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `velox-export.${type}`;
+                a.click();
+            }
+        };
+
+        const Cloud = {
+            async render() {
+                const container = document.getElementById('cloudFiles');
+                if (!Store.user) {
+                    container.innerHTML = `<p style="color:var(--text-muted)">Please Login to access Cloud.</p>`;
+                    return;
+                }
+                container.innerHTML = '<p style="color:var(--text-muted)">Loading...</p>';
+                const files = await API.getProjects();
+                container.innerHTML = '';
+                
+                if(files.length === 0) container.innerHTML = '<p style="color:var(--text-muted)">No projects saved.</p>';
+
+                files.forEach(f => {
+                    const div = document.createElement('div');
+                    div.className = 'file-card';
+                    div.innerHTML = `<i class="fa-solid fa-file-code" style="color:var(--accent); margin-bottom:10px;"></i><br><strong>${f.name}</strong><br><span style="font-size:0.8rem; color:var(--text-muted)">${new Date(f.date).toLocaleDateString()}</span>`;
+                    div.onclick = () => {
+                        Router.go('editor');
+                        Editor.input.value = f.content;
+                        Editor.process();
+                    };
+                    container.appendChild(div);
+                });
+            },
             
-            // Update stats
-            outputStats.innerText = `${jsonString.length} chars | ${jsonString.split('\n').length} lines`;
-        }
-
-        // --- Utility Functions ---
-
-        function setStatus(state, msg = "") {
-            inputStatusDot.className = 'status-indicator';
-            if (state === 'valid') {
-                inputStatusDot.classList.add('status-valid');
-                inputStatusText.innerText = 'Valid JSON';
-                inputStatusText.style.color = 'var(--success)';
-            } else if (state === 'error') {
-                inputStatusDot.classList.add('status-error');
-                inputStatusText.innerText = 'Error: ' + msg;
-                inputStatusText.style.color = 'var(--danger)';
-            } else {
-                inputStatusText.innerText = 'Waiting for input...';
-                inputStatusText.style.color = 'var(--text-muted)';
-            }
-        }
-
-        function copyToClipboard() {
-            if (!currentJsonString) {
-                // Try to copy raw input if no formatted version exists yet
-                currentJsonString = inputEl.value;
-            }
-            if (!currentJsonString) return;
-
-            navigator.clipboard.writeText(currentJsonString).then(() => {
-                showToast('Copied to Clipboard');
-            }).catch(err => {
-                showToast('Failed to copy', 'error');
-                console.error(err);
-            });
-        }
-
-        function downloadJson() {
-            if (!currentJsonString) {
-                // Attempt to format first if empty
-                formatJson();
-            }
-            if (!currentJsonString) {
-                showToast('No valid JSON to download', 'error');
-                return;
-            }
-
-            const blob = new Blob([currentJsonString], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'formatted-data.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            async saveCurrent() {
+                if(!Store.user) return Auth.toggleModal();
+                const name = prompt("Enter project name:", "Untitled Project");
+                if(name) {
+                    await API.saveProject(name, Editor.input.value);
+                    UI.showToast("Saved to Cloud");
+                }
+            },
             
-            showToast('Download Started');
-        }
+            load() { if(document.getElementById('view-cloud').classList.contains('active')) this.render(); }
+        };
 
-        function clearInput() {
-            inputEl.value = '';
-            outputEl.innerHTML = '';
-            currentJsonString = '';
-            setStatus('waiting');
-            inputEl.focus();
-        }
+        const BulkProcessor = {
+            handleFiles(files) {
+                const resultsDiv = document.getElementById('bulkResults');
+                resultsDiv.innerHTML = '';
+                
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const json = JSON.parse(e.target.result);
+                            const pretty = JSON.stringify(json, null, 2);
+                            resultsDiv.innerHTML += `
+                                <div style="background:var(--bg-panel); padding:10px; border:1px solid var(--border); border-radius:4px;">
+                                    <strong>${file.name}</strong> <span style="color:var(--success)">Valid</span>
+                                    <button class="btn" style="float:right; font-size:0.7rem;" onclick="navigator.clipboard.writeText(\`${pretty.replace(/`/g, '\\`')}\`)">Copy</button>
+                                </div>
+                            `;
+                        } catch(err) {
+                            resultsDiv.innerHTML += `<div style="padding:10px; color:var(--danger)">${file.name}: Invalid JSON</div>`;
+                        }
+                    };
+                    reader.readAsText(file);
+                });
+            }
+        };
 
-        function loadSample() {
-            const sample = {
-                "project": "Velox JSON Formatter",
-                "version": 2.0,
-                "features": [
-                    "Syntax Validation",
-                    "Beautify",
-                    "Minify",
-                    "Download"
-                ],
-                "settings": {
-                    "theme": "Glassmorphism",
-                    "darkMode": true,
-                    "author": "Adam Laamime"
-                },
-                "isAwesome": true
-            };
-            inputEl.value = JSON.stringify(sample); // Load raw string
-            validateInput();
-            formatJson(); // Auto format sample
-        }
+        const History = {
+            render() {
+                const list = document.getElementById('historyList');
+                list.innerHTML = '';
+                // Show last 5 edits from stack
+                Editor.historyStack.slice(-5).reverse().forEach((content, idx) => {
+                    const div = document.createElement('div');
+                    div.style.padding = '10px';
+                    div.style.borderBottom = '1px solid var(--border)';
+                    div.style.cursor = 'pointer';
+                    div.textContent = `Version ${Editor.historyStack.length - idx} (${new Date().toLocaleTimeString()})`;
+                    div.onclick = () => {
+                        Editor.input.value = content;
+                        Editor.process();
+                    };
+                    list.appendChild(div);
+                });
+            }
+        };
 
-        function showToast(message, type = 'success') {
-            toastMsgEl.innerText = message;
-            toastEl.style.background = type === 'error' ? 'var(--danger)' : 'var(--success)';
-            toastEl.classList.add('show');
-            setTimeout(() => {
-                toastEl.classList.remove('show');
-            }, 3000);
-        }
+        const ProExport = {
+            toExcel() {
+                if (!Store.user || !Store.user.isPro) {
+                    UI.showToast("Pro Feature: Please upgrade to export Excel.", "error");
+                    // In real app: open Stripe checkout
+                    return;
+                }
+                // CSV Export as Excel-compatible fallback
+                const items = JSON.parse(Editor.input.value);
+                if(!Array.isArray(items)) items = [items];
+                const replacer = (key, value) => value === null ? '' : value; 
+                const header = Object.keys(items[0]);
+                const csv = [
+                    header.join(','), 
+                    ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+                ];
+                const blob = new Blob([csv.join('\r\n')], { type: 'text/csv' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'velox_export.csv';
+                a.click();
+                UI.showToast("Exported to Excel (CSV)");
+            }
+        };
 
-        // Initialize with focus
-        inputEl.focus();
+        const ProAI = {
+            analyze() {
+                if (!Store.user || !Store.user.isPro) {
+                    UI.showToast("Pro Feature: AI Analysis requires subscription.", "error");
+                    return;
+                }
+                const data = JSON.parse(Editor.input.value);
+                const keys = Object.keys(data);
+                alert(`AI Analysis Summary:\n- Structure detected: ${Array.isArray(data) ? 'Array' : 'Object'}\n- Root Keys: ${keys.length}\n- Complexity: ${keys.length > 5 ? 'High' : 'Low'}\n\n(Simulated AI Response)`);
+            }
+        };
 
-    </script>  
+        const Auth = {
+            isLogin: true,
+            toggleModal() { document.getElementById('authModal').classList.add('open'); },
+            
+            switchMode() {
+                this.isLogin = !this.isLogin;
+                document.getElementById('authTitle').textContent = this.isLogin ? 'Account Access' : 'Create Account';
+                document.getElementById('authSwitchText').textContent = this.isLogin ? 'Register' : 'Login';
+            },
+
+            async handleSubmit(e) {
+                e.preventDefault();
+                const email = document.getElementById('emailInput').value;
+                const pass = document.getElementById('passInput').value;
+                
+                try {
+                    const user = this.isLogin ? await API.login(email, pass) : await API.register(email, pass);
+                    Store.login(user);
+                } catch (err) {
+                    UI.showToast("Authentication Failed", "error");
+                }
+            }
+        };
+
+        const UI = {
+            showToast(msg, type='success') {
+                const t = document.getElementById('toast');
+                t.textContent = msg;
+                t.style.borderLeftColor = type === 'error' ? 'var(--danger)' : 'var(--accent)';
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 3000);
+            }
+        };
+
+        // --- INIT ---
+        window.onload = () => {
+            Store.init();
+            Editor.init();
+        };
+
+    </script>
 </body>
 </html>
