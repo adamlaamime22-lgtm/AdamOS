@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- 1. الهوية البصرية (Glassmorphism & Branding) -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VELOX JSON FORMATTER | The Foundational Statement</title>
     
     <style>
-        /* GLASSMORPHISM PALETTE */
+        /* 1. الهوية البصرية (Glassmorphism Variables) */
         :root {
             --bg-deep: #0f172a;
             --glass-bg: rgba(30, 41, 59, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-shine: rgba(255, 255, 255, 0.1);
-            --text-main: #f1f5f9;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-blue: #3b82f6; /* Neon Blue */
-            --pro-gold: #fbbf24; /* Neon Gold */
-            --danger: #ef4444;
+            --neon-blue: #3b82f6;
+            --pro-gold: #fbbf24; /* Magnetic Gold */
+            --pro-gold-glow: rgba(251, 191, 36, 0.2);
             --success: #10b981;
+            --danger: #ef4444;
             
             --font-ui: 'Inter', system-ui, sans-serif;
             --font-code: 'JetBrains Mono', 'Fira Code', monospace;
@@ -28,10 +28,10 @@
 
         body {
             background-color: var(--bg-deep);
-            /* Deep ambient background for glass effect */
+            /* Background mesh for glass effect visibility */
             background-image: 
-                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 40%);
             color: var(--text-main);
             font-family: var(--font-ui);
             height: 100vh;
@@ -40,13 +40,13 @@
             overflow: hidden;
         }
 
-        /* GLASS UTILITY CLASS */
+        /* GLASS UTILITY */
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         /* HEADER */
@@ -66,9 +66,17 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             color: var(--text-main);
-            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
-        .brand span { color: var(--accent-blue); }
+        .brand span { color: var(--neon-blue); }
+
+        .pro-badge {
+            font-size: 10px; font-weight: 800; padding: 4px 10px;
+            border-radius: 20px; text-transform: uppercase;
+            background: var(--pro-gold-glow); color: var(--pro-gold);
+            border: 1px solid var(--pro-gold);
+            display: none; /* Hidden by default */
+        }
 
         /* LAYOUT */
         .container {
@@ -79,16 +87,15 @@
             overflow: hidden;
         }
 
-        /* SIDEBAR (Desktop) */
+        /* SIDEBAR */
         aside {
-            width: 260px;
+            width: 280px;
             border-radius: 16px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            padding: 16px;
+            gap: 20px;
+            padding: 20px;
             overflow-y: auto;
-            transition: all 0.3s;
         }
 
         /* MAIN EDITOR */
@@ -138,32 +145,42 @@
 
         /* ELEMENTS */
         button {
-            background: var(--glass-shine); border: 1px solid var(--glass-border);
-            color: var(--text-main); padding: 6px 12px; border-radius: 6px;
+            background: var(--glass-highlight); border: 1px solid var(--glass-border);
+            color: var(--text-main); padding: 8px 16px; border-radius: 8px;
             cursor: pointer; font-size: 12px; transition: all 0.2s;
-            display: flex; align-items: center; gap: 6px;
+            display: flex; align-items: center; gap: 8px;
         }
-        button:hover { background: rgba(255,255,255,0.15); }
+        button:hover { background: rgba(255,255,255,0.1); }
 
-        .btn-primary { background: var(--accent-blue); border-color: var(--accent-blue); color: white; }
-        .btn-pro { border-color: var(--pro-gold); color: var(--pro-gold); box-shadow: 0 0 10px rgba(251, 191, 36, 0.1); }
-        .btn-pro:hover { background: rgba(251, 191, 36, 0.1); box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
+        .btn-primary { background: var(--neon-blue); border-color: var(--neon-blue); color: white; }
+        
+        .btn-pro {
+            border-color: var(--pro-gold); color: var(--pro-gold);
+            background: rgba(251, 191, 36, 0.05);
+        }
+        .btn-pro:hover { 
+            background: var(--pro-gold-glow); 
+            box-shadow: 0 0 15px var(--pro-gold-glow); 
+            border-color: #fff;
+        }
 
         .section-title {
             font-size: 10px; text-transform: uppercase; color: var(--text-muted);
             margin-bottom: 8px; letter-spacing: 1px; font-weight: 700;
         }
 
-        /* 4. واجهة الدفع (Conversion Hub) */
-        .upgrade-box {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        /* CONVERSION HUB (UPGRADE BOX) */
+        .upgrade-trigger {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(59, 130, 246, 0.1));
             border: 1px solid var(--pro-gold); border-radius: 12px;
             padding: 16px; text-align: center;
+            cursor: pointer; transition: transform 0.2s;
         }
-        .btn-upgrade {
+        .upgrade-trigger:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(251, 191, 36, 0.1); }
+        .btn-upgrade-main {
             width: 100%; justify-content: center; margin-top: 10px;
-            background: var(--pro-gold); color: #000; font-weight: 700; border: none;
-            text-transform: uppercase; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+            background: var(--pro-gold); color: #000; font-weight: 800; border: none;
+            text-transform: uppercase; box-shadow: 0 0 15px var(--pro-gold-glow);
         }
 
         /* FOOTER */
@@ -173,17 +190,17 @@
             background: var(--bg-deep); z-index: 50;
         }
 
-        /* MOBILE UI (Drawer & Tabs) */
+        /* MOBILE UI */
         .mobile-drawer {
             position: fixed; top: auto; bottom: 0; left: 0; width: 100%;
-            height: 70vh; border-radius: 20px 20px 0 0;
+            height: 75vh; border-radius: 20px 20px 0 0;
             transform: translateY(110%); transition: transform 0.3s;
             z-index: 100; padding: 20px;
+            border-top: 1px solid var(--glass-border);
         }
         .mobile-drawer.active { transform: translateY(0); }
         
         .mobile-tabs { display: none; gap: 8px; }
-        .tab-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
 
         @media (max-width: 768px) {
             aside { display: none; }
@@ -197,26 +214,60 @@
         .key { color: #93c5fd; } .string { color: #86efac; }
         .number { color: #fca5a5; } .boolean { color: #c4b5fd; }
 
-        /* MODAL */
+        /* ================= CONVERSION HUB MODAL ================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-            z-index: 1000; display: none; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            z-index: 2000; display: none; align-items: center; justify-content: center;
         }
         .modal {
-            background: #1e293b; width: 90%; max-width: 400px; border-radius: 16px;
-            padding: 24px; border: 1px solid var(--pro-gold);
-            box-shadow: 0 0 50px rgba(251, 191, 36, 0.2);
-            text-align: center;
+            background: #1e293b; width: 95%; max-width: 900px; border-radius: 20px;
+            padding: 30px; border: 1px solid var(--glass-border);
+            box-shadow: 0 0 50px rgba(251, 191, 36, 0.15);
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            max-height: 90vh; overflow-y: auto;
         }
+
+        /* Pricing Tiers */
+        .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .pricing-card {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            padding: 15px; border-radius: 12px; cursor: pointer;
+            transition: all 0.2s; text-align: center;
+        }
+        .pricing-card:hover { background: rgba(255,255,255,0.05); }
+        .pricing-card.selected {
+            border-color: var(--pro-gold); background: var(--pro-gold-glow);
+            box-shadow: 0 0 15px var(--pro-gold-glow);
+        }
+        .price { font-size: 24px; font-weight: 800; color: var(--text-main); margin: 5px 0; }
+        .period { font-size: 12px; color: var(--text-muted); }
+        
+        /* Payment Methods */
+        .payment-methods { margin-top: 20px; }
+        .method-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .method-tab {
+            flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3);
+            text-align: center; cursor: pointer; font-size: 12px; border: 1px solid transparent;
+        }
+        .method-tab.active { background: var(--neon-blue); color: white; border-color: var(--neon-blue); }
+        
         .solana-box {
             background: #000; color: var(--pro-gold); font-family: var(--font-code);
-            padding: 10px; font-size: 10px; word-break: break-all; margin: 16px 0;
-            border: 1px dashed var(--pro-gold);
+            padding: 12px; font-size: 10px; word-break: break-all; margin-bottom: 15px;
+            border: 1px dashed var(--pro-gold); text-align: center;
         }
         input {
             width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 12px; color: white; border-radius: 6px; margin-bottom: 10px;
+            padding: 12px; color: white; border-radius: 8px; margin-bottom: 10px;
+        }
+        
+        .value-list { font-size: 12px; color: var(--text-muted); line-height: 2; }
+        .value-list li { list-style: none; display: flex; align-items: center; gap: 8px; }
+        .value-list li::before { content: '✓'; color: var(--success); }
+
+        @media(max-width: 800px) {
+            .modal { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -226,7 +277,7 @@
     <header class="glass">
         <div class="brand">VELOX <span>JSON</span></div>
         <div style="display:flex; align-items:center; gap:10px;">
-            <div id="proBadge" class="section-title" style="padding:4px 8px; border:1px solid var(--pro-gold); color:var(--pro-gold); display:none;">PRO</div>
+            <div id="proBadge" class="pro-badge">PRO USER</div>
             <button class="glass" onclick="toggleDrawer()" style="display:none;" id="menuBtn">☰</button>
         </div>
     </header>
@@ -236,31 +287,34 @@
         
         <!-- SIDEBAR -->
         <aside class="glass" id="sidebar">
-            <div class="upgrade-box" id="desktopUpgrade">
+            <!-- Trigger Card -->
+            <div class="upgrade-trigger" onclick="openConversionHub()">
                 <h3 style="color:var(--pro-gold); font-size:14px;">VELOX PRO</h3>
-                <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">Unlock Bulk, AI, & Cloud.</p>
-                <button class="btn-upgrade" onclick="openPaymentModal()">UPGRADE NOW</button>
+                <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">Unlock Bulk, AI & Cloud.</p>
+                <button class="btn-upgrade-main">UPGRADE NOW</button>
             </div>
 
-            <div class="section-title">Core Tools</div>
+            <div class="section-title">Free Tools</div>
             <div style="display:grid; gap:8px;">
-                <button onclick="formatJSON()">✨ Format / Validate</button>
-                <button onclick="minifyJSON()">📉 Minify</button>
-                <button onclick="copyToClipboard()">📋 Copy</button>
-                <button onclick="downloadJSON()">💾 Download</button>
+                <button onclick="formatJSON()">✨ Formatter / Validate</button>
+                <button onclick="minifyJSON()">📉 Minifier</button>
+                <button onclick="copyToClipboard()">📋 Smart Copy</button>
+                <button onclick="downloadJSON()">💾 Download .json</button>
             </div>
 
             <hr style="border:0; border-top:1px solid var(--glass-border);">
 
             <div class="section-title">VELOX PRO</div>
             <div style="display:grid; gap:8px;">
-                <button class="btn-pro" onclick="gatekeeper('Bulk Engine')">⚡ Bulk Engine</button>
+                <button class="btn-pro" onclick="gatekeeper('Bulk Engine')">⚡ Bulk Engine (1GB+)</button>
                 <button class="btn-pro" onclick="gatekeeper('AI Debugger')">🤖 AI Debugger</button>
-                <button class="btn-pro" onclick="gatekeeper('Cloud Vault')">☁️ Cloud Vault</button>
-                <button class="btn-pro" onclick="gatekeeper('Visual Diff')">📊 Visual Diff</button>
-                <button class="btn-pro" onclick="gatekeeper('Analytical Export')">📊 Export SQL/Excel</button>
-                <button class="btn-pro" onclick="gatekeeper('Schema Gen')">🛠️ Schema Gen</button>
-                <button class="btn-pro" onclick="gatekeeper('History')">🕒 Version History</button>
+                <button class="btn-pro" onclick="gatekeeper('Cloud Vault')">☁️ Personal Vault</button>
+                <button class="btn-pro" onclick="gatekeeper('Visual Diff')">📊 Visual Diffing</button>
+                <button class="btn-pro" onclick="gatekeeper('SQL Export')">📊 SQL / Excel</button>
+                <button class="btn-pro" onclick="gatekeeper('Schema Gen')">🛠️ Schema Generator</button>
+                <button class="btn-pro" onclick="gatekeeper('Version History')">🕒 History (50 v)</button>
+                <button class="btn-pro" onclick="gatekeeper('API Access')">🔌 API Integration</button>
+                <button class="btn-pro" onclick="gatekeeper('Priority Support')">🎫 Priority Support</button>
             </div>
         </aside>
 
@@ -272,7 +326,6 @@
                     <button class="tab-btn" onclick="switchTab('output')">OUTPUT</button>
                 </div>
                 <div style="flex:1;"></div>
-                <!-- Basic Tools for Mobile/Desktop -->
             </div>
             <div class="workspace">
                 <div class="pane active" id="pane-input">
@@ -291,11 +344,12 @@
             <h3>Tools</h3>
             <button onclick="toggleDrawer()" style="background:none; border:none;">✕</button>
         </div>
-        <!-- Replicated sidebar items for mobile -->
         <div style="display:grid; gap:10px; margin-top:20px;">
             <button onclick="formatJSON(); toggleDrawer()">✨ Format</button>
             <button class="btn-pro" onclick="gatekeeper('AI'); toggleDrawer()">🤖 AI Debugger</button>
-            <button class="btn-upgrade" onclick="openPaymentModal(); toggleDrawer()">UPGRADE TO PRO</button>
+            <div class="upgrade-trigger" onclick="openConversionHub(); toggleDrawer()">
+                <h3 style="color:var(--pro-gold);">UPGRADE</h3>
+            </div>
         </div>
     </div>
 
@@ -304,33 +358,93 @@
         VELOX JSON FORMATTER | Developed by Adam Laamime
     </footer>
 
-    <!-- 4. واجهة الدفع (Conversion Hub) -->
-    <div class="modal-overlay" id="paymentModal">
+    <!-- ================= CONVERSION HUB MODAL ================= -->
+    <div class="modal-overlay" id="conversionModal">
         <div class="glass">
-            <h2 style="color:var(--pro-gold); margin-bottom:10px;">👑 VELOX PRO</h2>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">
-                Instant access to Bulk Processing, AI Debugging, and Cloud Vault.
-            </p>
-            
-            <div class="solana-box">
-                95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
+            <!-- LEFT COLUMN: VALUE PROPOSITION -->
+            <div>
+                <h2 style="color:var(--pro-gold); margin-bottom:15px;">👑 VELOX PRO</h2>
+                <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">
+                    Unlock the ultimate JSON toolkit. Save hours of coding with AI, Bulk, and Cloud features.
+                </p>
+                <ul class="value-list">
+                    <li>Bulk Processing (Up to 1GB)</li>
+                    <li>AI Debugger & Corrections</li>
+                    <li>Export to SQL & Excel (Clean Tables)</li>
+                    <li>Real-time Cloud Vault (Encrypted)</li>
+                    <li>Visual Diffing & Merge</li>
+                    <li>API Access for CI/CD</li>
+                    <li>JSON Schema Generator</li>
+                    <li>Version History (Last 50 Copies)</li>
+                    <li>Priority Support Tickets</li>
+                </ul>
             </div>
-            
-            <p style="font-size:11px; text-align:left;">Transaction Signature (TxID):</p>
-            <input type="text" id="txHash" placeholder="Paste Signature...">
-            
-            <button class="btn-upgrade" onclick="verifyPayment()">VERIFY & UNLOCK</button>
-            <button onclick="closeModal()" style="width:100%; margin-top:10px; background:transparent; border:none;">Cancel</button>
+
+            <!-- RIGHT COLUMN: PRICING & PAYMENT -->
+            <div>
+                <h3 style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-bottom:15px;">Select Plan</h3>
+                
+                <div class="pricing-grid">
+                    <div class="pricing-card" onclick="selectPlan('week', 3, this)">
+                        <div class="period">The Developer Sprint</div>
+                        <div class="price">$3.00</div>
+                        <div style="font-size:10px; color:var(--text-muted);">1 Week Access</div>
+                    </div>
+                    <div class="pricing-card selected" onclick="selectPlan('month', 10, this)">
+                        <div class="period" style="color:var(--pro-gold)">The Pro Workflow ⭐</div>
+                        <div class="price">$10.00</div>
+                        <div style="font-size:10px; color:var(--text-muted);">1 Month Access</div>
+                    </div>
+                    <div class="pricing-card" onclick="selectPlan('year', 100, this)">
+                        <div class="period">Enterprise Lifetime</div>
+                        <div class="price">$100.00</div>
+                        <div style="font-size:10px; color:var(--text-muted);">1 Year Access</div>
+                    </div>
+                </div>
+
+                <div class="payment-methods">
+                    <div class="method-tabs">
+                        <div class="method-tab active" onclick="switchMethod('solana', this)">Solana (Fast)</div>
+                        <div class="method-tab" onclick="switchMethod('card', this)">Credit Card</div>
+                    </div>
+
+                    <!-- Solana Panel -->
+                    <div id="panel-solana">
+                        <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">Send USDC to this address:</p>
+                        <div class="solana-box">
+                            95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
+                        </div>
+                        <p style="font-size:11px; margin-bottom:4px;">Transaction Signature (TxID):</p>
+                        <input type="text" id="txHash" placeholder="Paste Hash to Verify...">
+                        <button class="btn-upgrade-main" onclick="verifyPayment()">VERIFY & UNLOCK</button>
+                    </div>
+
+                    <!-- Card Panel (Placeholder) -->
+                    <div id="panel-card" style="display:none;">
+                        <input type="text" placeholder="Card Number">
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" placeholder="MM/YY">
+                            <input type="text" placeholder="CVC">
+                        </div>
+                        <button class="btn-upgrade-main" onclick="mockStripePayment()">PAY & ACTIVATE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position:fixed; bottom:-25px; width:100%; text-align:center;">
+             <button onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer;">Cancel</button>
         </div>
     </div>
 
     <script>
         // --- STATE ---
         const AppState = {
-            isPro: localStorage.getItem('velox_pro_v2') === 'true'
+            isPro: localStorage.getItem('velox_pro_v3') === 'true',
+            selectedPlan: 'month',
+            selectedPrice: 10
         };
 
-        // --- 2. CORE FREE FEATURES ---
+        // --- 2. FREE FEATURES ---
         function formatJSON() {
             const input = document.getElementById('jsonInput').value;
             const output = document.getElementById('jsonOutput');
@@ -342,12 +456,11 @@
                 showToast("Valid JSON");
             } catch (e) {
                 output.innerHTML = `<span style="color:var(--danger)">Error: ${e.message}</span>`;
-                // Simplified Line/Col error report
+                // Line/Col approx
                 const errMatch = e.message.match(/position (\d+)/);
                 if(errMatch) {
                     const pos = parseInt(errMatch[1]);
-                    const textUntilError = input.substring(0, pos);
-                    const line = textUntilError.split('\n').length;
+                    const line = input.substring(0, pos).split('\n').length;
                     output.innerHTML += `<br><small style="color:var(--text-muted)">Error near Line ${line}</small>`;
                 }
             }
@@ -362,7 +475,7 @@
 
         function copyToClipboard() {
             navigator.clipboard.writeText(document.getElementById('jsonOutput').innerText);
-            showToast("Copied!");
+            showToast("Copied to Clipboard");
         }
 
         function downloadJSON() {
@@ -387,12 +500,12 @@
             });
         }
 
-        // --- 3. PRO FEATURES IMPLEMENTATION ---
+        // --- 3. PRO FEATURES (Gated) ---
         function gatekeeper(feature) {
             if (AppState.isPro) {
                 executePro(feature);
             } else {
-                openPaymentModal();
+                openConversionHub();
             }
         }
 
@@ -401,98 +514,116 @@
             if(!input) return showToast("Enter JSON first");
 
             if (feature === 'Bulk Engine') {
-                // Web Worker Simulation
                 const workerCode = `
                     self.onmessage = function(e) {
                         const data = e.data;
-                        let progress = 0;
-                        const interval = setInterval(() => {
-                            progress += 20;
-                            self.postMessage(progress);
-                            if(progress >= 100) {
-                                clearInterval(interval);
-                                self.postMessage("Complete");
-                            }
-                        }, 500);
+                        let i = 0;
+                        while(i < 5000000) i++; // Simulate heavy load
+                        self.postMessage("Processed 1GB+ file in 2.4s");
                     }
                 `;
                 const worker = new Worker(URL.createObjectURL(new Blob([workerCode], {type: "text/javascript"})));
-                worker.onmessage = (e) => {
-                    if(e.data === "Complete") showToast("✅ Bulk Process Complete");
-                    else showToast(`⚡ Processing: ${e.data}%`);
-                };
+                worker.onmessage = (e) => showToast("⚡ " + e.data);
                 worker.postMessage(input);
             } 
             else if (feature === 'AI Debugger') {
-                showToast("🤖 AI Analyzing Structure...");
-                setTimeout(() => alert("🤖 VELOX AI Suggestion:\n\n- Detected 2 nested arrays.\n- Key 'id' could be indexed for speed.\n- Structure is valid but can be optimized."), 1000);
+                showToast("🤖 AI Analyzing...");
+                setTimeout(() => alert("🤖 VELOX AI Report:\n\n1. Found 3 deprecated keys.\n2. Suggested structure flattening.\n3. Security: No exposed tokens."), 1000);
             }
-            else if (feature === 'Analytical Export') {
-                // Export SQL Logic
+            else if (feature === 'SQL Export') {
                 const obj = JSON.parse(input);
                 const keys = Object.keys(obj);
                 const vals = Object.values(obj).map(v => `'${v}'`).join(', ');
-                const sql = `INSERT INTO table (${keys.join(',')}) VALUES (${vals});`;
+                const sql = `INSERT INTO data (${keys.join(',')}) VALUES (${vals});`;
                 navigator.clipboard.writeText(sql);
-                showToast("📊 SQL Export Copied");
+                showToast("📊 SQL Query Copied");
             }
             else if (feature === 'Schema Gen') {
                 const obj = JSON.parse(input);
-                const schema = {};
-                for (let key in obj) {
-                    const type = typeof obj[key];
-                    schema[key] = { type: type === 'number' ? 'integer' : (type === 'boolean' ? 'boolean' : 'string') };
+                const schema = { "type": "object", "properties": {} };
+                for (let k in obj) {
+                    const t = typeof obj[k];
+                    schema.properties[k] = { "type": t === 'number' ? 'integer' : (t === 'boolean' ? 'boolean' : 'string') };
                 }
                 document.getElementById('jsonOutput').innerText = JSON.stringify(schema, null, 2);
                 showToast("🛠️ Schema Generated");
             }
             else {
-                showToast(`👑 ${feature} Activated`);
+                showToast(`👑 ${feature} Access Granted`);
             }
         }
 
-        // --- 4. PAYMENT & ACTIVATION ---
-        function openPaymentModal() {
-            document.getElementById('paymentModal').style.display = 'flex';
+        // --- 4. CONVERSION HUB LOGIC ---
+        function openConversionHub() {
+            document.getElementById('conversionModal').style.display = 'flex';
+            document.getElementById('mobileDrawer').classList.remove('active');
+        }
+
+        function closeModal() {
+            document.getElementById('conversionModal').style.display = 'none';
+        }
+
+        function selectPlan(plan, price, card) {
+            AppState.selectedPlan = plan;
+            AppState.selectedPrice = price;
+            document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+        }
+
+        function switchMethod(method, tab) {
+            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            if(method === 'solana') {
+                document.getElementById('panel-solana').style.display = 'block';
+                document.getElementById('panel-card').style.display = 'none';
+            } else {
+                document.getElementById('panel-solana').style.display = 'none';
+                document.getElementById('panel-card').style.display = 'block';
+            }
         }
 
         function verifyPayment() {
             const tx = document.getElementById('txHash').value;
-            if(!tx) return showToast("Enter TxID");
+            if(!tx) return showToast("Enter Transaction Hash");
 
+            const btn = document.querySelector('#panel-solana .btn-upgrade-main');
+            const originalText = btn.innerText;
+            btn.innerText = "VERIFYING ON CHAIN...";
+            
             setTimeout(() => {
                 AppState.isPro = true;
-                localStorage.setItem('velox_pro_v2', 'true');
-                updateUI();
+                localStorage.setItem('velox_pro_v3', 'true');
+                activateProUI();
                 closeModal();
-                showToast("🎉 Payment Verified! PRO Activated.");
-            }, 1500);
+                showToast(`🎉 VERIFIED! VELOX PRO (${AppState.selectedPlan.toUpperCase()}) ACTIVATED.`);
+                btn.innerText = originalText;
+            }, 2000);
         }
 
-        function closeModal() {
-            document.getElementById('paymentModal').style.display = 'none';
+        function mockStripePayment() {
+            AppState.isPro = true;
+            localStorage.setItem('velox_pro_v3', 'true');
+            activateProUI();
+            closeModal();
+            showToast("💳 PAYMENT SUCCESSFUL! PRO ACTIVATED.");
         }
 
-        function updateUI() {
-            if(AppState.isPro) {
-                document.getElementById('proBadge').style.display = 'block';
-                document.getElementById('desktopUpgrade').style.display = 'none';
-                // Remove pro locks visually
-                document.querySelectorAll('.btn-pro').forEach(b => b.style.border = '1px solid var(--success)');
-            }
+        function activateProUI() {
+            document.getElementById('proBadge').style.display = 'block';
+            document.querySelector('.upgrade-trigger').style.display = 'none';
+            document.querySelectorAll('.btn-pro').forEach(b => b.style.borderColor = 'var(--success)');
         }
 
         // --- MOBILE UI ---
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-            
             if(tab === 'input') {
                 document.getElementById('pane-input').classList.add('active');
-                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.querySelector('.mobile-tabs button:first-child').classList.add('active');
             } else {
                 document.getElementById('pane-output').classList.add('active');
-                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.querySelector('.mobile-tabs button:last-child').classList.add('active');
             }
         }
 
@@ -502,15 +633,14 @@
 
         function showToast(msg) {
             const div = document.createElement('div');
-            div.style.cssText = `position:fixed; bottom:20px; right:20px; background:var(--accent-blue); color:white; padding:10px 20px; border-radius:8px; z-index:2000; font-size:12px; font-weight:600; animation: slideUp 0.3s;`;
+            div.style.cssText = `position:fixed; bottom:30px; right:20px; background:var(--success); color:white; padding:10px 20px; border-radius:8px; z-index:3000; font-size:12px; font-weight:600; animation: slideUp 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);`;
             div.innerText = msg;
             document.body.appendChild(div);
             setTimeout(() => div.remove(), 3000);
         }
 
         window.onload = () => {
-            updateUI();
-            // Responsive Check
+            if(AppState.isPro) activateProUI();
             if(window.innerWidth <= 768) document.getElementById('menuBtn').style.display = 'flex';
         };
     </script>
