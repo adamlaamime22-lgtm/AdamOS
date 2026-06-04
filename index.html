@@ -1,648 +1,847 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VELOX JSON FORMATTER | The Foundational Statement</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELOX JSON FORMATTER | Professional SaaS Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* 1. الهوية البصرية (Glassmorphism Variables) */
+        /* 
+         * 1. الهوية البصرية (Glassmorphism) & المتغيرات الأساسية
+         */
         :root {
-            --bg-deep: #0f172a;
-            --glass-bg: rgba(30, 41, 59, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-highlight: rgba(255, 255, 255, 0.05);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --neon-blue: #3b82f6;
-            --pro-gold: #fbbf24; /* Magnetic Gold */
-            --pro-gold-glow: rgba(251, 191, 36, 0.2);
-            --success: #10b981;
-            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1e293b, #0f172a);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --blur-strength: 16px;
             
-            --font-ui: 'Inter', system-ui, sans-serif;
-            --font-code: 'JetBrains Mono', 'Fira Code', monospace;
+            --primary-blue: #3b82f6; /* أزرق عميق */
+            --accent-gold: #fbbf24;  /* ذهبي للـ PRO */
+            --success: #10b981;
+            --error: #ef4444;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'Fira Code', monospace;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
 
         body {
-            background-color: var(--bg-deep);
-            /* Background mesh for glass effect visibility */
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 40%);
+            background: var(--bg-dark);
+            background-image: var(--bg-gradient);
             color: var(--text-main);
             font-family: var(--font-ui);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* GLASS UTILITY */
+        /* تأثيرات الزجاج (Glass Utility Class) */
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
             border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* HEADER */
-        header {
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            z-index: 50;
+        .glass-solid {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(var(--blur-strength));
             border-bottom: 1px solid var(--glass-border);
         }
 
-        .brand {
-            font-weight: 800;
-            font-size: 18px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-main);
-            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        /* التخطيط العام */
+        header {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .brand span { color: var(--neon-blue); }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
 
         .pro-badge {
-            font-size: 10px; font-weight: 800; padding: 4px 10px;
-            border-radius: 20px; text-transform: uppercase;
-            background: var(--pro-gold-glow); color: var(--pro-gold);
-            border: 1px solid var(--pro-gold);
-            display: none; /* Hidden by default */
+            background: linear-gradient(135deg, #b45309, var(--accent-gold));
+            color: #000;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            vertical-align: middle;
+            margin-left: 8px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            display: inline-block;
         }
 
-        /* LAYOUT */
-        .container {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-            overflow: hidden;
+        body.pro-active .pro-badge {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        /* SIDEBAR */
-        aside {
-            width: 280px;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        /* MAIN EDITOR */
         main {
             flex: 1;
-            border-radius: 16px;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            position: relative;
+            gap: 1.5rem;
         }
 
-        .toolbar {
-            height: 50px;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            gap: 10px;
-            background: rgba(0,0,0,0.2);
-        }
-
+        /* 
+         * منطقة العمل (Workspace) 
+         */
         .workspace {
-            flex: 1;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            overflow: hidden;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            height: 600px;
         }
 
-        .pane {
-            position: relative;
-            border-right: 1px solid var(--glass-border);
+        .panel-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            height: 100%;
         }
-        .pane:last-child { border-right: none; }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .editor-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
 
         textarea {
-            width: 100%; height: 100%; background: transparent; border: none;
-            color: #e2e8f0; font-family: var(--font-code); font-size: 13px;
-            padding: 20px; resize: none; line-height: 1.5; outline: none;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            padding: 1rem;
+            resize: none;
+            line-height: 1.5;
+            transition: border-color 0.2s;
         }
 
-        .output {
-            width: 100%; height: 100%; overflow: auto;
-            padding: 20px; font-family: var(--font-code); font-size: 13px;
-            line-height: 1.5; white-space: pre-wrap;
+        textarea:focus {
+            border-color: var(--primary-blue);
         }
 
-        /* ELEMENTS */
-        button {
-            background: var(--glass-highlight); border: 1px solid var(--glass-border);
-            color: var(--text-main); padding: 8px 16px; border-radius: 8px;
-            cursor: pointer; font-size: 12px; transition: all 0.2s;
-            display: flex; align-items: center; gap: 8px;
+        /* نتيجة التنسيق (Syntax Highlighting Simulation) */
+        #outputDisplay {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow: auto;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
         }
-        button:hover { background: rgba(255,255,255,0.1); }
 
-        .btn-primary { background: var(--neon-blue); border-color: var(--neon-blue); color: white; }
-        
+        /* ألوان الكود */
+        .json-key { color: #9cdcfe; }
+        .json-string { color: #ce9178; }
+        .json-number { color: #b5cea8; }
+        .json-boolean { color: #569cd6; }
+        .json-null { color: #569cd6; }
+
+        /* شريط الأدوات الوسطي */
+        .toolbar {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .tool-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tool-btn:hover {
+            background: var(--glass-highlight);
+            transform: translateY(-2px);
+            border-color: var(--primary-blue);
+        }
+
+        .tool-btn:active {
+            transform: translateY(0);
+        }
+
+        .tool-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Tooltips */
+        .tool-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 60px;
+            background: #000;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+        .tool-btn:hover::after {
+            opacity: 1;
+        }
+
+        /* زر PRO محجوب */
         .btn-pro {
-            border-color: var(--pro-gold); color: var(--pro-gold);
-            background: rgba(251, 191, 36, 0.05);
+            border-color: rgba(251, 191, 36, 0.3);
+            color: var(--accent-gold);
+            position: relative;
+            overflow: hidden;
         }
-        .btn-pro:hover { 
-            background: var(--pro-gold-glow); 
-            box-shadow: 0 0 15px var(--pro-gold-glow); 
-            border-color: #fff;
+        
+        .btn-pro::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
         }
-
-        .section-title {
-            font-size: 10px; text-transform: uppercase; color: var(--text-muted);
-            margin-bottom: 8px; letter-spacing: 1px; font-weight: 700;
-        }
-
-        /* CONVERSION HUB (UPGRADE BOX) */
-        .upgrade-trigger {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(59, 130, 246, 0.1));
-            border: 1px solid var(--pro-gold); border-radius: 12px;
-            padding: 16px; text-align: center;
-            cursor: pointer; transition: transform 0.2s;
-        }
-        .upgrade-trigger:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(251, 191, 36, 0.1); }
-        .btn-upgrade-main {
-            width: 100%; justify-content: center; margin-top: 10px;
-            background: var(--pro-gold); color: #000; font-weight: 800; border: none;
-            text-transform: uppercase; box-shadow: 0 0 15px var(--pro-gold-glow);
+        
+        .btn-pro:hover::before {
+            transform: translateX(100%);
         }
 
-        /* FOOTER */
+        body:not(.pro-active) .locked-feature {
+            filter: grayscale(1);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* 
+         * قسم التفعيل والمحفظة (Wallet Box) 
+         */
+        .wallet-section {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .wallet-input-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .wallet-address {
+            font-family: var(--font-code);
+            background: rgba(0,0,0,0.4);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .hash-input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem;
+            border-radius: 8px;
+            color: #fff;
+            font-family: var(--font-code);
+            min-width: 250px;
+        }
+
+        .activate-btn {
+            background: linear-gradient(90deg, var(--accent-gold), #d97706);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .activate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+        }
+
+        /* حالة التفعيل */
+        .activation-status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            height: 20px;
+        }
+        .status-success { color: var(--success); }
+        .status-error { color: var(--error); }
+
+        /* 
+         * بطاقات الأسعار (Pricing) 
+         */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .price-card {
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+        }
+
+        .price-card.featured {
+            border-color: var(--accent-gold);
+            background: linear-gradient(180deg, rgba(251, 191, 36, 0.05), rgba(255, 255, 255, 0.03));
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 1rem 0;
+            color: var(--text-main);
+        }
+        .price-amount span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+
+        .plan-features {
+            list-style: none;
+            text-align: left;
+            margin: 1.5rem 0;
+            padding: 0;
+        }
+        .plan-features li {
+            margin-bottom: 0.8rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .plan-features li::before {
+            content: '✓';
+            color: var(--success);
+            margin-left: 8px;
+        }
+
+        /* 
+         * Footer & Signature 
+         */
         footer {
-            height: 30px; display: flex; align-items: center; justify-content: center;
-            font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px;
-            background: var(--bg-deep); z-index: 50;
-        }
-
-        /* MOBILE UI */
-        .mobile-drawer {
-            position: fixed; top: auto; bottom: 0; left: 0; width: 100%;
-            height: 75vh; border-radius: 20px 20px 0 0;
-            transform: translateY(110%); transition: transform 0.3s;
-            z-index: 100; padding: 20px;
+            text-align: center;
+            padding: 2rem;
             border-top: 1px solid var(--glass-border);
-        }
-        .mobile-drawer.active { transform: translateY(0); }
-        
-        .mobile-tabs { display: none; gap: 8px; }
-
-        @media (max-width: 768px) {
-            aside { display: none; }
-            .workspace { grid-template-columns: 1fr; }
-            .pane { display: none; }
-            .pane.active { display: block; }
-            .mobile-tabs { display: flex; }
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: auto;
         }
 
-        /* SYNTAX HIGHLIGHTING */
-        .key { color: #93c5fd; } .string { color: #86efac; }
-        .number { color: #fca5a5; } .boolean { color: #c4b5fd; }
+        .dev-signature {
+            font-family: var(--font-code);
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
 
-        /* ================= CONVERSION HUB MODAL ================= */
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--bg-dark);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Modal for PRO Features */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-            z-index: 2000; display: none; align-items: center; justify-content: center;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
-        .modal {
-            background: #1e293b; width: 95%; max-width: 900px; border-radius: 20px;
-            padding: 30px; border: 1px solid var(--glass-border);
-            box-shadow: 0 0 50px rgba(251, 191, 36, 0.15);
-            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
-            max-height: 90vh; overflow-y: auto;
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-content {
+            width: 90%; max-width: 600px;
+            padding: 2rem;
+            position: relative;
         }
 
-        /* Pricing Tiers */
-        .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        .pricing-card {
-            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
-            padding: 15px; border-radius: 12px; cursor: pointer;
-            transition: all 0.2s; text-align: center;
+        .close-modal {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none; border: none;
+            color: #fff; cursor: pointer; font-size: 1.5rem;
         }
-        .pricing-card:hover { background: rgba(255,255,255,0.05); }
-        .pricing-card.selected {
-            border-color: var(--pro-gold); background: var(--pro-gold-glow);
-            box-shadow: 0 0 15px var(--pro-gold-glow);
-        }
-        .price { font-size: 24px; font-weight: 800; color: var(--text-main); margin: 5px 0; }
-        .period { font-size: 12px; color: var(--text-muted); }
-        
-        /* Payment Methods */
-        .payment-methods { margin-top: 20px; }
-        .method-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .method-tab {
-            flex: 1; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3);
-            text-align: center; cursor: pointer; font-size: 12px; border: 1px solid transparent;
-        }
-        .method-tab.active { background: var(--neon-blue); color: white; border-color: var(--neon-blue); }
-        
-        .solana-box {
-            background: #000; color: var(--pro-gold); font-family: var(--font-code);
-            padding: 12px; font-size: 10px; word-break: break-all; margin-bottom: 15px;
-            border: 1px dashed var(--pro-gold); text-align: center;
-        }
-        input {
-            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 12px; color: white; border-radius: 8px; margin-bottom: 10px;
-        }
-        
-        .value-list { font-size: 12px; color: var(--text-muted); line-height: 2; }
-        .value-list li { list-style: none; display: flex; align-items: center; gap: 8px; }
-        .value-list li::before { content: '✓'; color: var(--success); }
 
-        @media(max-width: 800px) {
-            .modal { grid-template-columns: 1fr; }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .workspace { grid-template-columns: 1fr; height: auto; }
+            .toolbar { flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+            .editor-area { height: 300px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header class="glass">
-        <div class="brand">VELOX <span>JSON</span></div>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div id="proBadge" class="pro-badge">PRO USER</div>
-            <button class="glass" onclick="toggleDrawer()" style="display:none;" id="menuBtn">☰</button>
+    <!-- Header -->
+    <header class="glass-solid">
+        <div class="logo">
+            VELOX <span style="font-weight:300; color:var(--text-muted)">JSON</span> FORMATTER
+            <span class="pro-badge">PRO ACTIVE</span>
         </div>
+        <nav>
+            <!-- يمكن إضافة روابط هنا مستقبلاً -->
+        </nav>
     </header>
 
-    <!-- CONTAINER -->
-    <div class="container">
-        
-        <!-- SIDEBAR -->
-        <aside class="glass" id="sidebar">
-            <!-- Trigger Card -->
-            <div class="upgrade-trigger" onclick="openConversionHub()">
-                <h3 style="color:var(--pro-gold); font-size:14px;">VELOX PRO</h3>
-                <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">Unlock Bulk, AI & Cloud.</p>
-                <button class="btn-upgrade-main">UPGRADE NOW</button>
+    <!-- Main Workspace -->
+    <main>
+        <!-- قسم المحرر -->
+        <section class="glass workspace">
+            <!-- Input Panel -->
+            <div class="panel-container">
+                <div class="panel-header">
+                    <span>INPUT (RAW JSON)</span>
+                    <span id="inputStats">0 chars</span>
+                </div>
+                <div class="editor-area">
+                    <textarea id="jsonInput" placeholder="Paste your JSON here..." spellcheck="false"></textarea>
+                </div>
             </div>
 
-            <div class="section-title">Free Tools</div>
-            <div style="display:grid; gap:8px;">
-                <button onclick="formatJSON()">✨ Formatter / Validate</button>
-                <button onclick="minifyJSON()">📉 Minifier</button>
-                <button onclick="copyToClipboard()">📋 Smart Copy</button>
-                <button onclick="downloadJSON()">💾 Download .json</button>
-            </div>
-
-            <hr style="border:0; border-top:1px solid var(--glass-border);">
-
-            <div class="section-title">VELOX PRO</div>
-            <div style="display:grid; gap:8px;">
-                <button class="btn-pro" onclick="gatekeeper('Bulk Engine')">⚡ Bulk Engine (1GB+)</button>
-                <button class="btn-pro" onclick="gatekeeper('AI Debugger')">🤖 AI Debugger</button>
-                <button class="btn-pro" onclick="gatekeeper('Cloud Vault')">☁️ Personal Vault</button>
-                <button class="btn-pro" onclick="gatekeeper('Visual Diff')">📊 Visual Diffing</button>
-                <button class="btn-pro" onclick="gatekeeper('SQL Export')">📊 SQL / Excel</button>
-                <button class="btn-pro" onclick="gatekeeper('Schema Gen')">🛠️ Schema Generator</button>
-                <button class="btn-pro" onclick="gatekeeper('Version History')">🕒 History (50 v)</button>
-                <button class="btn-pro" onclick="gatekeeper('API Access')">🔌 API Integration</button>
-                <button class="btn-pro" onclick="gatekeeper('Priority Support')">🎫 Priority Support</button>
-            </div>
-        </aside>
-
-        <!-- MAIN EDITOR -->
-        <main class="glass">
+            <!-- Toolbar -->
             <div class="toolbar">
-                <div class="mobile-tabs">
-                    <button class="tab-btn active" onclick="switchTab('input')">INPUT</button>
-                    <button class="tab-btn" onclick="switchTab('output')">OUTPUT</button>
-                </div>
-                <div style="flex:1;"></div>
+                <button class="tool-btn" id="btnFormat" data-tooltip="Pretty Print (Format)">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm3 2h6v2H9V8zm0 4h6v2H9v-2z"/></svg>
+                </button>
+                <button class="tool-btn" id="btnMinify" data-tooltip="Minify (Compress)">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm3 9h6l-3 4-3-4zm0-6h6l-3-4-3 4z"/></svg>
+                </button>
+                <button class="tool-btn" id="btnValidate" data-tooltip="Validate Syntax">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </button>
+                <button class="tool-btn" id="btnCopy" data-tooltip="Copy Output">
+                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                </button>
+                <button class="tool-btn" id="btnDownload" data-tooltip="Export .json">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                </button>
+                <div style="height: 1px; background: var(--glass-border); margin: 4px 0;"></div>
+                <!-- PRO Features -->
+                <button class="tool-btn btn-pro locked-feature" id="btnDiff" data-tooltip="Visual Diff (PRO)">
+                    <svg viewBox="0 0 24 24"><path d="M10 21H5v-6h5v6zm-1-5h-3v4h3v-4zm11-5h-5V5h5v6zm-1-5h-3v4h3V6zM8 13v-2H2v2h6zm14 0v-2h-6v2h6zM8 7V5H2v2h6zm14 0V5h-6v2h6z"/></svg>
+                </button>
+                <button class="tool-btn btn-pro locked-feature" id="btnAI" data-tooltip="AI Debugger (PRO)">
+                    <svg viewBox="0 0 24 24"><path d="M21 11.5v-1c0-.8-.7-1.5-1.5-1.5H16V6c0-.8-.7-1.5-1.5-1.5h-4C9.7 4.5 9 5.2 9 6v4H5v2h14v-2.5h2zM11 6h3v4h-3V6zM6 13h13v8H6v-8z"/></svg>
+                </button>
+                <button class="tool-btn btn-pro locked-feature" id="btnSQL" data-tooltip="Export to SQL (PRO)">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M7 12h2v5H7zm4-7h2v12h-2zm4 4h2v8h-2z"/></svg>
+                </button>
             </div>
-            <div class="workspace">
-                <div class="pane active" id="pane-input">
-                    <textarea id="jsonInput" placeholder="Paste your JSON here..."></textarea>
-                </div>
-                <div class="pane" id="pane-output">
-                    <div id="jsonOutput" class="output"></div>
-                </div>
-            </div>
-        </main>
-    </div>
 
-    <!-- MOBILE DRAWER -->
-    <div class="glass mobile-drawer" id="mobileDrawer">
-        <div style="display:flex; justify-content:space-between;">
-            <h3>Tools</h3>
-            <button onclick="toggleDrawer()" style="background:none; border:none;">✕</button>
-        </div>
-        <div style="display:grid; gap:10px; margin-top:20px;">
-            <button onclick="formatJSON(); toggleDrawer()">✨ Format</button>
-            <button class="btn-pro" onclick="gatekeeper('AI'); toggleDrawer()">🤖 AI Debugger</button>
-            <div class="upgrade-trigger" onclick="openConversionHub(); toggleDrawer()">
-                <h3 style="color:var(--pro-gold);">UPGRADE</h3>
+            <!-- Output Panel -->
+            <div class="panel-container">
+                <div class="panel-header">
+                    <span>OUTPUT (FORMATTED)</span>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <span id="collabIndicator" style="font-size:0.7rem; color:var(--success); display:none;">
+                            ● 2 Users Active
+                        </span>
+                        <span id="outputStats">Ready</span>
+                    </div>
+                </div>
+                <div class="editor-area">
+                    <pre id="outputDisplay"></pre>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- FOOTER -->
+        <!-- Wallet & Activation Section -->
+        <section class="glass wallet-section">
+            <h2 style="margin-bottom:1rem; font-weight:300;">VELOX <span style="color:var(--accent-gold)">PRO</span> ACTIVATION</h2>
+            <p style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">
+                Unlock Bulk Processing, AI Debugger, Cloud Sync, and more via Solana Protocol.
+            </p>
+            
+            <div class="wallet-input-group">
+                <div class="wallet-address" onclick="copyAddress()" title="Click to copy">
+                    95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
+                </div>
+                <input type="text" class="hash-input" id="txHash" placeholder="Paste Transaction Hash here...">
+                <button class="activate-btn" onclick="verifyHash()">UNLOCK PRO</button>
+            </div>
+            <div class="activation-status" id="activationStatus"></div>
+        </section>
+
+        <!-- Pricing Tiers -->
+        <section class="pricing-grid">
+            <div class="glass price-card">
+                <h3>Weekly</h3>
+                <div class="price-amount">$3 <span>/ week</span></div>
+                <ul class="plan-features">
+                    <li>Basic Formatting</li>
+                    <li>Minifier & Validator</li>
+                    <li>Standard Export</li>
+                </ul>
+                <button class="tool-btn" style="width:100%; border-radius:6px;">Select Plan</button>
+            </div>
+            <div class="glass price-card featured">
+                <div style="position:absolute; top:0; left:0; width:100%; background:var(--accent-gold); color:#000; font-size:0.7rem; font-weight:bold;">POPULAR</div>
+                <h3>Monthly</h3>
+                <div class="price-amount">$10 <span>/ month</span></div>
+                <ul class="plan-features">
+                    <li>All Weekly Features</li>
+                    <li><strong>AI Debugger</strong></li>
+                    <li>Visual Diffing</li>
+                    <li>Cloud Sync</li>
+                </ul>
+                <button class="tool-btn" style="width:100%; border-radius:6px; border-color:var(--accent-gold); color:var(--accent-gold)">Select Plan</button>
+            </div>
+            <div class="glass price-card">
+                <h3>Yearly</h3>
+                <div class="price-amount">$100 <span>/ year</span></div>
+                <ul class="plan-features">
+                    <li>All Monthly Features</li>
+                    <li>Priority Support</li>
+                    <li>Dev API Access</li>
+                    <li>Schema Generator</li>
+                </ul>
+                <button class="tool-btn" style="width:100%; border-radius:6px;">Select Plan</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
     <footer>
-        VELOX JSON FORMATTER | Developed by Adam Laamime
+        <div class="dev-signature">
+            VELOX JSON FORMATTER | Developed by Adam Laamime
+        </div>
     </footer>
 
-    <!-- ================= CONVERSION HUB MODAL ================= -->
-    <div class="modal-overlay" id="conversionModal">
-        <div class="glass">
-            <!-- LEFT COLUMN: VALUE PROPOSITION -->
-            <div>
-                <h2 style="color:var(--pro-gold); margin-bottom:15px;">👑 VELOX PRO</h2>
-                <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">
-                    Unlock the ultimate JSON toolkit. Save hours of coding with AI, Bulk, and Cloud features.
-                </p>
-                <ul class="value-list">
-                    <li>Bulk Processing (Up to 1GB)</li>
-                    <li>AI Debugger & Corrections</li>
-                    <li>Export to SQL & Excel (Clean Tables)</li>
-                    <li>Real-time Cloud Vault (Encrypted)</li>
-                    <li>Visual Diffing & Merge</li>
-                    <li>API Access for CI/CD</li>
-                    <li>JSON Schema Generator</li>
-                    <li>Version History (Last 50 Copies)</li>
-                    <li>Priority Support Tickets</li>
-                </ul>
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <span id="toastIcon">✓</span>
+        <span id="toastMsg">Operation Successful</span>
+    </div>
+
+    <!-- PRO Feature Modal (Simulation) -->
+    <div class="modal-overlay" id="proModal">
+        <div class="glass modal-content">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <h2 id="modalTitle" style="color:var(--accent-gold); margin-bottom:1rem;">PRO Feature</h2>
+            <p id="modalBody" style="color:var(--text-muted); line-height:1.6;">
+                Content goes here.
+            </p>
+            <div style="margin-top:2rem; text-align:right;">
+                <button class="tool-btn" style="width:auto; padding:0 1.5rem; border-radius:6px;" onclick="closeModal()">Close</button>
             </div>
-
-            <!-- RIGHT COLUMN: PRICING & PAYMENT -->
-            <div>
-                <h3 style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-bottom:15px;">Select Plan</h3>
-                
-                <div class="pricing-grid">
-                    <div class="pricing-card" onclick="selectPlan('week', 3, this)">
-                        <div class="period">The Developer Sprint</div>
-                        <div class="price">$3.00</div>
-                        <div style="font-size:10px; color:var(--text-muted);">1 Week Access</div>
-                    </div>
-                    <div class="pricing-card selected" onclick="selectPlan('month', 10, this)">
-                        <div class="period" style="color:var(--pro-gold)">The Pro Workflow ⭐</div>
-                        <div class="price">$10.00</div>
-                        <div style="font-size:10px; color:var(--text-muted);">1 Month Access</div>
-                    </div>
-                    <div class="pricing-card" onclick="selectPlan('year', 100, this)">
-                        <div class="period">Enterprise Lifetime</div>
-                        <div class="price">$100.00</div>
-                        <div style="font-size:10px; color:var(--text-muted);">1 Year Access</div>
-                    </div>
-                </div>
-
-                <div class="payment-methods">
-                    <div class="method-tabs">
-                        <div class="method-tab active" onclick="switchMethod('solana', this)">Solana (Fast)</div>
-                        <div class="method-tab" onclick="switchMethod('card', this)">Credit Card</div>
-                    </div>
-
-                    <!-- Solana Panel -->
-                    <div id="panel-solana">
-                        <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">Send USDC to this address:</p>
-                        <div class="solana-box">
-                            95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
-                        </div>
-                        <p style="font-size:11px; margin-bottom:4px;">Transaction Signature (TxID):</p>
-                        <input type="text" id="txHash" placeholder="Paste Hash to Verify...">
-                        <button class="btn-upgrade-main" onclick="verifyPayment()">VERIFY & UNLOCK</button>
-                    </div>
-
-                    <!-- Card Panel (Placeholder) -->
-                    <div id="panel-card" style="display:none;">
-                        <input type="text" placeholder="Card Number">
-                        <div style="display:flex; gap:10px;">
-                            <input type="text" placeholder="MM/YY">
-                            <input type="text" placeholder="CVC">
-                        </div>
-                        <button class="btn-upgrade-main" onclick="mockStripePayment()">PAY & ACTIVATE</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="position:fixed; bottom:-25px; width:100%; text-align:center;">
-             <button onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer;">Cancel</button>
         </div>
     </div>
 
     <script>
-        // --- STATE ---
-        const AppState = {
-            isPro: localStorage.getItem('velox_pro_v3') === 'true',
-            selectedPlan: 'month',
-            selectedPrice: 10
+        /* 
+         * Logic Core - VELOX JSON FORMATTER
+         * Handling: Formatting, Validation, PRO Simulation, UI Interactions
+         */
+
+        const els = {
+            input: document.getElementById('jsonInput'),
+            output: document.getElementById('outputDisplay'),
+            inputStats: document.getElementById('inputStats'),
+            outputStats: document.getElementById('outputStats'),
+            toast: document.getElementById('toast'),
+            txHash: document.getElementById('txHash'),
+            status: document.getElementById('activationStatus'),
+            modal: document.getElementById('proModal'),
+            modalTitle: document.getElementById('modalTitle'),
+            modalBody: document.getElementById('modalBody'),
+            collab: document.getElementById('collabIndicator')
         };
 
-        // --- 2. FREE FEATURES ---
-        function formatJSON() {
-            const input = document.getElementById('jsonInput').value;
-            const output = document.getElementById('jsonOutput');
-            if (!input.trim()) return;
-
-            try {
-                const obj = JSON.parse(input);
-                output.innerHTML = syntaxHighlight(obj);
-                showToast("Valid JSON");
-            } catch (e) {
-                output.innerHTML = `<span style="color:var(--danger)">Error: ${e.message}</span>`;
-                // Line/Col approx
-                const errMatch = e.message.match(/position (\d+)/);
-                if(errMatch) {
-                    const pos = parseInt(errMatch[1]);
-                    const line = input.substring(0, pos).split('\n').length;
-                    output.innerHTML += `<br><small style="color:var(--text-muted)">Error near Line ${line}</small>`;
-                }
-            }
-        }
-
-        function minifyJSON() {
-            const input = document.getElementById('jsonInput').value;
-            try {
-                document.getElementById('jsonOutput').innerText = JSON.stringify(JSON.parse(input));
-            } catch(e) { showToast("Invalid JSON"); }
-        }
-
-        function copyToClipboard() {
-            navigator.clipboard.writeText(document.getElementById('jsonOutput').innerText);
-            showToast("Copied to Clipboard");
-        }
-
-        function downloadJSON() {
-            const text = document.getElementById('jsonOutput').innerText;
-            const blob = new Blob([text], {type: "application/json"});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "velox_data.json";
-            a.click();
-        }
-
+        // --- 3. محرك التنسيق (Formatter Engine) & 4. نظام الضغط (Minifier) ---
+        
         function syntaxHighlight(json) {
-            json = JSON.stringify(json, undefined, 2);
             json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                let cls = 'number';
+                let cls = 'json-number';
                 if (/^"/.test(match)) {
-                    if (/:$/.test(match)) cls = 'key';
-                    else cls = 'string';
-                } else if (/true|false/.test(match)) cls = 'boolean';
+                    if (/:$/.test(match)) {
+                        cls = 'json-key';
+                    } else {
+                        cls = 'json-string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'json-null';
+                }
                 return '<span class="' + cls + '">' + match + '</span>';
             });
         }
 
-        // --- 3. PRO FEATURES (Gated) ---
-        function gatekeeper(feature) {
-            if (AppState.isPro) {
-                executePro(feature);
+        function formatJSON() {
+            const raw = els.input.value.trim();
+            if (!raw) return showToast('Input is empty', 'error');
+
+            try {
+                const parsed = JSON.parse(raw);
+                const formatted = JSON.stringify(parsed, null, 4);
+                els.output.innerHTML = syntaxHighlight(formatted);
+                els.outputStats.textContent = 'Valid JSON';
+                els.outputStats.style.color = 'var(--success)';
+            } catch (e) {
+                handleValidationError(e);
+            }
+        }
+
+        function minifyJSON() {
+            const raw = els.input.value.trim();
+            if (!raw) return showToast('Input is empty', 'error');
+
+            try {
+                const parsed = JSON.parse(raw);
+                const minified = JSON.stringify(parsed);
+                els.output.textContent = minified;
+                els.outputStats.textContent = 'Minified';
+                els.outputStats.style.color = 'var(--primary-blue)';
+            } catch (e) {
+                handleValidationError(e);
+            }
+        }
+
+        // --- 5. مُدقق الأخطاء (Syntax Validator) ---
+
+        function validateJSON() {
+            const raw = els.input.value.trim();
+            if(!raw) return;
+
+            try {
+                JSON.parse(raw);
+                showToast('JSON Syntax is Valid!', 'success');
+                els.outputStats.textContent = 'Valid';
+            } catch (e) {
+                handleValidationError(e);
+            }
+        }
+
+        function handleValidationError(e) {
+            // محاكاة توضيح مكان الخطأ
+            const errMsg = e.message;
+            els.outputStats.textContent = 'Syntax Error';
+            els.outputStats.style.color = 'var(--error)';
+            els.output.innerHTML = `<span style="color:var(--error)">${errMsg}</span>`;
+            showToast('Syntax Error Detected', 'error');
+        }
+
+        // --- 6. زر النسخ الذكي (One-Click Copy) & 7. التصدير المجاني ---
+
+        function copyOutput() {
+            const content = els.output.textContent;
+            if(!content) return;
+            navigator.clipboard.writeText(content).then(() => {
+                showToast('Copied to Clipboard!', 'success');
+            });
+        }
+
+        function downloadJSON() {
+            const content = els.output.textContent;
+            if(!content || els.outputStats.textContent === 'Syntax Error') {
+                return showToast('Nothing valid to download', 'error');
+            }
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'velox-formatted.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('File Downloaded', 'success');
+        }
+
+        // --- 19. بروتوكول الدفع المباشر & 20. التفعيل الفوري ---
+
+        function verifyHash() {
+            const hash = els.txHash.value.trim();
+            // محاكاة التحقق (في الواقع يتم الاتصال بالـ blockchain)
+            if (hash.length > 10) { // شرط محاكاة بسيط
+                els.status.textContent = 'Verifying on Solana Network...';
+                els.status.className = 'activation-status';
+                
+                setTimeout(() => {
+                    // Zero-Refresh Activation
+                    document.body.classList.add('pro-active');
+                    els.status.textContent = 'SUCCESS: PRO Features Unlocked!';
+                    els.status.className = 'activation-status status-success';
+                    els.txHash.value = '';
+                    showToast('Welcome to VELOX PRO', 'success');
+                    
+                    // Show Real-time Collaboration indicator
+                    els.collab.style.display = 'block';
+                }, 1000); // تأخير مصطنع للواقعية
             } else {
-                openConversionHub();
+                els.status.textContent = 'Invalid Transaction Hash.';
+                els.status.className = 'activation-status status-error';
             }
         }
 
-        function executePro(feature) {
-            const input = document.getElementById('jsonInput').value;
-            if(!input) return showToast("Enter JSON first");
-
-            if (feature === 'Bulk Engine') {
-                const workerCode = `
-                    self.onmessage = function(e) {
-                        const data = e.data;
-                        let i = 0;
-                        while(i < 5000000) i++; // Simulate heavy load
-                        self.postMessage("Processed 1GB+ file in 2.4s");
-                    }
-                `;
-                const worker = new Worker(URL.createObjectURL(new Blob([workerCode], {type: "text/javascript"})));
-                worker.onmessage = (e) => showToast("⚡ " + e.data);
-                worker.postMessage(input);
-            } 
-            else if (feature === 'AI Debugger') {
-                showToast("🤖 AI Analyzing...");
-                setTimeout(() => alert("🤖 VELOX AI Report:\n\n1. Found 3 deprecated keys.\n2. Suggested structure flattening.\n3. Security: No exposed tokens."), 1000);
-            }
-            else if (feature === 'SQL Export') {
-                const obj = JSON.parse(input);
-                const keys = Object.keys(obj);
-                const vals = Object.values(obj).map(v => `'${v}'`).join(', ');
-                const sql = `INSERT INTO data (${keys.join(',')}) VALUES (${vals});`;
-                navigator.clipboard.writeText(sql);
-                showToast("📊 SQL Query Copied");
-            }
-            else if (feature === 'Schema Gen') {
-                const obj = JSON.parse(input);
-                const schema = { "type": "object", "properties": {} };
-                for (let k in obj) {
-                    const t = typeof obj[k];
-                    schema.properties[k] = { "type": t === 'number' ? 'integer' : (t === 'boolean' ? 'boolean' : 'string') };
-                }
-                document.getElementById('jsonOutput').innerText = JSON.stringify(schema, null, 2);
-                showToast("🛠️ Schema Generated");
-            }
-            else {
-                showToast(`👑 ${feature} Access Granted`);
-            }
+        function copyAddress() {
+            const addr = document.querySelector('.wallet-address').textContent;
+            navigator.clipboard.writeText(addr);
+            showToast('Wallet Address Copied', 'success');
         }
 
-        // --- 4. CONVERSION HUB LOGIC ---
-        function openConversionHub() {
-            document.getElementById('conversionModal').style.display = 'flex';
-            document.getElementById('mobileDrawer').classList.remove('active');
+        // --- PRO Features Simulation ---
+
+        function showProFeature(title, body) {
+            if (!document.body.classList.contains('pro-active')) {
+                showToast('This is a PRO Feature. Please activate.', 'error');
+                return;
+            }
+            els.modalTitle.textContent = title;
+            els.modalBody.textContent = body;
+            els.modal.classList.add('active');
         }
 
         function closeModal() {
-            document.getElementById('conversionModal').style.display = 'none';
+            els.modal.classList.remove('active');
         }
 
-        function selectPlan(plan, price, card) {
-            AppState.selectedPlan = plan;
-            AppState.selectedPrice = price;
-            document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-        }
+        // --- Event Listeners ---
 
-        function switchMethod(method, tab) {
-            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            if(method === 'solana') {
-                document.getElementById('panel-solana').style.display = 'block';
-                document.getElementById('panel-card').style.display = 'none';
-            } else {
-                document.getElementById('panel-solana').style.display = 'none';
-                document.getElementById('panel-card').style.display = 'block';
-            }
-        }
+        document.getElementById('btnFormat').addEventListener('click', formatJSON);
+        document.getElementById('btnMinify').addEventListener('click', minifyJSON);
+        document.getElementById('btnValidate').addEventListener('click', validateJSON);
+        document.getElementById('btnCopy').addEventListener('click', copyOutput);
+        document.getElementById('btnDownload').addEventListener('click', downloadJSON);
 
-        function verifyPayment() {
-            const tx = document.getElementById('txHash').value;
-            if(!tx) return showToast("Enter Transaction Hash");
+        // PRO Listeners
+        document.getElementById('btnDiff').addEventListener('click', () => {
+            showProFeature('Visual Diffing', 'Comparison engine loaded. In a real environment, this would allow side-by-side JSON comparison with merge capabilities.');
+        });
+        document.getElementById('btnAI').addEventListener('click', () => {
+            showProFeature('AI Debugger', 'AI Agent is analyzing your JSON context... \nSuggestion: The "userId" field appears to be malformed. Expected string, got integer.');
+        });
+        document.getElementById('btnSQL').addEventListener('click', () => {
+            showProFeature('SQL Export', 'Generating INSERT statements...\nCREATE TABLE users (id INT, name VARCHAR(255));\nINSERT INTO users VALUES (1, "Adam");');
+        });
 
-            const btn = document.querySelector('#panel-solana .btn-upgrade-main');
-            const originalText = btn.innerText;
-            btn.innerText = "VERIFYING ON CHAIN...";
+        // Input Stats Update
+        els.input.addEventListener('input', () => {
+            els.inputStats.textContent = `${els.input.value.length} chars`;
+        });
+
+        // Toast Helper
+        function showToast(msg, type) {
+            const t = els.toast;
+            document.getElementById('toastMsg').textContent = msg;
+            const icon = document.getElementById('toastIcon');
+            icon.textContent = type === 'success' ? '✓' : '⚠';
             
+            t.style.borderColor = type === 'success' ? 'var(--success)' : 'var(--error)';
+            t.style.color = type === 'success' ? 'var(--success)' : 'var(--error)';
+            
+            t.classList.add('show');
             setTimeout(() => {
-                AppState.isPro = true;
-                localStorage.setItem('velox_pro_v3', 'true');
-                activateProUI();
-                closeModal();
-                showToast(`🎉 VERIFIED! VELOX PRO (${AppState.selectedPlan.toUpperCase()}) ACTIVATED.`);
-                btn.innerText = originalText;
-            }, 2000);
+                t.classList.remove('show');
+            }, 3000);
         }
 
-        function mockStripePayment() {
-            AppState.isPro = true;
-            localStorage.setItem('velox_pro_v3', 'true');
-            activateProUI();
-            closeModal();
-            showToast("💳 PAYMENT SUCCESSFUL! PRO ACTIVATED.");
-        }
-
-        function activateProUI() {
-            document.getElementById('proBadge').style.display = 'block';
-            document.querySelector('.upgrade-trigger').style.display = 'none';
-            document.querySelectorAll('.btn-pro').forEach(b => b.style.borderColor = 'var(--success)');
-        }
-
-        // --- MOBILE UI ---
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-            if(tab === 'input') {
-                document.getElementById('pane-input').classList.add('active');
-                document.querySelector('.mobile-tabs button:first-child').classList.add('active');
-            } else {
-                document.getElementById('pane-output').classList.add('active');
-                document.querySelector('.mobile-tabs button:last-child').classList.add('active');
-            }
-        }
-
-        function toggleDrawer() {
-            document.getElementById('mobileDrawer').classList.toggle('active');
-        }
-
-        function showToast(msg) {
-            const div = document.createElement('div');
-            div.style.cssText = `position:fixed; bottom:30px; right:20px; background:var(--success); color:white; padding:10px 20px; border-radius:8px; z-index:3000; font-size:12px; font-weight:600; animation: slideUp 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);`;
-            div.innerText = msg;
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 3000);
-        }
-
-        window.onload = () => {
-            if(AppState.isPro) activateProUI();
-            if(window.innerWidth <= 768) document.getElementById('menuBtn').style.display = 'flex';
-        };
     </script>
 </body>
 </html>
