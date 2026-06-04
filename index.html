@@ -3,196 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX JSON FORMATTER | Crypto-Native</title>
+    <title>VELOX JSON FORMATTER | Enterprise</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- VELOX DARK THEME SYSTEM --- */
+        /* 
+         * ENTERPRISE DESIGN SYSTEM 
+         * Focus: Clarity, Contrast, Precision
+         */
         :root {
-            --bg-body: #0b0c10;
-            --bg-panel: #1f2833;
-            --bg-input: #121418;
-            --accent: #9945FF; /* Solana Purple Gradient Base */
-            --accent-sec: #14F195; /* Solana Green Gradient Base */
-            --text-main: #ffffff;
-            --text-muted: #c5c6c7;
-            --border: #2b3642;
-            --success: #14F195;
+            /* Palette - Slate & Professional Blue */
+            --bg-app: #0f172a;       /* Deep Slate */
+            --bg-panel: #1e293b;      /* Panel Slate */
+            --bg-input: #020617;      /* Editor Black */
+            --border: #334155;        /* Subtle Border */
             
-            --font-ui: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
+            --accent-primary: #3b82f6; /* Professional Blue */
+            --accent-hover: #2563eb;
+            
+            --pro-accent: #6366f1;    /* Indigo for Pro features */
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-invert: #ffffff;
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            
+            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-code: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            
+            --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { box-sizing: border-box; outline: none; }
+        
         body {
-            margin: 0; background: var(--bg-body); color: var(--text-main);
-            font-family: var(--font-ui); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+            margin: 0; padding: 0;
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 14px; /* Optimal for productivity */
         }
 
-        /* HEADER */
+        /* --- HEADER --- */
         header {
-            height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 25px;
+            height: 56px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            flex-shrink: 0;
         }
-        .brand { font-weight: 800; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .brand i { background: linear-gradient(45deg, var(--accent), var(--accent-sec)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* LAYOUT */
+        .brand {
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand span { color: var(--accent-primary); font-weight: 700; }
+
+        .header-controls { display: flex; align-items: center; gap: 20px; }
+        .user-status { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
+        .status-dot.active { background: var(--success); box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+
+        .link-btn {
+            background: none; border: none; color: var(--accent-primary);
+            font-size: 0.85rem; font-weight: 500; cursor: pointer;
+        }
+        .link-btn:hover { text-decoration: underline; }
+
+        /* --- LAYOUT --- */
         .workspace { display: flex; flex: 1; overflow: hidden; }
+
         aside {
-            width: 260px; background: var(--bg-body); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; padding-top: 20px;
+            width: 240px;
+            background: var(--bg-app);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 16px 0;
         }
+
         .nav-item {
-            padding: 12px 25px; cursor: pointer; color: var(--text-muted); font-size: 0.9rem;
-            display: flex; align-items: center; gap: 12px; transition: 0.2s;
+            padding: 10px 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
         }
-        .nav-item:hover, .nav-item.active { 
-            color: #fff; background: linear-gradient(90deg, rgba(153, 69, 255, 0.1), transparent);
-            border-right: 3px solid var(--accent); 
+        .nav-item:hover { color: var(--text-main); background: rgba(255,255,255,0.03); }
+        .nav-item.active { 
+            color: var(--accent-primary); 
+            background: rgba(59, 130, 246, 0.08); 
+            border-left-color: var(--accent-primary);
         }
+        .nav-item i { width: 16px; text-align: center; }
 
-        main { flex: 1; position: relative; display: flex; flex-direction: column; }
-        
-        /* EDITOR */
-        .editor-container { display: flex; flex: 1; height: calc(100% - 60px); }
-        .pane { flex: 1; display: flex; flex-direction: column; border-right: 1px solid var(--border); min-width: 0; }
-        .pane-header {
-            padding: 8px 15px; background: var(--bg-panel); font-size: 0.8rem; color: var(--text-muted);
-            border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;
-        }
-        textarea, pre {
-            flex: 1; background: var(--bg-input); color: var(--text-main); border: none;
-            font-family: var(--font-code); font-size: 14px; padding: 20px; resize: none; overflow: auto;
-        }
+        main { flex: 1; display: flex; flex-direction: column; position: relative; background: var(--bg-app); }
 
-        /* TOOLBAR */
+        /* --- TOOLBAR --- */
         .toolbar {
-            height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; padding: 0 20px; gap: 12px;
+            height: 48px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 12px;
+            background: var(--bg-panel);
         }
 
-        button {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-main);
-            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: 0.2s;
+        .divider { width: 1px; height: 20px; background: var(--border); }
+
+        button.btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
             display: flex; align-items: center; gap: 8px;
+            transition: var(--transition);
         }
-        button:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
-        
-        /* Pro Button Style */
-        .btn-pro {
-            border-color: var(--accent-sec); color: var(--accent-sec); position: relative; overflow: hidden;
-        }
-        .btn-pro::after {
-            content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(20, 241, 149, 0.1), transparent);
-            transform: translateX(-100%); transition: 0.5s;
-        }
-        .btn-pro:hover::after { transform: translateX(100%); }
+        button.btn:hover { background: rgba(255,255,255,0.05); border-color: var(--text-muted); }
+        button.btn:active { transform: translateY(1px); }
 
-        /* FOOTER */
+        button.btn-pro {
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+        }
+        button.btn-pro:hover {
+            border-color: var(--pro-accent);
+            background: rgba(99, 102, 241, 0.1);
+            color: #c7d2fe;
+        }
+        button.btn-pro i { color: var(--pro-accent); }
+
+        /* --- EDITOR --- */
+        .editor-grid { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
+        
+        .pane {
+            display: flex; flex-direction: column;
+            border-right: 1px solid var(--border);
+            min-width: 0;
+        }
+        .pane:last-child { border-right: none; }
+
+        .pane-header {
+            height: 36px;
+            background: var(--bg-app);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        textarea, pre {
+            flex: 1;
+            background: var(--bg-input);
+            color: var(--text-main);
+            border: none;
+            padding: 16px;
+            font-family: var(--font-code);
+            font-size: 13px;
+            line-height: 1.6;
+            resize: none;
+            overflow: auto;
+            white-space: pre;
+        }
+        
+        /* Syntax Colors */
+        .k { color: #93c5fd; } /* Key */
+        .s { color: #86efac; } /* String */
+        .n { color: #fca5a5; } /* Number */
+        .b { color: #c4b5fd; } /* Boolean */
+        .z { color: #94a3b8; } /* Null */
+
+        /* --- FOOTER --- */
         footer {
-            height: 35px; background: #000; border-top: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--text-muted);
+            height: 32px;
+            background: #000;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #64748b;
         }
 
-        /* MODALS */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px); z-index: 100; display: none; justify-content: center; align-items: center;
+        /* --- MODALS --- */
+        .modal-backdrop {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none; justify-content: center; align-items: center;
         }
-        .modal-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal-backdrop.active { display: flex; animation: fadeIn 0.2s ease-out; }
 
-        /* AUTH MODAL */
-        .auth-box {
-            background: var(--bg-panel); padding: 40px; border-radius: 12px; border: 1px solid var(--border); width: 380px; text-align: center;
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        .modal {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 480px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
         }
-        .auth-input {
-            width: 100%; padding: 12px; margin: 10px 0; background: var(--bg-input); border: 1px solid var(--border);
-            color: #fff; border-radius: 6px;
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
         }
+        .modal-header h3 { margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
+        .close-modal { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
+
+        .modal-body { padding: 24px; }
+
+        /* Upgrade Modal Specifics */
+        .feature-list { margin: 20px 0; padding: 0; list-style: none; }
+        .feature-list li {
+            display: flex; align-items: flex-start; gap: 12px;
+            margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;
+        }
+        .feature-list i { color: var(--success); margin-top: 4px; }
+        .feature-list strong { color: var(--text-main); display: block; margin-bottom: 2px; }
+
         .btn-primary {
-            width: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-sec)); 
-            border: none; color: #000; font-weight: bold; justify-content: center; margin-top: 10px;
+            width: 100%; justify-content: center; background: var(--pro-accent);
+            color: white; border: none; padding: 12px; font-size: 0.95rem; font-weight: 600;
         }
+        .btn-primary:hover { background: #4f46e5; }
 
-        /* CRYPTO PAYMENT MODAL */
-        .crypto-box {
-            background: var(--bg-panel); padding: 30px; border-radius: 16px; border: 1px solid var(--border); width: 450px;
-            text-align: center; position: relative;
+        /* Crypto Modal Specifics */
+        .crypto-info {
+            background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-sm);
+            text-align: center; border: 1px solid var(--border); margin-bottom: 20px;
         }
-        .plan-tag {
-            background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
-            margin-bottom: 15px; display: inline-block;
+        .qr-placeholder {
+            width: 140px; height: 140px; background: white; margin: 0 auto 12px;
+            display: flex; align-items: center; justify-content: center;
         }
-        .qr-container {
-            background: white; padding: 15px; border-radius: 12px; width: 180px; height: 180px; margin: 0 auto 20px;
-        }
-        .qr-container img { width: 100%; height: 100%; }
-        
         .wallet-address {
-            background: #000; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.9rem;
-            color: var(--accent-sec); word-break: break-all; margin-bottom: 15px; border: 1px dashed var(--border);
-            cursor: pointer; position: relative;
+            background: #000; padding: 8px 12px; border-radius: var(--radius-sm);
+            font-family: var(--font-code); font-size: 0.8rem; color: var(--success);
+            word-break: break-all; border: 1px dashed var(--border); cursor: pointer;
         }
-        .wallet-address:hover { border-color: var(--accent-sec); }
-        .copy-hint { font-size: 0.7rem; color: var(--text-muted); margin-top: 5px; }
-
-        .verify-section {
-            margin-top: 25px; text-align: left; border-top: 1px solid var(--border); padding-top: 20px;
-        }
-        .verify-section h4 { color: var(--text-main); margin-bottom: 10px; font-size: 0.9rem; }
+        .wallet-address:hover { border-color: var(--success); }
         
-        /* Syntax Highlighting */
-        .k { color: #ff79c6; } .s { color: #f1fa8c; } .n { color: #bd93f9; } .b { color: #8be9fd; } .z { color: #6272a4; }
+        .input-group { margin-top: 16px; }
+        .input-group label { display: block; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-muted); }
+        .input-field {
+            width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border);
+            color: white; border-radius: var(--radius-sm); font-family: var(--font-code); font-size: 0.85rem;
+        }
+        .input-field:focus { border-color: var(--accent-primary); }
+
     </style>
 </head>
 <body>
 
     <header>
         <div class="brand">
-            <i class="fa-solid fa-cube"></i> VELOX
+            <i class="fa-solid fa-layer-group" style="color: var(--text-muted);"></i>
+            VELOX <span>FORMATTER</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div id="userBadge" style="font-size: 0.85rem; color: var(--text-muted);">Guest</div>
-            <button id="authBtn" onclick="AuthSystem.toggle()">Login</button>
+        <div class="header-controls">
+            <div class="user-status">
+                <div id="authDot" class="status-dot"></div>
+                <span id="authText">Guest Session</span>
+            </div>
+            <button class="link-btn" id="authBtn" onclick="AuthManager.toggle()">Sign In</button>
         </div>
     </header>
 
     <div class="workspace">
         <aside>
-            <div class="nav-item active"><i class="fa-solid fa-code"></i> Formatter</div>
+            <div class="nav-item active"><i class="fa-solid fa-code"></i> Editor</div>
             <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> History</div>
-            <div class="nav-item" onclick="ProSystem.locked('Bulk Processing')"><i class="fa-solid fa-layer-group"></i> Bulk Tools</div>
-            <div class="nav-item" onclick="ProSystem.locked('Cloud Dashboard')"><i class="fa-solid fa-cloud"></i> Cloud Sync</div>
-            <div class="nav-item" onclick="ProSystem.locked('AI Analysis')"><i class="fa-solid fa-brain"></i> AI Analysis</div>
+            <div class="nav-item" onclick="ProManager.request('Bulk Processing')"><i class="fa-solid fa-layer-group"></i> Bulk Tools <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
+            <div class="nav-item" onclick="ProManager.request('Cloud Workspace')"><i class="fa-solid fa-cloud"></i> Cloud Sync <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
+            <div class="nav-item" onclick="ProManager.request('AI Analysis')"><i class="fa-solid fa-brain"></i> AI Insights <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
         </aside>
 
         <main>
             <div class="toolbar">
-                <button onclick="Editor.format()"><i class="fa-solid fa-wand-magic-sparkles"></i> Beautify</button>
-                <button onclick="Editor.minify()"><i class="fa-solid fa-compress"></i> Minify</button>
-                <div style="flex:1"></div>
-                <button onclick="Editor.copy()"><i class="fa-regular fa-copy"></i> Copy</button>
-                <button onclick="Editor.download()"><i class="fa-solid fa-download"></i> JSON</button>
-                <!-- Pro Features -->
-                <button class="btn-pro" onclick="ProSystem.locked('Export to Excel')">
+                <button class="btn" onclick="Editor.format()"><i class="fa-solid fa-indent"></i> Format</button>
+                <button class="btn" onclick="Editor.minify()"><i class="fa-solid fa-compress"></i> Minify</button>
+                <div class="divider"></div>
+                <button class="btn" onclick="Editor.copy()"><i class="fa-regular fa-copy"></i> Copy</button>
+                <button class="btn" onclick="Editor.download('json')"><i class="fa-solid fa-download"></i> JSON</button>
+                <div class="divider"></div>
+                <button class="btn btn-pro" onclick="ProManager.request('Excel Export')">
                     <i class="fa-solid fa-file-excel"></i> Excel
                 </button>
-                <button class="btn-pro" onclick="ProSystem.locked('SQL Convert')">
+                <button class="btn btn-pro" onclick="ProManager.request('SQL Schema')">
                     <i class="fa-solid fa-database"></i> SQL
                 </button>
             </div>
 
-            <div class="editor-container">
+            <div class="editor-grid">
                 <div class="pane">
-                    <div class="pane-header">RAW INPUT <span id="validStatus"></span></div>
-                    <textarea id="input" spellcheck="false"></textarea>
+                    <div class="pane-header">Raw Input <span id="validIndicator" style="color:var(--success); margin-left:auto;"></span></div>
+                    <textarea id="jsonInput" spellcheck="false"></textarea>
                 </div>
                 <div class="pane">
-                    <div class="pane-header">FORMATTED OUTPUT</div>
-                    <pre id="output"></pre>
+                    <div class="pane-header">Formatted Output</div>
+                    <pre id="jsonOutput"></pre>
                 </div>
             </div>
         </main>
@@ -203,81 +348,253 @@
     </footer>
 
     <!-- 1. AUTH MODAL -->
-    <div class="modal-overlay" id="authModal">
-        <div class="auth-box">
-            <h2 style="color:#fff; margin-top:0;">Secure Login</h2>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Access your workspace</p>
-            <input type="email" id="emailInput" class="auth-input" placeholder="Email Address">
-            <input type="password" class="auth-input" placeholder="Password">
-            <button class="btn-primary" onclick="AuthSystem.login()">Sign In</button>
-            <div style="margin-top:15px; font-size:0.8rem; cursor:pointer; color:var(--text-muted);" onclick="document.getElementById('authModal').classList.remove('open')">Cancel</div>
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Authentication</h3>
+                <button class="close-modal" onclick="UI.closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" style="margin-top:0;">
+                    <label>Work Email</label>
+                    <input type="email" class="input-field" placeholder="name@company.com">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" class="input-field" placeholder="••••••••">
+                </div>
+                <button class="btn-primary" style="margin-top:24px;" onclick="AuthManager.login()">Access Workspace</button>
+            </div>
         </div>
     </div>
 
-    <!-- 2. SOLANA CRYPTO PAYMENT MODAL (Priority Feature) -->
-    <div class="modal-overlay" id="cryptoModal">
-        <div class="crypto-box">
-            <button onclick="document.getElementById('cryptoModal').classList.remove('open')" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff;"><i class="fa-solid fa-xmark"></i></button>
-            
-            <span class="plan-tag" id="cryptoPlanName">PRO PLAN</span>
-            <h2 style="color:#fff; margin:0 0 10px 0;">Pay with Solana</h2>
-            <p style="color:var(--text-muted); font-size:0.9rem;">Send <strong id="cryptoAmount">$5.00 USDC</strong> to the address below.</p>
-
-            <!-- QR Code Generation (Using Google Charts API for zero-dependency QR) -->
-            <div class="qr-container">
-                <img id="qrImage" src="" alt="QR Code">
+    <!-- 2. UPGRADE MODAL (Business Conversion) -->
+    <div class="modal-backdrop" id="upgradeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 style="color: var(--pro-accent);">Upgrade to Professional</h3>
+                <button class="close-modal" onclick="UI.closeModals()">&times;</button>
             </div>
+            <div class="modal-body">
+                <p style="color:var(--text-main); margin-top:0;">Scale your data workflow with enterprise-grade tools.</p>
+                
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div>
+                            <strong>Reduce Debugging Time by 70%</strong>
+                            Advanced AI analysis explains structures and validates complex schemas instantly.
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div>
+                            <strong>Automate Bulk Workflows</strong>
+                            Process thousands of files simultaneously with our cloud engine.
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div>
+                            <strong>Universal Export Formats</strong>
+                            One-click conversion to Excel, SQL, XML, and YAML ready for production.
+                        </div>
+                    </li>
+                </ul>
 
-            <div class="wallet-address" onclick="CryptoSystem.copyAddress()" title="Click to Copy">
-                <span id="walletAddress">Loading...</span>
-                <div class="copy-hint"><i class="fa-regular fa-copy"></i> Click to copy address</div>
+                <button class="btn-primary" onclick="PaymentGateway.initiateCheckout()">
+                    Proceed to Payment ($5.00/mo)
+                </button>
             </div>
+        </div>
+    </div>
 
-            <div style="font-size:0.8rem; color:var(--accent-sec);">
-                <i class="fa-solid fa-circle-check"></i> Network: Solana Mainnet (USDC)
+    <!-- 3. SOLANA PAYMENT MODAL -->
+    <div class="modal-backdrop" id="paymentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Secure Payment</h3>
+                <button class="close-modal" onclick="UI.closeModals()">&times;</button>
             </div>
-
-            <div class="verify-section">
-                <h4>Step 2: Verify Transaction</h4>
-                <input type="text" id="txHash" class="auth-input" placeholder="Paste Transaction Signature (Hash)...">
-                <button class="btn-primary" onclick="CryptoSystem.verifyPayment()">Submit for Verification</button>
-                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:10px;">
-                    * Manual verification may take up to 1 hour.
+            <div class="modal-body">
+                <div class="crypto-info">
+                    <!-- Google Charts API for dependency-free QR -->
+                    <div class="qr-placeholder">
+                        <img id="solanaQR" src="" alt="Scan to Pay" style="width:100%; height:100%;">
+                    </div>
+                    <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">
+                        Send <strong>5.00 USDC</strong> on Solana Mainnet
+                    </div>
+                    <div class="wallet-address" onclick="SolanaProvider.copyAddress()" title="Click to Copy">
+                        <span id="walletAddr">...</span>
+                    </div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">
+                        <i class="fa-solid fa-mouse-pointer"></i> Click address to copy
+                    </div>
                 </div>
+
+                <div class="input-group">
+                    <label>Transaction Signature (Hash)</label>
+                    <input type="text" id="txHash" class="input-field" placeholder="Paste signature from wallet...">
+                </div>
+
+                <button class="btn-primary" style="margin-top:16px;" onclick="SolanaProvider.verify()">
+                    <span id="verifyBtnText">Verify & Activate</span>
+                </button>
             </div>
         </div>
     </div>
 
     <script>
         /**
-         * VELOX CORE SYSTEMS
-         * Modular Architecture for Scalability
+         * VELOX ENTERPRISE ARCHITECTURE
+         * Modular Design for Scalability
          */
 
+        // --- 1. Core Application State ---
         const AppState = {
-            user: null, // { id, email, subscription: 'free' | 'pro' }
+            user: null, // { email, tier: 'free' | 'pro' }
+            config: {
+                solanaAddress: "95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W"
+            }
         };
 
-        const Editor = {
-            init() {
-                this.input = document.getElementById('input');
-                this.output = document.getElementById('output');
-                this.status = document.getElementById('validStatus');
+        // --- 2. UI Controller ---
+        const UI = {
+            closeModals() {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.classList.remove('active'));
+            },
+            showUpgrade() {
+                this.closeModals();
+                document.getElementById('upgradeModal').classList.add('active');
+            },
+            showPayment() {
+                this.closeModals();
+                // Generate QR
+                const qrData = `solana:${AppState.config.solanaAddress}`;
+                document.getElementById('solanaQR').src = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(qrData)}`;
+                document.getElementById('walletAddr').textContent = AppState.config.solanaAddress;
+                document.getElementById('paymentModal').classList.add('active');
+            },
+            toast(msg, type='success') {
+                // Simple toast for professional feedback
+                const div = document.createElement('div');
+                div.style.cssText = `position:fixed; bottom:50px; right:20px; background:${type==='error'?'#ef4444':'#1e293b'}; color:#fff; padding:12px 24px; border-radius:6px; border-left:4px solid ${type==='error'?'#ef4444':'#3b82f6'}; box-shadow:0 10px 15px -3px rgba(0,0,0,0.5); z-index:200; animation: fadeIn 0.3s;`;
+                div.textContent = msg;
+                document.body.appendChild(div);
+                setTimeout(() => div.remove(), 3000);
+            }
+        };
+
+        // --- 3. Authentication Manager ---
+        const AuthManager = {
+            toggle() {
+                if(AppState.user) {
+                    AppState.user = null;
+                    this.updateUI("Guest Session", "Sign In", false);
+                    UI.toast("Logged out securely.");
+                } else {
+                    document.getElementById('authModal').classList.add('active');
+                }
+            },
+            login() {
+                // Simulate JWT Auth
+                AppState.user = { email: "user@enterprise.com", tier: "free" };
+                this.updateUI("user@enterprise.com", "Sign Out", true);
+                UI.closeModals();
+                UI.toast("Workspace authenticated.");
+            },
+            updateUI(status, btn, active) {
+                document.getElementById('authText').textContent = status;
+                document.getElementById('authBtn').textContent = btn;
+                document.getElementById('authDot').classList.toggle('active', active);
+            }
+        };
+
+        // --- 4. Feature & Pro Manager ---
+        const ProManager = {
+            request(featureName) {
+                if(!AppState.user) {
+                    UI.toast("Authentication required.", "error");
+                    document.getElementById('authModal').classList.add('active');
+                    return;
+                }
+                if(AppState.user.tier === 'pro') {
+                    UI.toast(`Accessing ${featureName}...`);
+                    // Feature logic goes here
+                } else {
+                    // Conversion Funnel Entry Point
+                    UI.showUpgrade();
+                }
+            }
+        };
+
+        // --- 5. Payment Gateway Interface (Decoupled) ---
+        class PaymentGateway {
+            // The App calls this generic method. It routes to the active provider.
+            static initiateCheckout() {
+                // Currently routing to Solana. In future, could route to Stripe based on user pref.
+                SolanaProvider.open();
+            }
+        }
+
+        // --- 6. Solana Provider Implementation ---
+        const SolanaProvider = {
+            open() {
+                UI.showPayment();
+            },
+            copyAddress() {
+                navigator.clipboard.writeText(AppState.config.solanaAddress);
+                UI.toast("Address copied to clipboard");
+            },
+            verify() {
+                const hash = document.getElementById('txHash').value;
+                const btnText = document.getElementById('verifyBtnText');
                 
-                this.input.value = '{"project": "Velox", "crypto": "enabled", "status": "ready"}';
+                if(!hash || hash.length < 10) {
+                    UI.toast("Invalid Transaction Signature", "error");
+                    return;
+                }
+
+                // UI Feedback Loop
+                const originalText = btnText.textContent;
+                btnText.textContent = "Verifying on Chain...";
+                
+                // Simulate Network Request
+                setTimeout(() => {
+                    console.log(`Verifying Hash: ${hash} against Address: ${AppState.config.solanaAddress}`);
+                    
+                    // Success Simulation
+                    UI.closeModals();
+                    AppState.user.tier = 'pro';
+                    UI.toast("Payment Verified! Features Unlocked.");
+                    btnText.textContent = originalText;
+                    document.getElementById('txHash').value = "";
+                }, 1500);
+            }
+        };
+
+        // --- 7. Editor Core ---
+        const Editor = {
+            input: document.getElementById('jsonInput'),
+            output: document.getElementById('jsonOutput'),
+            indicator: document.getElementById('validIndicator'),
+
+            init() {
+                this.input.value = '{"project": "Velox Enterprise", "status": "Operational", "encryption": "AES-256"}';
                 this.process();
                 this.input.addEventListener('input', () => this.process());
             },
 
             process() {
                 try {
-                    const json = JSON.parse(this.input.value);
-                    this.status.textContent = "✓ Valid";
-                    this.status.style.color = "var(--success)";
-                    this.output.innerHTML = this.highlight(JSON.stringify(json, null, 4));
+                    const obj = JSON.parse(this.input.value);
+                    this.indicator.textContent = "VALID JSON";
+                    this.indicator.style.color = "var(--success)";
+                    this.output.innerHTML = this.highlight(JSON.stringify(obj, null, 2));
                 } catch(e) {
-                    this.status.textContent = "✗ Invalid";
-                    this.status.style.color = "var(--danger)";
+                    this.indicator.textContent = "SYNTAX ERROR";
+                    this.indicator.style.color = "var(--text-muted)";
                     this.output.textContent = e.message;
                 }
             },
@@ -294,93 +611,15 @@
                 });
             },
 
-            format() { this.input.value = JSON.stringify(JSON.parse(this.input.value), null, 4); this.process(); },
+            format() { this.input.value = JSON.stringify(JSON.parse(this.input.value), null, 2); this.process(); },
             minify() { this.input.value = JSON.stringify(JSON.parse(this.input.value)); this.process(); },
-            copy() { navigator.clipboard.writeText(this.input.value); alert("Copied!"); },
-            download() {
-                const blob = new Blob([this.input.value], {type:'application/json'});
-                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'velox.json'; a.click();
-            }
-        };
-
-        const AuthSystem = {
-            toggle() {
-                if(AppState.user) {
-                    AppState.user = null;
-                    this.updateUI("Guest", "Login");
-                    alert("Logged out.");
-                } else {
-                    document.getElementById('authModal').classList.add('open');
-                }
-            },
-            login() {
-                const email = document.getElementById('emailInput').value;
-                AppState.user = { id: 'usr_123', email: email, subscription: 'free' };
-                this.updateUI(email, "Logout");
-                document.getElementById('authModal').classList.remove('open');
-                alert(`Welcome, ${email}!`);
-            },
-            updateUI(badge, btn) {
-                document.getElementById('userBadge').textContent = badge;
-                document.getElementById('authBtn').textContent = btn;
-            }
-        };
-
-        const ProSystem = {
-            locked(feature) {
-                if(!AppState.user) { alert("Please login first."); AuthSystem.toggle(); return; }
-                if(AppState.user.subscription === 'pro') { alert(`Accessing ${feature}...`); return; }
-                // Trigger Crypto Payment
-                CryptoSystem.openModal(feature);
-            }
-        };
-
-        const CryptoSystem = {
-            // ADAM'S WALLET CONFIGURATION
-            config: {
-                address: "95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W",
-                token: "USDC",
-                network: "solana"
-            },
-
-            openModal(featureName) {
-                document.getElementById('cryptoPlanName').textContent = featureName + " PRO";
-                document.getElementById('walletAddress').textContent = this.config.address;
-                
-                // Generate QR Code (Using Google Chart API for simplicity in this demo)
-                // Format: solana:ADDRESS?amount=X
-                const qrData = `solana:${this.config.address}`;
-                document.getElementById('qrImage').src = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(qrData)}`;
-                
-                document.getElementById('cryptoModal').classList.add('open');
-            },
-
-            copyAddress() {
-                navigator.clipboard.writeText(this.config.address);
-                alert("Address copied to clipboard!");
-            },
-
-            verifyPayment() {
-                const hash = document.getElementById('txHash').value;
-                if(!hash) return alert("Please enter a Transaction Hash");
-
-                // SIMULATION: Send hash to backend
-                // POST /api/verify-crypto-payment { hash, userId }
-                
-                alert(`Transaction ID: ${hash}\n\nSubmitted for manual verification.\nOnce confirmed on the Solana blockchain, your Pro features will unlock automatically.`);
-                document.getElementById('cryptoModal').classList.remove('open');
-                
-                /* 
-                   FUTURE AUTOMATION ROADMAP:
-                   1. Backend receives hash.
-                   2. Calls Solana RPC (e.g., Helius).
-                   3. Confirms: 
-                      - Tx is successful.
-                      - Receiver == 95vduuD...
-                      - Token == USDC.
-                      - Amount >= $5.
-                   4. If valid: DB UPDATE users SET subscription='pro'.
-                */
+            copy() { navigator.clipboard.writeText(this.input.value); UI.toast("Copied to clipboard"); },
+            download(ext) {
+                const blob = new Blob([this.input.value], {type:'text/plain'});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `velox-data.${ext}`;
+                a.click();
             }
         };
 
