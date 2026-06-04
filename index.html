@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX JSON FORMATTER | Enterprise SaaS</title>
+    <title>VELOX JSON FORMATTER | Enterprise Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* 
-         * VELOX ENTERPRISE DESIGN SYSTEM v5.0
-         * Focus: High-Density, No Dead Space, Premium Dark Mode
+         * VELOX ENTERPRISE DESIGN SYSTEM v6.0
+         * Focus: Zero Dead Space, High Density, Native Ads
          */
         :root {
-            --bg-root: #050505;      /* Deepest Black */
-            --bg-panel: #0f1115;     /* Panel Background */
-            --bg-input: #080a0d;     /* Editor Input */
-            --border: #1e2329;       /* Subtle Border */
+            --bg-root: #0a0a0a;
+            --bg-panel: #111111;
+            --bg-hover: #1a1a1a;
+            --border: #2a2a2a;
             
-            --text-main: #e2e8f0;
-            --text-muted: #64748b;
+            --text-main: #e5e5e5;
+            --text-muted: #888888;
             
-            --accent: #3b82f6;       /* Professional Blue */
-            --pro-gold: #fbbf24;     /* Premium Accent */
+            --accent: #3b82f6;
+            --pro-gold: #d4af37;
             
             --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
             --font-code: 'JetBrains Mono', 'Fira Code', monospace;
-            
-            --radius: 4px;
         }
 
         * { box-sizing: border-box; outline: none; }
@@ -39,87 +37,88 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* No page scroll, app-like feel */
-            font-size: 13px; /* High density font size */
+            overflow: hidden;
+            font-size: 13px;
         }
 
         /* --- HEADER --- */
         header {
-            height: 48px;
+            height: 44px;
             background: var(--bg-panel);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 16px;
             flex-shrink: 0;
         }
 
-        .brand { font-weight: 700; letter-spacing: 0.5px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+        .brand { font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
         .brand span { color: var(--accent); }
 
-        .header-actions { display: flex; align-items: center; gap: 16px; }
-        .status-badge { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); }
-        .dot.pro { background: var(--pro-gold); box-shadow: 0 0 8px rgba(251, 191, 36, 0.4); }
+        .user-panel { display: flex; align-items: center; gap: 12px; }
+        .status-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 3px; background: #222; color: #666; }
+        .status-badge.pro { background: rgba(212, 175, 55, 0.15); color: var(--pro-gold); border: 1px solid rgba(212, 175, 55, 0.3); }
 
-        /* --- LAYOUT --- */
+        /* --- WORKSPACE LAYOUT --- */
         .workspace { display: flex; flex: 1; overflow: hidden; }
 
-        /* SIDEBAR (High Density) */
+        /* SIDEBAR (Dynamic Width based on Tier) */
         aside {
-            width: 220px; /* Compact sidebar */
             background: var(--bg-panel);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Default width (Free Tier with Ads) */
+            width: 240px; 
         }
 
-        .nav-section {
-            padding: 12px 0;
-            flex: 1;
-            overflow-y: auto;
-        }
+        /* Pro Layout: Remove Dead Space by shrinking sidebar */
+        body.ad-free-mode aside { width: 180px; }
 
+        .nav-list { padding: 8px 0; display: flex; flex-direction: column; flex: 1; }
+
+        /* NAV ITEMS & NATIVE ADS */
         .nav-item {
             padding: 8px 16px;
             cursor: pointer;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
             display: flex; align-items: center; gap: 10px;
             transition: 0.1s;
             border-left: 3px solid transparent;
+            text-decoration: none;
         }
-        .nav-item:hover { color: var(--text-main); background: rgba(255,255,255,0.03); }
-        .nav-item.active { 
-            color: var(--accent); background: rgba(59, 130, 246, 0.08); border-left-color: var(--accent); 
-        }
-        .nav-item i { width: 14px; text-align: center; font-size: 0.9rem; }
+        .nav-item:hover { background: var(--bg-hover); color: var(--text-main); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.05); border-left-color: var(--accent); color: var(--accent); }
+        .nav-item i { width: 16px; text-align: center; font-size: 0.85rem; }
 
-        /* AD UNIT (Sidebar Widget) */
-        .ad-widget {
-            margin: 12px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+        /* NATIVE AD STYLING (Blends with Menu) */
+        .nav-item.ad-native {
+            margin: 4px 12px;
             background: rgba(255,255,255,0.02);
-            padding: 12px;
-            display: flex; flex-direction: column; gap: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 10px;
         }
-        .ad-header { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; display: flex; justify-content: space-between; }
-        .ad-body { display: flex; flex-direction: column; gap: 4px; text-align: center; }
-        .ad-title { font-weight: 600; color: #fff; font-size: 0.85rem; }
-        .ad-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; }
-        .ad-cta { font-size: 0.75rem; color: var(--accent); font-weight: 600; margin-top: 2px; }
-        
-        .hidden { display: none !important; }
+        .nav-item.ad-native:hover { border-color: var(--text-muted); }
+        .ad-label { font-size: 0.6rem; text-transform: uppercase; color: #555; font-weight: 700; }
+        .ad-content { display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; }
+        .ad-desc { font-size: 0.7rem; color: var(--text-muted); font-weight: 400; }
+
+        body.ad-free-mode .nav-item.ad-native { display: none; } /* Hard-coded removal */
 
         /* --- MAIN AREA --- */
-        main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--bg-root); }
 
-        /* TOOLBAR (Compact) */
         .toolbar {
-            height: 40px;
+            height: 36px;
             background: var(--bg-panel);
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; padding: 0 12px; gap: 8px;
@@ -127,99 +126,77 @@
 
         button {
             background: transparent; border: 1px solid transparent;
-            color: var(--text-muted); padding: 4px 10px; border-radius: 4px;
-            cursor: pointer; font-size: 0.8rem; font-weight: 500;
+            color: var(--text-muted); padding: 4px 10px; border-radius: 3px;
+            cursor: pointer; font-size: 0.75rem; font-weight: 600;
             display: flex; align-items: center; gap: 6px;
-            transition: 0.1s;
         }
-        button:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
-        button.btn-pro { border: 1px solid rgba(251, 191, 36, 0.2); color: #fcd34d; }
-        button.btn-pro:hover { background: rgba(251, 191, 36, 0.1); border-color: var(--pro-gold); }
+        button:hover { background: var(--bg-hover); color: var(--text-main); }
+        button.btn-pro { color: var(--pro-gold); border-color: rgba(212, 175, 55, 0.2); }
+        button.btn-pro:hover { background: rgba(212, 175, 55, 0.05); }
 
-        /* EDITOR GRID */
-        .editor-split { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
-        .pane { display: flex; flex-direction: column; min-width: 0; position: relative; }
+        /* EDITOR (Fills remaining space) */
+        .editor-container { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
+        .pane { display: flex; flex-direction: column; min-width: 0; }
         .pane:not(:last-child) { border-right: 1px solid var(--border); }
         
-        .pane-label {
-            height: 28px; background: var(--bg-root); border-bottom: 1px solid var(--border);
+        .pane-header {
+            height: 26px; background: var(--bg-root); border-bottom: 1px solid var(--border);
             display: flex; align-items: center; padding: 0 12px;
-            font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;
+            font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;
             justify-content: space-between;
         }
 
         textarea, pre {
-            flex: 1; background: var(--bg-input); color: var(--text-main); border: none;
+            flex: 1; background: var(--bg-root); color: var(--text-main); border: none;
             padding: 12px; font-family: var(--font-code); font-size: 12px; line-height: 1.5;
             resize: none; overflow: auto;
         }
-        textarea::placeholder { color: #333; }
-
-        /* Syntax Colors */
+        
         .k { color: #60a5fa; } .s { color: #4ade80; } .n { color: #f472b6; } .b { color: #a78bfa; } .z { color: #64748b; }
 
         /* FOOTER */
         footer {
-            height: 28px; background: #000; border-top: 1px solid var(--border);
+            height: 26px; background: #000; border-top: 1px solid var(--border);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; color: #475569;
+            font-size: 0.65rem; color: #444;
         }
 
-        /* --- MODALS (SaaS Style) --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(2px);
+        /* --- MODALS --- */
+        .modal-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
             z-index: 100; display: none; justify-content: center; align-items: center;
         }
-        .modal-overlay.active { display: flex; }
+        .modal-backdrop.active { display: flex; animation: fade 0.2s; }
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
         .modal {
-            background: var(--bg-panel); border: 1px solid var(--border);
-            width: 700px; max-width: 90%; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column;
+            background: var(--bg-panel); border: 1px solid var(--border); width: 500px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-radius: 6px;
         }
 
         .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { margin: 0; font-size: 1rem; color: var(--text-main); }
-        .close-modal { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem; }
-        
+        .modal-header h3 { margin: 0; font-size: 1rem; color: #fff; }
         .modal-body { padding: 24px; }
 
-        /* PRICING GRID */
-        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .plan {
-            border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            transition: 0.2s; background: rgba(255,255,255,0.01);
-        }
-        .plan:hover { border-color: var(--text-muted); transform: translateY(-2px); }
-        .plan.featured { border-color: var(--accent); background: rgba(59, 130, 246, 0.05); }
-        .plan-price { font-size: 1.5rem; font-weight: 700; margin: 8px 0; color: #fff; }
-        .plan-period { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
-        .plan-features { list-style: none; padding: 0; margin: 0 0 16px 0; font-size: 0.8rem; color: var(--text-muted); text-align: left; width: 100%; }
-        .plan-features li { margin-bottom: 6px; display: flex; gap: 8px; }
-        .plan-features i { color: var(--accent); margin-top: 2px; }
+        .benefit-list { margin: 16px 0; padding: 0; list-style: none; }
+        .benefit-list li { margin-bottom: 10px; display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-muted); }
+        .benefit-list i { color: var(--accent); }
 
-        .btn-checkout {
+        .btn-action {
             width: 100%; background: var(--accent); color: #fff; border: none;
-            padding: 8px; border-radius: var(--radius); cursor: pointer; font-weight: 600; margin-top: auto;
+            padding: 12px; font-weight: 700; cursor: pointer; border-radius: 4px;
         }
-        .btn-checkout:hover { background: #2563eb; }
+        .btn-action:hover { background: #2563eb; }
 
-        /* SOLANA MODAL */
-        .solana-layout { display: flex; gap: 20px; align-items: center; }
-        .qr-box { width: 140px; height: 140px; background: #fff; padding: 10px; border-radius: var(--radius); }
-        .qr-box img { width: 100%; height: 100%; }
-        .pay-info { flex: 1; }
-        .wallet-addr {
-            background: #000; padding: 8px; border-radius: var(--radius);
-            font-family: var(--font-code); font-size: 0.8rem; color: var(--accent);
-            border: 1px dashed var(--border); cursor: pointer; word-break: break-all;
+        .crypto-box {
+            background: rgba(0,0,0,0.3); padding: 16px; border-radius: 4px; border: 1px solid var(--border);
+            margin-top: 16px; text-align: center;
         }
-        .wallet-addr:hover { border-color: var(--accent); }
-        .input-field {
-            width: 100%; background: var(--bg-input); border: 1px solid var(--border);
-            padding: 8px; color: #fff; border-radius: var(--radius); margin-top: 10px;
+        .qr-img { width: 120px; height: 120px; background: #fff; padding: 10px; border-radius: 4px; }
+        .addr-box {
+            background: #000; padding: 6px; font-family: var(--font-code); font-size: 0.75rem;
+            color: var(--accent); border: 1px dashed var(--border); cursor: pointer;
+            margin-top: 10px; word-break: break-all;
         }
 
     </style>
@@ -228,40 +205,35 @@
 
     <header>
         <div class="brand">
-            <i class="fa-solid fa-cube" style="color: var(--text-muted);"></i>
+            <i class="fa-solid fa-cube" style="color: #333;"></i>
             VELOX <span>FORMATTER</span>
         </div>
-        <div class="header-actions">
-            <div class="status-badge">
-                <div id="authDot" class="dot"></div>
-                <span id="authLabel">Free Tier</span>
-            </div>
-            <button onclick="AuthManager.toggle()"><i class="fa-solid fa-right-to-bracket"></i> Sign In</button>
+        <div class="user-panel">
+            <span id="statusBadge" class="status-badge">FREE TIER</span>
+            <button onclick="AuthSystem.toggle()"><i class="fa-solid fa-user"></i></button>
         </div>
     </header>
 
     <div class="workspace">
         <aside>
-            <div class="nav-section">
+            <nav class="nav-list">
                 <div class="nav-item active"><i class="fa-solid fa-code"></i> Editor</div>
-                <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> History</div>
-                <div class="nav-item" onclick="ProSystem.request('Bulk Tools')"><i class="fa-solid fa-layer-group"></i> Bulk <i class="fa-solid fa-crown" style="margin-left:auto; color:var(--pro-gold); font-size:0.7rem;"></i></div>
-                <div class="nav-item" onclick="ProSystem.request('Cloud Workspace')"><i class="fa-solid fa-cloud"></i> Cloud <i class="fa-solid fa-crown" style="margin-left:auto; color:var(--pro-gold); font-size:0.7rem;"></i></div>
-                <div class="nav-item" onclick="ProSystem.request('AI Insights')"><i class="fa-solid fa-brain"></i> AI <i class="fa-solid fa-crown" style="margin-left:auto; color:var(--pro-gold); font-size:0.7rem;"></i></div>
-            </div>
+                <div class="nav-item"><i class="fa-solid fa-clock"></i> History</div>
+                <div class="nav-item" onclick="ProSystem.request('Bulk Tools')"><i class="fa-solid fa-layer-group"></i> Bulk <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.6rem; color:var(--pro-gold);"></i></div>
+                <div class="nav-item" onclick="ProSystem.request('Cloud Sync')"><i class="fa-solid fa-cloud"></i> Cloud <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.6rem; color:var(--pro-gold);"></i></div>
 
-            <!-- REVENUE STREAM 1: SIDEBAR AD UNIT -->
-            <div id="adWidget" class="ad-widget">
-                <div class="ad-header">
-                    <span>Sponsored</span>
-                    <i class="fa-solid fa-ellipsis"></i>
+                <!-- NATIVE AD INTEGRATION: Looks like a menu item -->
+                <div class="nav-item ad-native">
+                    <div class="ad-label">Sponsored Partner</div>
+                    <div class="ad-content">
+                        <i class="fa-solid fa-server" style="color:#555;"></i>
+                        <div>
+                            <div style="font-size:0.8rem;">Deploy Infra</div>
+                            <div class="ad-desc">Global edge scaling</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ad-body">
-                    <div class="ad-title">Scale Infra</div>
-                    <div class="ad-desc">Global edge deployment for APIs.</div>
-                    <div class="ad-cta">Deploy Now &rarr;</div>
-                </div>
-            </div>
+            </nav>
         </aside>
 
         <main>
@@ -270,20 +242,17 @@
                 <button onclick="Editor.minify()"><i class="fa-solid fa-compress"></i> Minify</button>
                 <div style="flex:1"></div>
                 <button onclick="Editor.copy()"><i class="fa-regular fa-copy"></i> Copy</button>
-                <button onclick="Editor.download()"><i class="fa-solid fa-download"></i> JSON</button>
-                <div style="width:1px; height:16px; background:var(--border); margin:0 4px;"></div>
                 <button class="btn-pro" onclick="ProSystem.request('Excel Export')"><i class="fa-solid fa-file-excel"></i> Excel</button>
-                <button class="btn-pro" onclick="ProSystem.request('SQL Schema')"><i class="fa-solid fa-database"></i> SQL</button>
             </div>
 
-            <div class="editor-split">
+            <div class="editor-container">
                 <div class="pane">
-                    <div class="pane-label">Input <span id="status" style="color:var(--text-muted);"></span></div>
-                    <textarea id="jsonInput" spellcheck="false"></textarea>
+                    <div class="pane-header">Input <span id="jsonStatus" style="color:var(--text-muted);"></span></div>
+                    <textarea id="input" spellcheck="false"></textarea>
                 </div>
                 <div class="pane">
-                    <div class="pane-label">Output</div>
-                    <pre id="jsonOutput"></pre>
+                    <div class="pane-header">Output</div>
+                    <pre id="output"></pre>
                 </div>
             </div>
         </main>
@@ -293,190 +262,108 @@
         VELOX JSON FORMATTER | Developed by Adam Laamime
     </footer>
 
-    <!-- 1. PRICING MODAL -->
-    <div class="modal-overlay" id="pricingModal">
+    <!-- PRO UPGRADE MODAL -->
+    <div class="modal-backdrop" id="upgradeModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Upgrade Workspace</h3>
-                <button class="close-modal" onclick="UI.closeAll()">&times;</button>
+                <h3 style="color:var(--pro-gold);">Upgrade to Pro</h3>
+                <button onclick="UI.closeModals()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <div style="text-align:center; margin-bottom:20px;">
-                    <h4 style="margin:0; color:#fff;">Unlock Professional Capacity</h4>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0 0;">Debug faster, automate tasks, and remove all ads.</p>
-                </div>
-                
-                <div class="pricing-grid">
-                    <div class="plan">
-                        <div style="font-weight:600;">Weekly</div>
-                        <div class="plan-price">$2</div>
-                        <div class="plan-period">per week</div>
-                        <ul class="plan-features">
-                            <li><i class="fa-solid fa-check"></i> Ad-Free UI</li>
-                            <li><i class="fa-solid fa-check"></i> Bulk Tools</li>
-                        </ul>
-                        <button class="btn-checkout" onclick="PaymentSystem.initiate('weekly')">Select</button>
-                    </div>
-                    <div class="plan featured">
-                        <div style="font-weight:600; color:var(--accent);">Monthly</div>
-                        <div class="plan-price">$5</div>
-                        <div class="plan-period">per month</div>
-                        <ul class="plan-features">
-                            <li><i class="fa-solid fa-check"></i> <strong>Most Popular</strong></li>
-                            <li><i class="fa-solid fa-check"></i> Cloud Sync</li>
-                            <li><i class="fa-solid fa-check"></i> All Formats</li>
-                        </ul>
-                        <button class="btn-checkout" style="background:#2563eb;" onclick="PaymentSystem.initiate('monthly')">Select</button>
-                    </div>
-                    <div class="plan">
-                        <div style="font-weight:600;">Annual</div>
-                        <div class="plan-price">$50</div>
-                        <div class="plan-period">per year</div>
-                        <ul class="plan-features">
-                            <li><i class="fa-solid fa-check"></i> Save 17%</li>
-                            <li><i class="fa-solid fa-check"></i> Priority Support</li>
-                        </ul>
-                        <button class="btn-checkout" onclick="PaymentSystem.initiate('annual')">Select</button>
-                    </div>
-                </div>
+                <p style="margin-top:0; font-size:0.9rem;">Maximize your engineering efficiency.</p>
+                <ul class="benefit-list">
+                    <li><i class="fa-solid fa-check"></i> <strong>Unlimited Bulk Processing</strong> - Handle massive datasets instantly.</li>
+                    <li><i class="fa-solid fa-check"></i> <strong>AI-Powered Debugging</strong> - Intelligent error explanations.</li>
+                    <li><i class="fa-solid fa-check"></i> <strong>Ad-Free Environment</strong> - Clean, focused workspace.</li>
+                </ul>
+                <button class="btn-action" onclick="PaymentSys.initiate($5.00)">Upgrade for $5/mo</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. SOLANA PAYMENT MODAL -->
-    <div class="modal-overlay" id="solanaModal">
-        <div class="modal" style="width:500px;">
+    <!-- SOLANA PAYMENT MODAL -->
+    <div class="modal-backdrop" id="paymentModal">
+        <div class="modal">
             <div class="modal-header">
-                <h3>Secure Payment (Solana)</h3>
-                <button class="close-modal" onclick="UI.closeAll()">&times;</button>
+                <h3>Secure Payment</h3>
+                <button onclick="UI.closeModals()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <div class="solana-layout">
-                    <div class="qr-box">
-                        <img id="qrImg" src="" alt="QR">
-                    </div>
-                    <div class="pay-info">
-                        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">
-                            Send <strong id="payAmount">5 USDC</strong> to:
-                        </div>
-                        <div class="wallet-addr" onclick="SolanaSys.copy()">
-                            <span id="solAddr">...</span>
-                        </div>
-                        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">
-                            <i class="fa-solid fa-mouse-pointer"></i> Click address to copy
-                        </div>
+                <div style="text-align:center;">
+                    <div style="font-size:0.8rem; margin-bottom:10px; color:#888;">Send 5 USDC to Solana Mainnet</div>
+                    <div class="crypto-box">
+                        <img id="qr" src="" class="qr-img">
+                        <div class="addr-box" onclick="SolanaSys.copy()">95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W</div>
                     </div>
                 </div>
-                
                 <div style="margin-top:16px;">
-                    <label style="font-size:0.75rem; color:var(--text-muted);">Transaction Signature</label>
-                    <input type="text" id="txHash" class="input-field" placeholder="Paste Tx ID...">
+                    <label style="font-size:0.75rem; color:#666;">Transaction Hash</label>
+                    <input type="text" id="txId" class="addr-box" style="background:#111; color:#fff; cursor:text;" placeholder="Paste signature here...">
                 </div>
-
-                <button class="btn-checkout" style="margin-top:12px;" onclick="SolanaSys.verify()">
-                    <span id="verifyBtn">Verify & Activate</span>
-                </button>
+                <button class="btn-action" style="margin-top:16px;" onclick="SolanaSys.verify()">Verify & Activate</button>
             </div>
         </div>
     </div>
 
     <script>
         /**
-         * VELOX MONETIZATION & AUTH CORE
-         * Centralized routing for Ads and Crypto Payments
+         * CENTRALIZED REVENUE & AUTH CORE
          */
 
         const AppState = {
-            user: null,
-            tier: 'free',
-            wallet: "95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W"
+            status: 'FREE', // FREE | PRO
+            wallet: '95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W'
         };
 
         const UI = {
-            closeAll() { document.querySelectorAll('.modal-overlay').forEach(el => el.classList.remove('active')); },
-            showPricing() { this.closeAll(); document.getElementById('pricingModal').classList.add('active'); },
-            showSolana(plan) {
-                this.closeAll();
-                // Dynamic Amount
-                const prices = { weekly: 2, monthly: 5, annual: 50 };
-                document.getElementById('payAmount').textContent = `${prices[plan]} USDC`;
-                
-                // QR Code
-                const data = `solana:${AppState.wallet}`;
-                document.getElementById('qrImg').src = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(data)}`;
-                document.getElementById('solAddr').textContent = AppState.wallet;
-                
-                document.getElementById('solanaModal').classList.add('active');
-            },
-            updateAuthUI() {
-                const label = document.getElementById('authLabel');
-                const dot = document.getElementById('authDot');
-                const ad = document.getElementById('adWidget');
-                const btn = document.querySelector('.header-actions button');
-
-                if(AppState.tier === 'pro') {
-                    label.textContent = "PRO USER";
-                    label.style.color = "var(--pro-gold)";
-                    dot.classList.add('pro');
-                    ad.classList.add('hidden'); // REMOVE ADS
-                    btn.innerHTML = '<i class="fa-solid fa-user"></i> Account';
+            closeModals() { document.querySelectorAll('.modal-backdrop').forEach(e => e.classList.remove('active')); },
+            
+            render() {
+                // THE CORE LOGIC: Toggle Ad-Free Mode based on Status
+                if(AppState.status === 'PRO') {
+                    document.body.classList.add('ad-free-mode');
+                    document.getElementById('statusBadge').textContent = 'PRO USER';
+                    document.getElementById('statusBadge').classList.add('pro');
                 } else {
-                    label.textContent = "Free Tier";
-                    label.style.color = "var(--text-muted)";
-                    dot.classList.remove('pro');
-                    ad.classList.remove('hidden'); // SHOW ADS
-                    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+                    document.body.classList.remove('ad-free-mode');
+                    document.getElementById('statusBadge').textContent = 'FREE TIER';
+                    document.getElementById('statusBadge').classList.remove('pro');
                 }
             },
+
             toast(msg) {
                 const t = document.createElement('div');
-                t.style.cssText = `position:fixed; bottom:40px; right:20px; background:#1e293b; color:#fff; padding:10px 20px; border-left:3px solid var(--accent); border-radius:4px; font-size:0.8rem; box-shadow:0 10px 20px rgba(0,0,0,0.3); z-index:200;`;
-                t.textContent = msg;
-                document.body.appendChild(t);
-                setTimeout(() => t.remove(), 2500);
+                t.style.cssText = `position:fixed; bottom:30px; right:20px; background:#222; color:#fff; padding:10px 20px; border-left:3px solid var(--pro-gold); border-radius:4px; font-size:0.8rem; box-shadow:0 10px 20px rgba(0,0,0,0.5); z-index:200;`;
+                t.textContent = msg; document.body.appendChild(t);
+                setTimeout(() => t.remove(), 2000);
             }
         };
 
-        const AdManager = {
-            // Revenue Stream 1: Ad Network Integration Hook
-            // In production, this would render script tags from Google AdManager or similar
-            render() {
-                if(AppState.tier === 'free') {
-                    // Placeholder for Ad Script Injection
-                    console.log("Injecting Ad Network Scripts...");
-                }
-            }
-        };
-
-        const AuthManager = {
+        const AuthSystem = {
             toggle() {
-                if(AppState.user) {
-                    AppState.user = null;
-                    AppState.tier = 'free';
-                    UI.updateAuthUI();
-                    UI.toast("Logged out");
+                // Mock Auth for Demo
+                if(AppState.status === 'PRO') {
+                    AppState.status = 'FREE';
+                    UI.render();
                 } else {
-                    // Mock Login
-                    AppState.user = { id: 1 };
-                    UI.updateAuthUI();
-                    UI.toast("Authenticated");
+                    alert("Simulating Login...");
                 }
             }
         };
 
         const ProSystem = {
-            request(feature) {
-                if(!AppState.user) { UI.toast("Please login first."); return; }
-                if(AppState.tier === 'pro') { UI.toast(`Accessing ${feature}...`); return; }
-                UI.showPricing();
+            request(feat) {
+                if(AppState.status === 'PRO') { UI.toast(`Accessing ${feat}...`); return; }
+                document.getElementById('upgradeModal').classList.add('active');
             }
         };
 
-        const PaymentSystem = {
-            // Centralized Revenue Router
-            initiate(plan) {
-                // Route to Solana (Phantom Wallet)
-                UI.showSolana(plan);
+        const PaymentSys = {
+            initiate(amount) {
+                UI.closeModals();
+                // QR Generation
+                document.getElementById('qr').src = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent('solana:' + AppState.wallet)}`;
+                document.getElementById('paymentModal').classList.add('active');
             }
         };
 
@@ -486,42 +373,39 @@
                 UI.toast("Address Copied");
             },
             verify() {
-                const hash = document.getElementById('txHash').value;
-                if(!hash) return UI.toast("Invalid Hash");
+                const hash = document.getElementById('txId').value;
+                if(!hash) return;
 
-                const btn = document.getElementById('verifyBtn');
-                btn.textContent = "Verifying...";
-
-                // Simulate Blockchain RPC Check
+                // Simulate Verification & Payout Routing
+                // BACKEND HOOK: POST /api/verify-solana { hash, wallet }
+                
                 setTimeout(() => {
-                    AppState.tier = 'pro'; // ACTIVATE PRO
-                    UI.updateAuthUI(); // REMOVE ADS INSTANTLY
-                    UI.closeAll();
-                    UI.toast("Payment Verified! Ads Removed & Pro Unlocked.");
-                    btn.textContent = "Verify & Activate";
-                    document.getElementById('txHash').value = "";
-                }, 1500);
+                    AppState.status = 'PRO'; // ACTIVATE PRO
+                    UI.render(); // TRIGGER LAYOUT CHANGE (REMOVE ADS)
+                    UI.closeModals();
+                    UI.toast("Payment Verified! Upgraded to Pro.");
+                }, 1000);
             }
         };
 
         const Editor = {
             init() {
-                const input = document.getElementById('jsonInput');
-                input.value = '{"project": "Velox", "tier": "Pro", "ads": false}';
+                const i = document.getElementById('input');
+                i.value = '{"project": "Velox", "tier": "Pro", "ads": "removed"}';
                 this.process();
-                input.addEventListener('input', () => this.process());
-                UI.updateAuthUI(); // Initial UI State
+                i.addEventListener('input', () => this.process());
+                UI.render(); // Initial check
             },
             process() {
                 try {
-                    const json = JSON.parse(document.getElementById('jsonInput').value);
-                    document.getElementById('status').textContent = "Valid";
-                    document.getElementById('status').style.color = "var(--accent)";
-                    document.getElementById('jsonOutput').innerHTML = this.highlight(JSON.stringify(json, null, 2));
+                    const j = JSON.parse(document.getElementById('input').value);
+                    document.getElementById('jsonStatus').textContent = "VALID";
+                    document.getElementById('jsonStatus').style.color = "var(--accent)";
+                    document.getElementById('output').innerHTML = this.highlight(JSON.stringify(j, null, 2));
                 } catch(e) {
-                    document.getElementById('status').textContent = "Error";
-                    document.getElementById('status').style.color = "var(--text-muted)";
-                    document.getElementById('jsonOutput').textContent = e.message;
+                    document.getElementById('jsonStatus').textContent = "ERROR";
+                    document.getElementById('jsonStatus').style.color = "#666";
+                    document.getElementById('output').textContent = e.message;
                 }
             },
             highlight(json) {
@@ -535,13 +419,9 @@
                     return '<span class="' + cls + '">' + match + '</span>';
                 });
             },
-            format() { document.getElementById('jsonInput').value = JSON.stringify(JSON.parse(document.getElementById('jsonInput').value), null, 2); this.process(); },
-            minify() { document.getElementById('jsonInput').value = JSON.stringify(JSON.parse(document.getElementById('jsonInput').value)); this.process(); },
-            copy() { navigator.clipboard.writeText(document.getElementById('jsonInput').value); UI.toast("Copied"); },
-            download() {
-                const blob = new Blob([document.getElementById('jsonInput').value], {type:'text/plain'});
-                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'velox.json'; a.click();
-            }
+            format() { document.getElementById('input').value = JSON.stringify(JSON.parse(document.getElementById('input').value), null, 2); this.process(); },
+            minify() { document.getElementById('input').value = JSON.stringify(JSON.parse(document.getElementById('input').value)); this.process(); },
+            copy() { navigator.clipboard.writeText(document.getElementById('input').value); UI.toast("Copied"); }
         };
 
         Editor.init();
