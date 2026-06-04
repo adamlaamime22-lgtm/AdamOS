@@ -3,40 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX JSON FORMATTER | Enterprise</title>
+    <title>VELOX JSON FORMATTER | Professional SaaS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* 
-         * ENTERPRISE DESIGN SYSTEM 
-         * Focus: Clarity, Contrast, Precision
+         * ENTERPRISE DESIGN SYSTEM v4.0 
+         * Focus: High Productivity, Dual-Monetization Ready
          */
         :root {
-            /* Palette - Slate & Professional Blue */
             --bg-app: #0f172a;       /* Deep Slate */
             --bg-panel: #1e293b;      /* Panel Slate */
             --bg-input: #020617;      /* Editor Black */
             --border: #334155;        /* Subtle Border */
             
-            --accent-primary: #3b82f6; /* Professional Blue */
-            --accent-hover: #2563eb;
-            
-            --pro-accent: #6366f1;    /* Indigo for Pro features */
+            --accent-primary: #3b82f6; /* Tech Blue */
+            --pro-accent: #6366f1;    /* Indigo */
             
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --text-invert: #ffffff;
             
             --success: #10b981;
-            --warning: #f59e0b;
             
-            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --font-code: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            --font-ui: 'Inter', system-ui, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
             
-            --radius-sm: 4px;
-            --radius-md: 6px;
-            
-            --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 6px;
+            --transition: 0.15s ease;
         }
 
         * { box-sizing: border-box; outline: none; }
@@ -50,7 +43,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            font-size: 14px; /* Optimal for productivity */
+            font-size: 14px;
         }
 
         /* --- HEADER --- */
@@ -66,37 +59,28 @@
         }
 
         .brand {
-            font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 700; letter-spacing: 0.5px;
+            font-size: 1rem; display: flex; align-items: center; gap: 10px;
         }
-        .brand span { color: var(--accent-primary); font-weight: 700; }
+        .brand span { color: var(--accent-primary); }
 
         .header-controls { display: flex; align-items: center; gap: 20px; }
         .user-status { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
-        .status-dot.active { background: var(--success); box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+        .status-dot.pro { background: var(--pro-accent); box-shadow: 0 0 10px rgba(99, 102, 241, 0.4); }
 
-        .link-btn {
-            background: none; border: none; color: var(--accent-primary);
-            font-size: 0.85rem; font-weight: 500; cursor: pointer;
-        }
-        .link-btn:hover { text-decoration: underline; }
+        .link-btn { background: none; border: none; color: var(--accent-primary); cursor: pointer; font-size: 0.85rem; font-weight: 500; }
 
-        /* --- LAYOUT --- */
-        .workspace { display: flex; flex: 1; overflow: hidden; }
-
+        /* --- SIDEBAR (Navigation & Ads) --- */
         aside {
-            width: 240px;
+            width: 260px;
             background: var(--bg-app);
             border-right: 1px solid var(--border);
             display: flex;
-            flex-direction: column;
-            padding: 16px 0;
+            flex-direction: column; /* Important for Ad placement */
         }
+
+        .nav-list { flex: 1; padding: 16px 0; overflow-y: auto; }
 
         .nav-item {
             padding: 10px 24px;
@@ -104,151 +88,112 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 12px;
             transition: var(--transition);
             border-left: 3px solid transparent;
         }
         .nav-item:hover { color: var(--text-main); background: rgba(255,255,255,0.03); }
-        .nav-item.active { 
-            color: var(--accent-primary); 
-            background: rgba(59, 130, 246, 0.08); 
-            border-left-color: var(--accent-primary);
+        .nav-item.active { color: var(--accent-primary); background: rgba(59, 130, 246, 0.08); border-left-color: var(--accent-primary); }
+
+        /* MONETIZATION: AD UNIT */
+        .ad-container {
+            border-top: 1px solid var(--border);
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            display: flex; flex-direction: column; gap: 8px;
         }
-        .nav-item i { width: 16px; text-align: center; }
+        
+        .ad-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
+        
+        .ad-content {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px;
+            display: flex; align-direction: column; justify-content: center; align-items: center;
+            text-align: center;
+            min-height: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ad-content:hover { border-color: var(--border); } /* No distracting hover effects */
+        
+        .ad-title { font-weight: 600; font-size: 0.9rem; color: #fff; margin-bottom: 4px; }
+        .ad-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+        .ad-cta { font-size: 0.75rem; color: var(--accent-primary); margin-top: 8px; font-weight: 500; }
 
-        main { flex: 1; display: flex; flex-direction: column; position: relative; background: var(--bg-app); }
+        /* Hide Ad class */
+        .hidden { display: none !important; }
 
-        /* --- TOOLBAR --- */
+        /* --- MAIN WORKSPACE --- */
+        main { flex: 1; display: flex; flex-direction: column; position: relative; }
+
         .toolbar {
-            height: 48px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            gap: 12px;
+            height: 48px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; padding: 0 20px; gap: 12px;
             background: var(--bg-panel);
         }
 
-        .divider { width: 1px; height: 20px; background: var(--border); }
-
         button.btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: flex; align-items: center; gap: 8px;
+            background: transparent; border: 1px solid var(--border); color: var(--text-main);
+            padding: 6px 12px; border-radius: var(--radius); cursor: pointer;
+            font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 8px;
             transition: var(--transition);
         }
         button.btn:hover { background: rgba(255,255,255,0.05); border-color: var(--text-muted); }
-        button.btn:active { transform: translateY(1px); }
-
+        
         button.btn-pro {
-            border-color: rgba(99, 102, 241, 0.3);
-            color: #a5b4fc;
+            border-color: rgba(99, 102, 241, 0.3); color: #a5b4fc;
         }
-        button.btn-pro:hover {
-            border-color: var(--pro-accent);
-            background: rgba(99, 102, 241, 0.1);
-            color: #c7d2fe;
-        }
-        button.btn-pro i { color: var(--pro-accent); }
+        button.btn-pro:hover { border-color: var(--pro-accent); background: rgba(99, 102, 241, 0.1); }
 
-        /* --- EDITOR --- */
         .editor-grid { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
         
-        .pane {
-            display: flex; flex-direction: column;
-            border-right: 1px solid var(--border);
-            min-width: 0;
-        }
-        .pane:last-child { border-right: none; }
-
+        .pane { display: flex; flex-direction: column; border-right: 1px solid var(--border); min-width: 0; }
         .pane-header {
-            height: 36px;
-            background: var(--bg-app);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 600;
+            height: 36px; background: var(--bg-app); border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 16px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;
         }
-
         textarea, pre {
-            flex: 1;
-            background: var(--bg-input);
-            color: var(--text-main);
-            border: none;
-            padding: 16px;
-            font-family: var(--font-code);
-            font-size: 13px;
-            line-height: 1.6;
-            resize: none;
-            overflow: auto;
-            white-space: pre;
+            flex: 1; background: var(--bg-input); color: var(--text-main); border: none;
+            padding: 16px; font-family: var(--font-code); font-size: 13px; line-height: 1.6;
+            resize: none; overflow: auto;
         }
         
-        /* Syntax Colors */
-        .k { color: #93c5fd; } /* Key */
-        .s { color: #86efac; } /* String */
-        .n { color: #fca5a5; } /* Number */
-        .b { color: #c4b5fd; } /* Boolean */
-        .z { color: #94a3b8; } /* Null */
+        /* Syntax Highlighting */
+        .k { color: #93c5fd; } .s { color: #86efac; } .n { color: #fca5a5; } .b { color: #c4b5fd; } .z { color: #94a3b8; }
 
         /* --- FOOTER --- */
         footer {
-            height: 32px;
-            background: #000;
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: #64748b;
+            height: 32px; background: #000; border-top: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; color: #64748b;
         }
 
         /* --- MODALS --- */
         .modal-backdrop {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            z-index: 100;
-            display: none; justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);
+            z-index: 100; display: none; justify-content: center; align-items: center;
         }
         .modal-backdrop.active { display: flex; animation: fadeIn 0.2s ease-out; }
-
+        
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
         .modal {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            width: 480px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 8px; width: 480px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             overflow: hidden;
         }
 
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .modal-header h3 { margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
         .close-modal { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
-
         .modal-body { padding: 24px; }
 
-        /* Upgrade Modal Specifics */
         .feature-list { margin: 20px 0; padding: 0; list-style: none; }
         .feature-list li {
             display: flex; align-items: flex-start; gap: 12px;
@@ -263,29 +208,21 @@
         }
         .btn-primary:hover { background: #4f46e5; }
 
-        /* Crypto Modal Specifics */
-        .crypto-info {
-            background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-sm);
-            text-align: center; border: 1px solid var(--border); margin-bottom: 20px;
-        }
-        .qr-placeholder {
-            width: 140px; height: 140px; background: white; margin: 0 auto 12px;
-            display: flex; align-items: center; justify-content: center;
-        }
+        /* Crypto Specifics */
+        .crypto-info { background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius); text-align: center; border: 1px solid var(--border); margin-bottom: 20px; }
+        .qr-placeholder { width: 140px; height: 140px; background: white; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; }
         .wallet-address {
-            background: #000; padding: 8px 12px; border-radius: var(--radius-sm);
+            background: #000; padding: 8px 12px; border-radius: var(--radius);
             font-family: var(--font-code); font-size: 0.8rem; color: var(--success);
             word-break: break-all; border: 1px dashed var(--border); cursor: pointer;
         }
         .wallet-address:hover { border-color: var(--success); }
-        
         .input-group { margin-top: 16px; }
         .input-group label { display: block; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-muted); }
         .input-field {
             width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border);
-            color: white; border-radius: var(--radius-sm); font-family: var(--font-code); font-size: 0.85rem;
+            color: white; border-radius: var(--radius); font-family: var(--font-code);
         }
-        .input-field:focus { border-color: var(--accent-primary); }
 
     </style>
 </head>
@@ -299,35 +236,43 @@
         <div class="header-controls">
             <div class="user-status">
                 <div id="authDot" class="status-dot"></div>
-                <span id="authText">Guest Session</span>
+                <span id="authText">Guest</span>
             </div>
             <button class="link-btn" id="authBtn" onclick="AuthManager.toggle()">Sign In</button>
         </div>
     </header>
 
     <div class="workspace">
+        <!-- SIDEBAR: Contains Navigation & AD UNIT -->
         <aside>
-            <div class="nav-item active"><i class="fa-solid fa-code"></i> Editor</div>
-            <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> History</div>
-            <div class="nav-item" onclick="ProManager.request('Bulk Processing')"><i class="fa-solid fa-layer-group"></i> Bulk Tools <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
-            <div class="nav-item" onclick="ProManager.request('Cloud Workspace')"><i class="fa-solid fa-cloud"></i> Cloud Sync <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
-            <div class="nav-item" onclick="ProManager.request('AI Analysis')"><i class="fa-solid fa-brain"></i> AI Insights <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
+            <div class="nav-list">
+                <div class="nav-item active"><i class="fa-solid fa-code"></i> Editor</div>
+                <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> History</div>
+                <div class="nav-item" onclick="ProManager.request('Bulk Processing')"><i class="fa-solid fa-layer-group"></i> Bulk Tools <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
+                <div class="nav-item" onclick="ProManager.request('Cloud Workspace')"><i class="fa-solid fa-cloud"></i> Cloud Sync <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
+                <div class="nav-item" onclick="ProManager.request('AI Analysis')"><i class="fa-solid fa-brain"></i> AI Insights <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.7rem; color:var(--pro-accent);"></i></div>
+            </div>
+
+            <!-- DUAL MONETIZATION: AD UNIT (Visible only on Free Tier) -->
+            <div id="adContainer" class="ad-container">
+                <div class="ad-label">Sponsored</div>
+                <div class="ad-content">
+                    <div class="ad-title">Host Faster APIs</div>
+                    <div class="ad-desc">Scale your infrastructure with global edge deployment.</div>
+                    <div class="ad-cta">Learn More &rarr;</div>
+                </div>
+            </div>
         </aside>
 
         <main>
             <div class="toolbar">
                 <button class="btn" onclick="Editor.format()"><i class="fa-solid fa-indent"></i> Format</button>
                 <button class="btn" onclick="Editor.minify()"><i class="fa-solid fa-compress"></i> Minify</button>
-                <div class="divider"></div>
+                <div style="flex:1"></div>
                 <button class="btn" onclick="Editor.copy()"><i class="fa-regular fa-copy"></i> Copy</button>
                 <button class="btn" onclick="Editor.download('json')"><i class="fa-solid fa-download"></i> JSON</button>
-                <div class="divider"></div>
-                <button class="btn btn-pro" onclick="ProManager.request('Excel Export')">
-                    <i class="fa-solid fa-file-excel"></i> Excel
-                </button>
-                <button class="btn btn-pro" onclick="ProManager.request('SQL Schema')">
-                    <i class="fa-solid fa-database"></i> SQL
-                </button>
+                <button class="btn btn-pro" onclick="ProManager.request('Excel Export')"><i class="fa-solid fa-file-excel"></i> Excel</button>
+                <button class="btn btn-pro" onclick="ProManager.request('SQL Schema')"><i class="fa-solid fa-database"></i> SQL</button>
             </div>
 
             <div class="editor-grid">
@@ -347,7 +292,7 @@
         VELOX JSON FORMATTER | Developed by Adam Laamime
     </footer>
 
-    <!-- 1. AUTH MODAL -->
+    <!-- AUTH MODAL -->
     <div class="modal-backdrop" id="authModal">
         <div class="modal">
             <div class="modal-header">
@@ -368,7 +313,7 @@
         </div>
     </div>
 
-    <!-- 2. UPGRADE MODAL (Business Conversion) -->
+    <!-- UPGRADE MODAL (Conversion Asset) -->
     <div class="modal-backdrop" id="upgradeModal">
         <div class="modal">
             <div class="modal-header">
@@ -376,40 +321,40 @@
                 <button class="close-modal" onclick="UI.closeModals()">&times;</button>
             </div>
             <div class="modal-body">
-                <p style="color:var(--text-main); margin-top:0;">Scale your data workflow with enterprise-grade tools.</p>
+                <p style="color:var(--text-main); margin-top:0;">Maximize your engineering ROI.</p>
                 
                 <ul class="feature-list">
                     <li>
                         <i class="fa-solid fa-check-circle"></i>
                         <div>
-                            <strong>Reduce Debugging Time by 70%</strong>
-                            Advanced AI analysis explains structures and validates complex schemas instantly.
+                            <strong>Remove Ads & Distractions</strong>
+                            Experience a completely clean, focused, professional workspace.
                         </div>
                     </li>
                     <li>
                         <i class="fa-solid fa-check-circle"></i>
                         <div>
-                            <strong>Automate Bulk Workflows</strong>
-                            Process thousands of files simultaneously with our cloud engine.
+                            <strong>Debug 70% Faster</strong>
+                            AI-powered schema validation explains errors instantly.
                         </div>
                     </li>
                     <li>
                         <i class="fa-solid fa-check-circle"></i>
                         <div>
-                            <strong>Universal Export Formats</strong>
-                            One-click conversion to Excel, SQL, XML, and YAML ready for production.
+                            <strong>Automate Complex Workflows</strong>
+                            Bulk processing and Cloud Workspaces for enterprise teams.
                         </div>
                     </li>
                 </ul>
 
                 <button class="btn-primary" onclick="PaymentGateway.initiateCheckout()">
-                    Proceed to Payment ($5.00/mo)
+                    Unlock Pro & Remove Ads
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- 3. SOLANA PAYMENT MODAL -->
+    <!-- SOLANA PAYMENT MODAL -->
     <div class="modal-backdrop" id="paymentModal">
         <div class="modal">
             <div class="modal-header">
@@ -418,23 +363,22 @@
             </div>
             <div class="modal-body">
                 <div class="crypto-info">
-                    <!-- Google Charts API for dependency-free QR -->
                     <div class="qr-placeholder">
-                        <img id="solanaQR" src="" alt="Scan to Pay" style="width:100%; height:100%;">
+                        <img id="solanaQR" src="" alt="QR" style="width:100%; height:100%;">
                     </div>
                     <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">
-                        Send <strong>5.00 USDC</strong> on Solana Mainnet
+                        Send <strong>5.00 USDC</strong> to address:
                     </div>
-                    <div class="wallet-address" onclick="SolanaProvider.copyAddress()" title="Click to Copy">
+                    <div class="wallet-address" onclick="SolanaProvider.copyAddress()">
                         <span id="walletAddr">...</span>
                     </div>
                     <div style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">
-                        <i class="fa-solid fa-mouse-pointer"></i> Click address to copy
+                        <i class="fa-solid fa-mouse-pointer"></i> Click to copy
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <label>Transaction Signature (Hash)</label>
+                    <label>Transaction Signature</label>
                     <input type="text" id="txHash" class="input-field" placeholder="Paste signature from wallet...">
                 </div>
 
@@ -447,143 +391,133 @@
 
     <script>
         /**
-         * VELOX ENTERPRISE ARCHITECTURE
-         * Modular Design for Scalability
+         * VELOX DUAL-MONETIZATION ARCHITECTURE
+         * 1. State Management (Free vs Pro)
+         * 2. Ad Manager (Visibility Control)
+         * 3. Payment Gateway (Solana Integration)
          */
 
-        // --- 1. Core Application State ---
         const AppState = {
-            user: null, // { email, tier: 'free' | 'pro' }
+            user: null,
+            tier: 'free', // 'free' | 'pro'
             config: {
                 solanaAddress: "95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W"
             }
         };
 
-        // --- 2. UI Controller ---
         const UI = {
-            closeModals() {
-                document.querySelectorAll('.modal-backdrop').forEach(el => el.classList.remove('active'));
-            },
+            closeModals() { document.querySelectorAll('.modal-backdrop').forEach(el => el.classList.remove('active')); },
+            
             showUpgrade() {
                 this.closeModals();
                 document.getElementById('upgradeModal').classList.add('active');
             },
+            
             showPayment() {
                 this.closeModals();
-                // Generate QR
                 const qrData = `solana:${AppState.config.solanaAddress}`;
                 document.getElementById('solanaQR').src = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(qrData)}`;
                 document.getElementById('walletAddr').textContent = AppState.config.solanaAddress;
                 document.getElementById('paymentModal').classList.add('active');
             },
-            toast(msg, type='success') {
-                // Simple toast for professional feedback
+
+            toast(msg) {
                 const div = document.createElement('div');
-                div.style.cssText = `position:fixed; bottom:50px; right:20px; background:${type==='error'?'#ef4444':'#1e293b'}; color:#fff; padding:12px 24px; border-radius:6px; border-left:4px solid ${type==='error'?'#ef4444':'#3b82f6'}; box-shadow:0 10px 15px -3px rgba(0,0,0,0.5); z-index:200; animation: fadeIn 0.3s;`;
+                div.style.cssText = `position:fixed; bottom:50px; right:20px; background:#1e293b; color:#fff; padding:12px 24px; border-radius:6px; border-left:4px solid #3b82f6; box-shadow:0 10px 15px rgba(0,0,0,0.5); z-index:200; animation: fadeIn 0.3s;`;
                 div.textContent = msg;
                 document.body.appendChild(div);
                 setTimeout(() => div.remove(), 3000);
+            },
+
+            updateAuthUI(email, isPro) {
+                document.getElementById('authText').textContent = email + (isPro ? ' (PRO)' : '');
+                document.getElementById('authDot').classList.toggle('pro', isPro);
             }
         };
 
-        // --- 3. Authentication Manager ---
+        const AdManager = {
+            render() {
+                const adContainer = document.getElementById('adContainer');
+                if (AppState.tier === 'pro') {
+                    adContainer.classList.add('hidden'); // Remove Ads for Pro
+                } else {
+                    adContainer.classList.remove('hidden'); // Show Ads for Free
+                }
+            }
+        };
+
         const AuthManager = {
             toggle() {
                 if(AppState.user) {
                     AppState.user = null;
-                    this.updateUI("Guest Session", "Sign In", false);
-                    UI.toast("Logged out securely.");
+                    AppState.tier = 'free';
+                    UI.updateAuthUI("Guest", false);
+                    AdManager.render();
+                    UI.toast("Logged out.");
                 } else {
                     document.getElementById('authModal').classList.add('active');
                 }
             },
             login() {
-                // Simulate JWT Auth
-                AppState.user = { email: "user@enterprise.com", tier: "free" };
-                this.updateUI("user@enterprise.com", "Sign Out", true);
+                AppState.user = { email: "user@company.com" };
+                // Default to free, check localstorage in real app
+                UI.updateAuthUI("user@company.com", AppState.tier === 'pro');
                 UI.closeModals();
-                UI.toast("Workspace authenticated.");
-            },
-            updateUI(status, btn, active) {
-                document.getElementById('authText').textContent = status;
-                document.getElementById('authBtn').textContent = btn;
-                document.getElementById('authDot').classList.toggle('active', active);
+                AdManager.render(); // Ensure correct ad state
+                UI.toast("Authenticated.");
             }
         };
 
-        // --- 4. Feature & Pro Manager ---
         const ProManager = {
-            request(featureName) {
-                if(!AppState.user) {
-                    UI.toast("Authentication required.", "error");
-                    document.getElementById('authModal').classList.add('active');
-                    return;
-                }
-                if(AppState.user.tier === 'pro') {
-                    UI.toast(`Accessing ${featureName}...`);
-                    // Feature logic goes here
-                } else {
-                    // Conversion Funnel Entry Point
-                    UI.showUpgrade();
-                }
+            request(feature) {
+                if(!AppState.user) { UI.toast("Login required.", "error"); document.getElementById('authModal').classList.add('active'); return; }
+                if(AppState.tier === 'pro') { UI.toast(`Accessing ${feature}...`); return; }
+                UI.showUpgrade();
             }
         };
 
-        // --- 5. Payment Gateway Interface (Decoupled) ---
         class PaymentGateway {
-            // The App calls this generic method. It routes to the active provider.
-            static initiateCheckout() {
-                // Currently routing to Solana. In future, could route to Stripe based on user pref.
-                SolanaProvider.open();
-            }
+            static initiateCheckout() { SolanaProvider.open(); }
         }
 
-        // --- 6. Solana Provider Implementation ---
         const SolanaProvider = {
-            open() {
-                UI.showPayment();
-            },
-            copyAddress() {
-                navigator.clipboard.writeText(AppState.config.solanaAddress);
-                UI.toast("Address copied to clipboard");
-            },
+            open() { UI.showPayment(); },
+            copyAddress() { navigator.clipboard.writeText(AppState.config.solanaAddress); UI.toast("Address copied"); },
             verify() {
                 const hash = document.getElementById('txHash').value;
                 const btnText = document.getElementById('verifyBtnText');
                 
-                if(!hash || hash.length < 10) {
-                    UI.toast("Invalid Transaction Signature", "error");
-                    return;
-                }
+                if(!hash) { UI.toast("Invalid Hash", "error"); return; }
 
-                // UI Feedback Loop
-                const originalText = btnText.textContent;
-                btnText.textContent = "Verifying on Chain...";
+                btnText.textContent = "Verifying...";
                 
-                // Simulate Network Request
+                // Simulate Blockchain Verification
                 setTimeout(() => {
-                    console.log(`Verifying Hash: ${hash} against Address: ${AppState.config.solanaAddress}`);
+                    // 1. Upgrade User
+                    AppState.tier = 'pro';
+                    // 2. Remove Ads Instantly
+                    AdManager.render();
+                    // 3. Update UI
+                    UI.updateAuthUI(AppState.user.email, true);
                     
-                    // Success Simulation
                     UI.closeModals();
-                    AppState.user.tier = 'pro';
-                    UI.toast("Payment Verified! Features Unlocked.");
-                    btnText.textContent = originalText;
+                    UI.toast("Payment Verified! Ads Removed & Features Unlocked.");
+                    btnText.textContent = "Verify & Activate";
                     document.getElementById('txHash').value = "";
                 }, 1500);
             }
         };
 
-        // --- 7. Editor Core ---
         const Editor = {
             input: document.getElementById('jsonInput'),
             output: document.getElementById('jsonOutput'),
             indicator: document.getElementById('validIndicator'),
 
             init() {
-                this.input.value = '{"project": "Velox Enterprise", "status": "Operational", "encryption": "AES-256"}';
+                this.input.value = '{"project": "Velox", "tier": "Pro", "ads": false}';
                 this.process();
                 this.input.addEventListener('input', () => this.process());
+                AdManager.render(); // Initial check
             },
 
             process() {
@@ -613,7 +547,7 @@
 
             format() { this.input.value = JSON.stringify(JSON.parse(this.input.value), null, 2); this.process(); },
             minify() { this.input.value = JSON.stringify(JSON.parse(this.input.value)); this.process(); },
-            copy() { navigator.clipboard.writeText(this.input.value); UI.toast("Copied to clipboard"); },
+            copy() { navigator.clipboard.writeText(this.input.value); UI.toast("Copied"); },
             download(ext) {
                 const blob = new Blob([this.input.value], {type:'text/plain'});
                 const a = document.createElement('a');
@@ -623,7 +557,6 @@
             }
         };
 
-        // Initialize
         Editor.init();
 
     </script>
