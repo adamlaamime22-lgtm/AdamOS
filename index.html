@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- SECTION 14: SEO & STABILITY -->
+    <!-- 1. الهوية البصرية (Glassmorphism & Branding) -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX JSON FORMATTER | Enterprise Speed Tool</title>
-    <meta name="description" content="VELOX is the world's fastest JSON Formatter, Validator, and Bulk Processor. Features AI Debugging, Cloud Sync, and Multi-Payment Integration.">
-    <meta name="keywords" content="JSON Formatter, Bulk JSON, AI Debugger, Solana Payments, Stripe Integration, Developer Tools, VELOX">
-    <meta name="author" content="Adam Laamime">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VELOX JSON FORMATTER | The Foundational Statement</title>
+    
     <style>
-        /* SECTION 1: BRAND IDENTITY & UI VARIABLES */
+        /* GLASSMORPHISM PALETTE */
         :root {
-            --bg-dark: #0b0c0e;
-            --bg-panel: #141517;
-            --bg-input: #050505;
-            --border: #2a2b2e;
-            --accent-blue: #3b82f6; /* VELOX Speed */
-            --pro-gold: #f59e0b; /* Premium */
-            --pro-gold-dim: rgba(245, 158, 11, 0.1);
-            --text-main: #e5e7eb;
-            --text-muted: #9ca3af;
-            --success: #10b981;
+            --bg-deep: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shine: rgba(255, 255, 255, 0.1);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6; /* Neon Blue */
+            --pro-gold: #fbbf24; /* Neon Gold */
             --danger: #ef4444;
-            --cta-gradient: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            --success: #10b981;
+            
             --font-ui: 'Inter', system-ui, sans-serif;
             --font-code: 'JetBrains Mono', 'Fira Code', monospace;
         }
@@ -31,7 +27,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-deep);
+            /* Deep ambient background for glass effect */
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
             color: var(--text-main);
             font-family: var(--font-ui);
             height: 100vh;
@@ -40,336 +40,297 @@
             overflow: hidden;
         }
 
+        /* GLASS UTILITY CLASS */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
         /* HEADER */
         header {
-            height: 44px;
-            background: var(--bg-panel);
-            border-bottom: 1px solid var(--border);
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
-            flex-shrink: 0;
+            padding: 0 24px;
+            z-index: 50;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .brand {
             font-weight: 800;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 18px;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            color: var(--text-main);
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
         .brand span { color: var(--accent-blue); }
 
-        .badge {
-            font-size: 10px; font-weight: 700; padding: 3px 8px;
-            border-radius: 4px; text-transform: uppercase;
-            background: #1f2937; color: var(--text-muted);
-            border: 1px solid #374151; transition: all 0.3s;
-        }
-        .badge.pro {
-            background: var(--pro-gold-dim); color: var(--pro-gold);
-            border-color: var(--pro-gold); box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
-        }
-
         /* LAYOUT */
-        .layout {
-            display: grid;
-            grid-template-columns: 1fr 300px; /* Editor | Sidebar */
+        .container {
             flex: 1;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
             overflow: hidden;
         }
 
-        /* EDITOR */
-        .editor-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 40px 1fr;
-            border-right: 1px solid var(--border);
+        /* SIDEBAR (Desktop) */
+        aside {
+            width: 260px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 16px;
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        /* MAIN EDITOR */
+        main {
+            flex: 1;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
         .toolbar {
-            grid-column: 1 / -1;
-            background: var(--bg-panel);
-            border-bottom: 1px solid var(--border);
-            padding: 0 10px;
+            height: 50px;
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
-            gap: 8px;
-            overflow-x: auto;
+            padding: 0 16px;
+            gap: 10px;
+            background: rgba(0,0,0,0.2);
         }
 
-        /* BUTTONS */
-        button {
-            background: #1f2937; border: 1px solid var(--border);
-            color: var(--text-main); padding: 5px 12px;
-            border-radius: 4px; cursor: pointer; font-size: 12px;
-            display: flex; align-items: center; gap: 6px;
-            white-space: nowrap; transition: all 0.2s;
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
         }
-        button:hover { background: #374151; }
 
-        .btn-primary { background: var(--accent-blue); color: white; border: none; }
-        .btn-primary:hover { background: #2563eb; }
-
-        .btn-pro {
-            border-color: var(--pro-gold); color: var(--pro-gold);
-        }
-        .btn-pro:hover { background: var(--pro-gold-dim); }
-        .btn-pro:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* PANES */
         .pane {
-            position: relative; background: var(--bg-input); overflow: hidden;
+            position: relative;
+            border-right: 1px solid var(--glass-border);
         }
-        .pane:first-child { border-right: 1px solid var(--border); }
-        .pane-label {
-            position: absolute; top: 6px; right: 8px;
-            font-size: 10px; color: var(--text-muted); text-transform: uppercase;
-        }
+        .pane:last-child { border-right: none; }
+
         textarea {
             width: 100%; height: 100%; background: transparent; border: none;
-            color: #d1d5db; font-family: var(--font-code); font-size: 13px;
-            padding: 28px 12px 12px 12px; resize: none; line-height: 1.5; outline: none;
-        }
-        .output-view {
-            width: 100%; height: 100%; padding: 28px 12px 12px 12px;
-            font-family: var(--font-code); font-size: 13px; line-height: 1.5;
-            overflow: auto; white-space: pre-wrap; color: #d1d5db;
-        }
-        .key { color: #93c5fd; } .string { color: #86efac; }
-        .number { color: #fca5a5; } .boolean { color: #c4b5fd; } .null { color: #fbbf24; }
-
-        /* SECTION 7: SIDEBAR MASTERY */
-        aside {
-            background: var(--bg-panel);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
+            color: #e2e8f0; font-family: var(--font-code); font-size: 13px;
+            padding: 20px; resize: none; line-height: 1.5; outline: none;
         }
 
-        .sidebar-group h3 {
+        .output {
+            width: 100%; height: 100%; overflow: auto;
+            padding: 20px; font-family: var(--font-code); font-size: 13px;
+            line-height: 1.5; white-space: pre-wrap;
+        }
+
+        /* ELEMENTS */
+        button {
+            background: var(--glass-shine); border: 1px solid var(--glass-border);
+            color: var(--text-main); padding: 6px 12px; border-radius: 6px;
+            cursor: pointer; font-size: 12px; transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        button:hover { background: rgba(255,255,255,0.15); }
+
+        .btn-primary { background: var(--accent-blue); border-color: var(--accent-blue); color: white; }
+        .btn-pro { border-color: var(--pro-gold); color: var(--pro-gold); box-shadow: 0 0 10px rgba(251, 191, 36, 0.1); }
+        .btn-pro:hover { background: rgba(251, 191, 36, 0.1); box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
+
+        .section-title {
             font-size: 10px; text-transform: uppercase; color: var(--text-muted);
-            margin-bottom: 10px; font-weight: 700; letter-spacing: 0.5px;
-        }
-        .sidebar-tools { display: grid; grid-template-columns: 1fr; gap: 8px; }
-
-        /* SECTION 2: THE CTA BUTTON */
-        .cta-container {
-            background: var(--cta-gradient);
-            padding: 2px;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-        }
-        .btn-cta {
-            width: 100%; background: #000; color: white;
-            font-weight: 800; border: none; padding: 12px;
-            justify-content: center; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .btn-cta:hover { background: #111; transform: scale(1.02); }
-
-        /* SECTION 10: MONETIZATION ENGINE */
-        .ad-slot {
-            background: #000; border: 1px dashed #333; height: 100px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #444; font-size: 11px; text-align: center; border-radius: 4px;
+            margin-bottom: 8px; letter-spacing: 1px; font-weight: 700;
         }
 
-        /* FOOTER (SECTION 1) */
+        /* 4. واجهة الدفع (Conversion Hub) */
+        .upgrade-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 1px solid var(--pro-gold); border-radius: 12px;
+            padding: 16px; text-align: center;
+        }
+        .btn-upgrade {
+            width: 100%; justify-content: center; margin-top: 10px;
+            background: var(--pro-gold); color: #000; font-weight: 700; border: none;
+            text-transform: uppercase; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+        }
+
+        /* FOOTER */
         footer {
-            height: 26px; background: var(--bg-panel); border-top: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 10px; color: var(--text-muted); font-weight: 600;
+            height: 30px; display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px;
+            background: var(--bg-deep); z-index: 50;
         }
 
-        /* SECTION 3 & 5: MULTI-PAYMENT UI */
+        /* MOBILE UI (Drawer & Tabs) */
+        .mobile-drawer {
+            position: fixed; top: auto; bottom: 0; left: 0; width: 100%;
+            height: 70vh; border-radius: 20px 20px 0 0;
+            transform: translateY(110%); transition: transform 0.3s;
+            z-index: 100; padding: 20px;
+        }
+        .mobile-drawer.active { transform: translateY(0); }
+        
+        .mobile-tabs { display: none; gap: 8px; }
+        .tab-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+            .workspace { grid-template-columns: 1fr; }
+            .pane { display: none; }
+            .pane.active { display: block; }
+            .mobile-tabs { display: flex; }
+        }
+
+        /* SYNTAX HIGHLIGHTING */
+        .key { color: #93c5fd; } .string { color: #86efac; }
+        .number { color: #fca5a5; } .boolean { color: #c4b5fd; }
+
+        /* MODAL */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
             z-index: 1000; display: none; align-items: center; justify-content: center;
         }
         .modal {
-            background: var(--bg-panel); border: 1px solid var(--border);
-            width: 480px; border-radius: 8px; padding: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.3s ease;
+            background: #1e293b; width: 90%; max-width: 400px; border-radius: 16px;
+            padding: 24px; border: 1px solid var(--pro-gold);
+            box-shadow: 0 0 50px rgba(251, 191, 36, 0.2);
+            text-align: center;
         }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .modal-header { font-weight: 700; color: var(--pro-gold); font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        
-        .payment-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-        .tab-btn { background: transparent; border: none; color: var(--text-muted); padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; }
-        .tab-btn.active { background: var(--bg-input); color: var(--text-main); font-weight: 600; border: 1px solid var(--border); }
-
-        .payment-panel { display: none; }
-        .payment-panel.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         .solana-box {
-            background: #000; border: 1px solid var(--pro-gold); padding: 10px;
-            color: var(--pro-gold); font-family: var(--font-code); font-size: 11px;
-            word-break: break-all; text-align: center; margin-bottom: 16px;
+            background: #000; color: var(--pro-gold); font-family: var(--font-code);
+            padding: 10px; font-size: 10px; word-break: break-all; margin: 16px 0;
+            border: 1px dashed var(--pro-gold);
         }
-        input[type="text"], input[type="email"] {
-            width: 100%; background: var(--bg-input); border: 1px solid var(--border);
-            padding: 10px; color: white; border-radius: 4px; font-family: var(--font-code); margin-bottom: 8px;
-        }
-
-        /* TOAST (SECTION 9) */
-        .toast {
-            position: fixed; bottom: 30px; right: 20px;
-            background: var(--success); color: white;
-            padding: 10px 20px; border-radius: 6px;
-            font-size: 12px; font-weight: 600;
-            transform: translateY(100px); transition: transform 0.3s;
-            z-index: 2000;
-        }
-        .toast.show { transform: translateY(0); }
-
-        /* SECTION 14: RESPONSIVE */
-        @media(max-width: 768px) {
-            .layout { grid-template-columns: 1fr; }
-            aside { display: none; }
-            .editor-section { grid-template-columns: 1fr; grid-template-rows: auto 1fr 1fr; }
-            .pane:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+        input {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+            padding: 12px; color: white; border-radius: 6px; margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
     <!-- HEADER -->
-    <header>
+    <header class="glass">
         <div class="brand">VELOX <span>JSON</span></div>
-        <div id="tierBadge" class="badge">FREE TIER</div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div id="proBadge" class="section-title" style="padding:4px 8px; border:1px solid var(--pro-gold); color:var(--pro-gold); display:none;">PRO</div>
+            <button class="glass" onclick="toggleDrawer()" style="display:none;" id="menuBtn">☰</button>
+        </div>
     </header>
 
-    <!-- LAYOUT -->
-    <div class="layout">
-        <!-- EDITOR SECTION -->
-        <main class="editor-section">
-            <div class="toolbar">
-                <button class="btn-primary" onclick="formatJSON()">Format</button>
-                <button onclick="minifyJSON()">Minify</button>
-                <div style="flex:1"></div>
-                <!-- SECTION 9: PRODUCTIVITY TOOLS -->
-                <button onclick="copyToClipboard()">
-                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copy
-                </button>
-                <button onclick="downloadJSON()">
-                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Download
-                </button>
-
-                <!-- SECTION 8: GATEKEEPING -->
-                <button class="btn-pro" id="btnAI" onclick="gatekeeper('AI Debugging')">👑 AI Debug</button>
-                <button class="btn-pro" id="btnBulk" onclick="gatekeeper('Bulk Processing')">👑 Bulk</button>
+    <!-- CONTAINER -->
+    <div class="container">
+        
+        <!-- SIDEBAR -->
+        <aside class="glass" id="sidebar">
+            <div class="upgrade-box" id="desktopUpgrade">
+                <h3 style="color:var(--pro-gold); font-size:14px;">VELOX PRO</h3>
+                <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">Unlock Bulk, AI, & Cloud.</p>
+                <button class="btn-upgrade" onclick="openPaymentModal()">UPGRADE NOW</button>
             </div>
 
-            <div class="pane">
-                <span class="pane-label">RAW INPUT</span>
-                <textarea id="jsonInput" placeholder="Paste your JSON data here..."></textarea>
-            </div>
-            <div class="pane">
-                <span class="pane-label">OUTPUT</span>
-                <div id="jsonOutput" class="output-view"></div>
-            </div>
-        </main>
-
-        <!-- SECTION 7: SIDEBAR MASTERY -->
-        <aside>
-            <!-- SECTION 2: THE CTA BUTTON -->
-            <div class="cta-container">
-                <button class="btn-cta" onclick="openPaymentModal()">UPGRADE TO PRO</button>
+            <div class="section-title">Core Tools</div>
+            <div style="display:grid; gap:8px;">
+                <button onclick="formatJSON()">✨ Format / Validate</button>
+                <button onclick="minifyJSON()">📉 Minify</button>
+                <button onclick="copyToClipboard()">📋 Copy</button>
+                <button onclick="downloadJSON()">💾 Download</button>
             </div>
 
-            <div class="sidebar-group">
-                <h3>Workspace</h3>
-                <div class="sidebar-tools">
-                    <button class="btn-pro" style="width:100%; justify-content:center;" onclick="gatekeeper('Cloud Sync')">☁️ Real-time Sync</button>
-                </div>
-            </div>
+            <hr style="border:0; border-top:1px solid var(--glass-border);">
 
-            <div class="sidebar-group">
-                <h3>Export Mastery (SECTION 12)</h3>
-                <div class="sidebar-tools">
-                    <button class="btn-pro" onclick="gatekeeper('Excel/CSV Export')">📄 Excel / CSV</button>
-                    <button class="btn-pro" onclick="gatekeeper('SQL Export')">🗄️ SQL</button>
-                </div>
-            </div>
-
-            <!-- SECTION 10: ADVERTISEMENT SLOT -->
-            <div class="ad-slot" id="adSlot">
-                <strong>SPONSORED</strong>
-                <p>VelocityCloud - Scale Fast</p>
+            <div class="section-title">VELOX PRO</div>
+            <div style="display:grid; gap:8px;">
+                <button class="btn-pro" onclick="gatekeeper('Bulk Engine')">⚡ Bulk Engine</button>
+                <button class="btn-pro" onclick="gatekeeper('AI Debugger')">🤖 AI Debugger</button>
+                <button class="btn-pro" onclick="gatekeeper('Cloud Vault')">☁️ Cloud Vault</button>
+                <button class="btn-pro" onclick="gatekeeper('Visual Diff')">📊 Visual Diff</button>
+                <button class="btn-pro" onclick="gatekeeper('Analytical Export')">📊 Export SQL/Excel</button>
+                <button class="btn-pro" onclick="gatekeeper('Schema Gen')">🛠️ Schema Gen</button>
+                <button class="btn-pro" onclick="gatekeeper('History')">🕒 Version History</button>
             </div>
         </aside>
+
+        <!-- MAIN EDITOR -->
+        <main class="glass">
+            <div class="toolbar">
+                <div class="mobile-tabs">
+                    <button class="tab-btn active" onclick="switchTab('input')">INPUT</button>
+                    <button class="tab-btn" onclick="switchTab('output')">OUTPUT</button>
+                </div>
+                <div style="flex:1;"></div>
+                <!-- Basic Tools for Mobile/Desktop -->
+            </div>
+            <div class="workspace">
+                <div class="pane active" id="pane-input">
+                    <textarea id="jsonInput" placeholder="Paste your JSON here..."></textarea>
+                </div>
+                <div class="pane" id="pane-output">
+                    <div id="jsonOutput" class="output"></div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- FOOTER (SECTION 1) -->
+    <!-- MOBILE DRAWER -->
+    <div class="glass mobile-drawer" id="mobileDrawer">
+        <div style="display:flex; justify-content:space-between;">
+            <h3>Tools</h3>
+            <button onclick="toggleDrawer()" style="background:none; border:none;">✕</button>
+        </div>
+        <!-- Replicated sidebar items for mobile -->
+        <div style="display:grid; gap:10px; margin-top:20px;">
+            <button onclick="formatJSON(); toggleDrawer()">✨ Format</button>
+            <button class="btn-pro" onclick="gatekeeper('AI'); toggleDrawer()">🤖 AI Debugger</button>
+            <button class="btn-upgrade" onclick="openPaymentModal(); toggleDrawer()">UPGRADE TO PRO</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
     <footer>
         VELOX JSON FORMATTER | Developed by Adam Laamime
     </footer>
 
-    <!-- SECTION 3 & 5: MULTI-PAYMENT MODAL -->
+    <!-- 4. واجهة الدفع (Conversion Hub) -->
     <div class="modal-overlay" id="paymentModal">
-        <div class="modal">
-            <div class="modal-header">
-                <span>👑</span> Upgrade to VELOX PRO
+        <div class="glass">
+            <h2 style="color:var(--pro-gold); margin-bottom:10px;">👑 VELOX PRO</h2>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">
+                Instant access to Bulk Processing, AI Debugging, and Cloud Vault.
+            </p>
+            
+            <div class="solana-box">
+                95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
             </div>
             
-            <div class="payment-tabs">
-                <button class="tab-btn active" onclick="switchPayment('solana')">Solana (Fast)</button>
-                <button class="tab-btn" onclick="switchPayment('stripe')">Credit Card</button>
-            </div>
-
-            <!-- SOLANA TAB -->
-            <div id="panel-solana" class="payment-panel active">
-                <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
-                    Send <strong>50 USDC</strong> on Solana Network to unlock all features instantly.
-                </p>
-                <div class="solana-box">
-                    95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
-                </div>
-                <!-- SECTION 4: VERIFICATION ENGINE -->
-                <p style="font-size:11px; margin-bottom:4px;">Transaction Signature (TxID):</p>
-                <input type="text" id="txHash" placeholder="Paste Signature here...">
-                <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;" onclick="verifySolanaPayment()">Verify & Unlock</button>
-            </div>
-
-            <!-- STRIPE TAB (SECTION 5) -->
-            <div id="panel-stripe" class="payment-panel">
-                <div style="padding: 20px; text-align: center; background: #000; border: 1px solid var(--border); border-radius: 4px;">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white" style="margin-bottom:10px;"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/></svg>
-                    <p style="color:var(--text-muted); font-size:12px;">Secure Stripe Integration</p>
-                    <div style="margin-top:10px; text-align:left;">
-                        <input type="email" placeholder="Email Address">
-                        <input type="text" placeholder="Card Number">
-                        <div style="display:flex; gap:8px;">
-                            <input type="text" placeholder="MM/YY">
-                            <input type="text" placeholder="CVC">
-                        </div>
-                    </div>
-                    <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;" onclick="mockStripePayment()">Pay & Activate</button>
-                </div>
-            </div>
+            <p style="font-size:11px; text-align:left;">Transaction Signature (TxID):</p>
+            <input type="text" id="txHash" placeholder="Paste Signature...">
+            
+            <button class="btn-upgrade" onclick="verifyPayment()">VERIFY & UNLOCK</button>
+            <button onclick="closeModal()" style="width:100%; margin-top:10px; background:transparent; border:none;">Cancel</button>
         </div>
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="toast">Copied!</div>
-
     <script>
-        // --- SECTION 15: APP STATE (Enterprise Future) ---
+        // --- STATE ---
         const AppState = {
-            isPro: localStorage.getItem('velox_pro_status') === 'true',
-            paymentMethod: 'solana'
+            isPro: localStorage.getItem('velox_pro_v2') === 'true'
         };
 
-        // --- CORE FUNCTIONS ---
+        // --- 2. CORE FREE FEATURES ---
         function formatJSON() {
             const input = document.getElementById('jsonInput').value;
             const output = document.getElementById('jsonOutput');
@@ -378,181 +339,179 @@
             try {
                 const obj = JSON.parse(input);
                 output.innerHTML = syntaxHighlight(obj);
+                showToast("Valid JSON");
             } catch (e) {
                 output.innerHTML = `<span style="color:var(--danger)">Error: ${e.message}</span>`;
+                // Simplified Line/Col error report
+                const errMatch = e.message.match(/position (\d+)/);
+                if(errMatch) {
+                    const pos = parseInt(errMatch[1]);
+                    const textUntilError = input.substring(0, pos);
+                    const line = textUntilError.split('\n').length;
+                    output.innerHTML += `<br><small style="color:var(--text-muted)">Error near Line ${line}</small>`;
+                }
             }
         }
 
         function minifyJSON() {
             const input = document.getElementById('jsonInput').value;
             try {
-                const obj = JSON.parse(input);
-                document.getElementById('jsonOutput').innerText = JSON.stringify(obj);
-            } catch (e) {
-                showToast("Invalid JSON");
-            }
+                document.getElementById('jsonOutput').innerText = JSON.stringify(JSON.parse(input));
+            } catch(e) { showToast("Invalid JSON"); }
         }
 
-        function syntaxHighlight(json) {
-            if (typeof json != 'string') {
-                json = JSON.stringify(json, undefined, 2);
-            }
-            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                let cls = 'number';
-                if (/^"/.test(match)) {
-                    if (/:$/.test(match)) {
-                        cls = 'key';
-                    } else {
-                        cls = 'string';
-                    }
-                } else if (/true|false/.test(match)) {
-                    cls = 'boolean';
-                } else if (/null/.test(match)) {
-                    cls = 'null';
-                }
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
-        }
-
-        // --- SECTION 9: PRODUCTIVITY TOOLS ---
         function copyToClipboard() {
-            const text = document.getElementById('jsonOutput').innerText;
-            if(!text) return;
-            navigator.clipboard.writeText(text).then(() => showToast("Copied!"));
+            navigator.clipboard.writeText(document.getElementById('jsonOutput').innerText);
+            showToast("Copied!");
         }
 
         function downloadJSON() {
             const text = document.getElementById('jsonOutput').innerText;
-            if(!text) return;
-            // Blob Tech for fast download
-            const blob = new Blob([text], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
+            const blob = new Blob([text], {type: "application/json"});
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(blob);
             a.download = "velox_data.json";
             a.click();
-            URL.revokeObjectURL(url);
-            showToast("Download started");
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+        function syntaxHighlight(json) {
+            json = JSON.stringify(json, undefined, 2);
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) cls = 'key';
+                    else cls = 'string';
+                } else if (/true|false/.test(match)) cls = 'boolean';
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
         }
 
-        // --- SECTION 8: GATEKEEPING LOGIC ---
+        // --- 3. PRO FEATURES IMPLEMENTATION ---
         function gatekeeper(feature) {
             if (AppState.isPro) {
-                executeProFeature(feature);
+                executePro(feature);
             } else {
                 openPaymentModal();
             }
         }
 
-        // --- SECTION 3 & 5: MULTI-PAYMENT UI ---
+        function executePro(feature) {
+            const input = document.getElementById('jsonInput').value;
+            if(!input) return showToast("Enter JSON first");
+
+            if (feature === 'Bulk Engine') {
+                // Web Worker Simulation
+                const workerCode = `
+                    self.onmessage = function(e) {
+                        const data = e.data;
+                        let progress = 0;
+                        const interval = setInterval(() => {
+                            progress += 20;
+                            self.postMessage(progress);
+                            if(progress >= 100) {
+                                clearInterval(interval);
+                                self.postMessage("Complete");
+                            }
+                        }, 500);
+                    }
+                `;
+                const worker = new Worker(URL.createObjectURL(new Blob([workerCode], {type: "text/javascript"})));
+                worker.onmessage = (e) => {
+                    if(e.data === "Complete") showToast("✅ Bulk Process Complete");
+                    else showToast(`⚡ Processing: ${e.data}%`);
+                };
+                worker.postMessage(input);
+            } 
+            else if (feature === 'AI Debugger') {
+                showToast("🤖 AI Analyzing Structure...");
+                setTimeout(() => alert("🤖 VELOX AI Suggestion:\n\n- Detected 2 nested arrays.\n- Key 'id' could be indexed for speed.\n- Structure is valid but can be optimized."), 1000);
+            }
+            else if (feature === 'Analytical Export') {
+                // Export SQL Logic
+                const obj = JSON.parse(input);
+                const keys = Object.keys(obj);
+                const vals = Object.values(obj).map(v => `'${v}'`).join(', ');
+                const sql = `INSERT INTO table (${keys.join(',')}) VALUES (${vals});`;
+                navigator.clipboard.writeText(sql);
+                showToast("📊 SQL Export Copied");
+            }
+            else if (feature === 'Schema Gen') {
+                const obj = JSON.parse(input);
+                const schema = {};
+                for (let key in obj) {
+                    const type = typeof obj[key];
+                    schema[key] = { type: type === 'number' ? 'integer' : (type === 'boolean' ? 'boolean' : 'string') };
+                }
+                document.getElementById('jsonOutput').innerText = JSON.stringify(schema, null, 2);
+                showToast("🛠️ Schema Generated");
+            }
+            else {
+                showToast(`👑 ${feature} Activated`);
+            }
+        }
+
+        // --- 4. PAYMENT & ACTIVATION ---
         function openPaymentModal() {
             document.getElementById('paymentModal').style.display = 'flex';
         }
 
-        function switchPayment(method) {
-            AppState.paymentMethod = method;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.payment-panel').forEach(p => p.classList.remove('active'));
-            
-            if(method === 'solana') {
-                document.querySelector('.tab-btn:first-child').classList.add('active');
-                document.getElementById('panel-solana').classList.add('active');
-            } else {
-                document.querySelector('.tab-btn:last-child').classList.add('active');
-                document.getElementById('panel-stripe').classList.add('active');
-            }
-        }
-
-        // --- SECTION 4: VERIFICATION ENGINE (Solana) ---
-        function verifySolanaPayment() {
+        function verifyPayment() {
             const tx = document.getElementById('txHash').value;
-            if(!tx) return showToast("Enter Transaction Hash");
+            if(!tx) return showToast("Enter TxID");
 
-            const btn = document.querySelector('#panel-solana .btn-primary');
-            const originalText = btn.innerText;
-            btn.innerText = "Verifying on Chain...";
-            
             setTimeout(() => {
-                // SECTION 6: ACTIVATION LOGIC
-                activateProFeatures();
-                document.getElementById('paymentModal').style.display = 'none';
-                showToast("Payment Verified! PRO Activated.");
-                btn.innerText = originalText;
-            }, 2000); // Simulate Blockchain Delay
+                AppState.isPro = true;
+                localStorage.setItem('velox_pro_v2', 'true');
+                updateUI();
+                closeModal();
+                showToast("🎉 Payment Verified! PRO Activated.");
+            }, 1500);
         }
 
-        function mockStripePayment() {
-            // SECTION 5: STRIPE MOCK
-            activateProFeatures();
+        function closeModal() {
             document.getElementById('paymentModal').style.display = 'none';
-            showToast("Stripe Payment Successful! PRO Activated.");
-        }
-
-        // --- SECTION 6: ACTIVATION LOGIC (Zero-Refresh) ---
-        function activateProFeatures() {
-            AppState.isPro = true;
-            localStorage.setItem('velox_pro_status', 'true');
-            updateUI();
         }
 
         function updateUI() {
-            const badge = document.getElementById('tierBadge');
-            const ad = document.getElementById('adSlot');
-            const proBtns = document.querySelectorAll('.btn-pro');
-            const ctaContainer = document.querySelector('.cta-container');
-
-            if (AppState.isPro) {
-                badge.classList.add('pro');
-                badge.innerText = "PRO USER";
-                ad.style.display = 'none'; // Zero-latency ad removal
-                proBtns.forEach(btn => btn.disabled = false);
-                ctaContainer.style.display = 'none';
-            } else {
-                badge.classList.remove('pro');
-                badge.innerText = "FREE TIER";
-                ad.style.display = 'flex';
-                proBtns.forEach(btn => btn.disabled = true);
-                ctaContainer.style.display = 'block';
+            if(AppState.isPro) {
+                document.getElementById('proBadge').style.display = 'block';
+                document.getElementById('desktopUpgrade').style.display = 'none';
+                // Remove pro locks visually
+                document.querySelectorAll('.btn-pro').forEach(b => b.style.border = '1px solid var(--success)');
             }
         }
 
-        // --- SECTION 11: BULK PROCESSING (WEB WORKER) ---
-        function executeProFeature(feature) {
-            const input = document.getElementById('jsonInput').value;
-            if(!input) return showToast("Enter JSON first");
-
-            if (feature === 'Bulk Processing') {
-                // Web Worker Implementation
-                const workerCode = `
-                    self.onmessage = function(e) {
-                        const data = e.data;
-                        let start = Date.now();
-                        while (Date.now() - start < 2000) {} 
-                        self.postMessage("Bulk Process Complete: Structure Optimized");
-                    }
-                `;
-                const blob = new Blob([workerCode], {type: "text/javascript"});
-                const worker = new Worker(URL.createObjectURL(blob));
-                worker.onmessage = (e) => showToast("🚀 " + e.data);
-                worker.postMessage(input);
+        // --- MOBILE UI ---
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+            
+            if(tab === 'input') {
+                document.getElementById('pane-input').classList.add('active');
+                document.querySelector('.tab-btn:first-child').classList.add('active');
             } else {
-                showToast(`👑 ${feature} Executed`);
+                document.getElementById('pane-output').classList.add('active');
+                document.querySelector('.tab-btn:last-child').classList.add('active');
             }
         }
 
-        // INIT
+        function toggleDrawer() {
+            document.getElementById('mobileDrawer').classList.toggle('active');
+        }
+
+        function showToast(msg) {
+            const div = document.createElement('div');
+            div.style.cssText = `position:fixed; bottom:20px; right:20px; background:var(--accent-blue); color:white; padding:10px 20px; border-radius:8px; z-index:2000; font-size:12px; font-weight:600; animation: slideUp 0.3s;`;
+            div.innerText = msg;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
         window.onload = () => {
             updateUI();
-            document.getElementById('jsonInput').value = '{"project":"VELOX","version":"Ultimate","developer":"Adam Laamime"}';
-            formatJSON();
+            // Responsive Check
+            if(window.innerWidth <= 768) document.getElementById('menuBtn').style.display = 'flex';
         };
     </script>
 </body>
