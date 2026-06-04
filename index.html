@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX JSON FORMATTER | Enterprise Edition</title>
+    <title>VELOX JSON FORMATTER | Enterprise SaaS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* 
-         * VELOX ENTERPRISE DESIGN SYSTEM v6.0
-         * Focus: Zero Dead Space, High Density, Native Ads
+         * VELOX ENTERPRISE DESIGN SYSTEM v8.0 (FINAL)
+         * High-Density, Commercial Monetization Logic
          */
         :root {
-            --bg-root: #0a0a0a;
-            --bg-panel: #111111;
-            --bg-hover: #1a1a1a;
-            --border: #2a2a2a;
+            --bg-root: #050505;
+            --bg-panel: #0e0e0e;
+            --bg-element: #141414;
+            --border: #222222;
             
             --text-main: #e5e5e5;
-            --text-muted: #888888;
+            --text-muted: #666666;
             
-            --accent: #3b82f6;
-            --pro-gold: #d4af37;
+            --accent: #2563eb;
+            --pro-gold: #fbbf24;
             
-            --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-code: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-ui: 'Inter', system-ui, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
         }
 
         * { box-sizing: border-box; outline: none; }
@@ -56,31 +56,31 @@
         .brand { font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
         .brand span { color: var(--accent); }
 
-        .user-panel { display: flex; align-items: center; gap: 12px; }
-        .status-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 3px; background: #222; color: #666; }
-        .status-badge.pro { background: rgba(212, 175, 55, 0.15); color: var(--pro-gold); border: 1px solid rgba(212, 175, 55, 0.3); }
+        .user-controls { display: flex; align-items: center; gap: 12px; }
+        .tier-badge {
+            font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 3px;
+            background: #1a1a1a; color: #555; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .tier-badge.pro { background: rgba(251, 191, 36, 0.15); color: var(--pro-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
 
-        /* --- WORKSPACE LAYOUT --- */
+        /* --- WORKSPACE (High Density Grid) --- */
         .workspace { display: flex; flex: 1; overflow: hidden; }
 
-        /* SIDEBAR (Dynamic Width based on Tier) */
+        /* SIDEBAR: Dynamic Width Logic */
         aside {
             background: var(--bg-panel);
             border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            
-            /* Default width (Free Tier with Ads) */
-            width: 240px; 
+            width: 240px; /* Default width with Ads */
         }
 
-        /* Pro Layout: Remove Dead Space by shrinking sidebar */
-        body.ad-free-mode aside { width: 180px; }
+        /* Pro Mode: Remove Dead Space by shrinking sidebar */
+        body.pro-active aside { width: 180px; }
 
-        .nav-list { padding: 8px 0; display: flex; flex-direction: column; flex: 1; }
+        .sidebar-content { padding: 12px 0; display: flex; flex-direction: column; gap: 4px; }
 
-        /* NAV ITEMS & NATIVE ADS */
+        /* NAV ITEMS */
         .nav-item {
             padding: 8px 16px;
             cursor: pointer;
@@ -89,30 +89,32 @@
             font-weight: 500;
             display: flex; align-items: center; gap: 10px;
             transition: 0.1s;
-            border-left: 3px solid transparent;
-            text-decoration: none;
+            border-left: 2px solid transparent;
         }
-        .nav-item:hover { background: var(--bg-hover); color: var(--text-main); }
-        .nav-item.active { background: rgba(59, 130, 246, 0.05); border-left-color: var(--accent); color: var(--accent); }
+        .nav-item:hover { background: var(--bg-element); color: var(--text-main); }
+        .nav-item.active { background: rgba(37, 99, 235, 0.05); border-left-color: var(--accent); color: var(--accent); }
         .nav-item i { width: 16px; text-align: center; font-size: 0.85rem; }
+        .crown { margin-left: auto; font-size: 0.7rem; color: var(--pro-gold); }
 
-        /* NATIVE AD STYLING (Blends with Menu) */
-        .nav-item.ad-native {
-            margin: 4px 12px;
-            background: rgba(255,255,255,0.02);
+        /* NATIVE AD UNIT (High Visibility, Professional Integration) */
+        .native-ad {
+            margin: 4px 12px 12px 12px;
+            background: linear-gradient(145deg, #151515, #0d0d0d);
             border: 1px solid var(--border);
             border-radius: 4px;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
-            padding: 10px;
+            padding: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        .nav-item.ad-native:hover { border-color: var(--text-muted); }
-        .ad-label { font-size: 0.6rem; text-transform: uppercase; color: #555; font-weight: 700; }
-        .ad-content { display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; }
-        .ad-desc { font-size: 0.7rem; color: var(--text-muted); font-weight: 400; }
+        .native-ad:hover { border-color: #333; transform: translateY(-1px); }
+        .ad-header { display: flex; justify-content: space-between; font-size: 0.6rem; color: #444; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .ad-body h4 { margin: 0; font-size: 0.85rem; color: #fff; }
+        .ad-body p { margin: 4px 0 0; font-size: 0.7rem; color: #666; line-height: 1.3; }
+        .ad-cta { font-size: 0.7rem; color: var(--accent); font-weight: 600; margin-top: 4px; }
 
-        body.ad-free-mode .nav-item.ad-native { display: none; } /* Hard-coded removal */
+        /* LOGIC: Hide Ad when Pro */
+        body.pro-active .native-ad { display: none; }
 
         /* --- MAIN AREA --- */
         main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--bg-root); }
@@ -130,12 +132,13 @@
             cursor: pointer; font-size: 0.75rem; font-weight: 600;
             display: flex; align-items: center; gap: 6px;
         }
-        button:hover { background: var(--bg-hover); color: var(--text-main); }
-        button.btn-pro { color: var(--pro-gold); border-color: rgba(212, 175, 55, 0.2); }
-        button.btn-pro:hover { background: rgba(212, 175, 55, 0.05); }
+        button:hover { background: var(--bg-element); color: var(--text-main); }
+        
+        button.btn-pro { color: var(--pro-gold); border-color: rgba(251, 191, 36, 0.2); }
+        button.btn-pro:hover { background: rgba(251, 191, 36, 0.05); }
 
-        /* EDITOR (Fills remaining space) */
-        .editor-container { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
+        /* EDITOR */
+        .editor-grid { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
         .pane { display: flex; flex-direction: column; min-width: 0; }
         .pane:not(:last-child) { border-right: 1px solid var(--border); }
         
@@ -154,49 +157,58 @@
         
         .k { color: #60a5fa; } .s { color: #4ade80; } .n { color: #f472b6; } .b { color: #a78bfa; } .z { color: #64748b; }
 
-        /* FOOTER */
+        /* FOOTER (Strict Branding) */
         footer {
-            height: 26px; background: #000; border-top: 1px solid var(--border);
+            height: 28px; background: #000; border-top: 1px solid var(--border);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.65rem; color: #444;
+            font-size: 0.65rem; color: #444; letter-spacing: 0.5px;
+            flex-shrink: 0;
         }
 
         /* --- MODALS --- */
-        .modal-backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
             z-index: 100; display: none; justify-content: center; align-items: center;
         }
-        .modal-backdrop.active { display: flex; animation: fade 0.2s; }
-        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
         .modal {
-            background: var(--bg-panel); border: 1px solid var(--border); width: 500px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-radius: 6px;
+            background: var(--bg-panel); border: 1px solid var(--border); width: 550px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6); border-radius: 6px; display: flex; flex-direction: column;
+            max-height: 90vh;
         }
 
-        .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { margin: 0; font-size: 1rem; color: #fff; }
-        .modal-body { padding: 24px; }
+        .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;}
+        .modal-header h3 { margin: 0; font-size: 1.1rem; color: #fff; }
+        .modal-body { padding: 24px; overflow-y: auto; }
 
-        .benefit-list { margin: 16px 0; padding: 0; list-style: none; }
-        .benefit-list li { margin-bottom: 10px; display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-muted); }
-        .benefit-list i { color: var(--accent); }
+        .value-list { margin: 0 0 20px 0; padding: 0; list-style: none; }
+        .value-list li {
+            margin-bottom: 12px; display: flex; gap: 12px; font-size: 0.9rem; color: #aaa; line-height: 1.4;
+        }
+        .value-list i { color: var(--accent); margin-top: 3px; }
+        .value-list strong { color: #fff; display: block; }
 
         .btn-action {
             width: 100%; background: var(--accent); color: #fff; border: none;
-            padding: 12px; font-weight: 700; cursor: pointer; border-radius: 4px;
+            padding: 12px; font-weight: 700; cursor: pointer; border-radius: 4px; margin-top: auto;
         }
-        .btn-action:hover { background: #2563eb; }
+        .btn-action:hover { background: #1d4ed8; }
 
-        .crypto-box {
-            background: rgba(0,0,0,0.3); padding: 16px; border-radius: 4px; border: 1px solid var(--border);
+        .crypto-modal {
+            background: rgba(255,255,255,0.02); padding: 16px; border-radius: 4px; border: 1px solid var(--border);
             margin-top: 16px; text-align: center;
         }
         .qr-img { width: 120px; height: 120px; background: #fff; padding: 10px; border-radius: 4px; }
-        .addr-box {
-            background: #000; padding: 6px; font-family: var(--font-code); font-size: 0.75rem;
+        .wallet-addr {
+            background: #000; padding: 8px; font-family: var(--font-code); font-size: 0.75rem;
             color: var(--accent); border: 1px dashed var(--border); cursor: pointer;
             margin-top: 10px; word-break: break-all;
+        }
+        .hash-input {
+            width: 100%; background: #000; border: 1px solid var(--border);
+            color: #fff; padding: 10px; margin-top: 16px; font-family: var(--font-code);
         }
 
     </style>
@@ -208,29 +220,42 @@
             <i class="fa-solid fa-cube" style="color: #333;"></i>
             VELOX <span>FORMATTER</span>
         </div>
-        <div class="user-panel">
-            <span id="statusBadge" class="status-badge">FREE TIER</span>
-            <button onclick="AuthSystem.toggle()"><i class="fa-solid fa-user"></i></button>
+        <div class="user-controls">
+            <span id="tierBadge" class="tier-badge">FREE TIER</span>
+            <button onclick="AuthSystem.toggleLogin()"><i class="fa-solid fa-user-circle"></i></button>
         </div>
     </header>
 
     <div class="workspace">
         <aside>
-            <nav class="nav-list">
+            <nav class="sidebar-content">
                 <div class="nav-item active"><i class="fa-solid fa-code"></i> Editor</div>
                 <div class="nav-item"><i class="fa-solid fa-clock"></i> History</div>
-                <div class="nav-item" onclick="ProSystem.request('Bulk Tools')"><i class="fa-solid fa-layer-group"></i> Bulk <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.6rem; color:var(--pro-gold);"></i></div>
-                <div class="nav-item" onclick="ProSystem.request('Cloud Sync')"><i class="fa-solid fa-cloud"></i> Cloud <i class="fa-solid fa-crown" style="margin-left:auto; font-size:0.6rem; color:var(--pro-gold);"></i></div>
+                
+                <!-- PRO FEATURES -->
+                <div class="nav-item" id="nav-bulk" onclick="ProManager.checkAccess('Bulk Tools')">
+                    <i class="fa-solid fa-layer-group"></i> Bulk <i class="fa-solid fa-crown crown"></i>
+                </div>
+                <div class="nav-item" id="nav-cloud" onclick="ProManager.checkAccess('Cloud Sync')">
+                    <i class="fa-solid fa-cloud"></i> Cloud <i class="fa-solid fa-crown crown"></i>
+                </div>
+                <div class="nav-item" id="nav-ai" onclick="ProManager.checkAccess('AI Analysis')">
+                    <i class="fa-solid fa-brain"></i> AI <i class="fa-solid fa-crown crown"></i>
+                </div>
+                <div class="nav-item" id="nav-diff" onclick="ProManager.checkAccess('Diff Engine')">
+                    <i class="fa-solid fa-code-compare"></i> Diff <i class="fa-solid fa-crown crown"></i>
+                </div>
 
-                <!-- NATIVE AD INTEGRATION: Looks like a menu item -->
-                <div class="nav-item ad-native">
-                    <div class="ad-label">Sponsored Partner</div>
-                    <div class="ad-content">
-                        <i class="fa-solid fa-server" style="color:#555;"></i>
-                        <div>
-                            <div style="font-size:0.8rem;">Deploy Infra</div>
-                            <div class="ad-desc">Global edge scaling</div>
-                        </div>
+                <!-- NATIVE AD UNIT -->
+                <div class="native-ad">
+                    <div class="ad-header">
+                        <span>Sponsored</span>
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </div>
+                    <div class="ad-body">
+                        <h4>Scale Infra</h4>
+                        <p>Global edge deployment for high-performance APIs.</p>
+                        <div class="ad-cta">Deploy Now &rarr;</div>
                     </div>
                 </div>
             </nav>
@@ -242,12 +267,19 @@
                 <button onclick="Editor.minify()"><i class="fa-solid fa-compress"></i> Minify</button>
                 <div style="flex:1"></div>
                 <button onclick="Editor.copy()"><i class="fa-regular fa-copy"></i> Copy</button>
-                <button class="btn-pro" onclick="ProSystem.request('Excel Export')"><i class="fa-solid fa-file-excel"></i> Excel</button>
+                <button onclick="Editor.download()"><i class="fa-solid fa-download"></i> JSON</button>
+                <div style="width:1px; height:16px; background:#222; margin:0 4px;"></div>
+                <button class="btn-pro" id="btn-excel" onclick="ProManager.checkAccess('Excel Export')">
+                    <i class="fa-solid fa-file-excel"></i> Excel
+                </button>
+                <button class="btn-pro" id="btn-sql" onclick="ProManager.checkAccess('SQL Export')">
+                    <i class="fa-solid fa-database"></i> SQL
+                </button>
             </div>
 
-            <div class="editor-container">
+            <div class="editor-grid">
                 <div class="pane">
-                    <div class="pane-header">Input <span id="jsonStatus" style="color:var(--text-muted);"></span></div>
+                    <div class="pane-header">Input <span id="jsonStatus"></span></div>
                     <textarea id="input" spellcheck="false"></textarea>
                 </div>
                 <div class="pane">
@@ -262,139 +294,195 @@
         VELOX JSON FORMATTER | Developed by Adam Laamime
     </footer>
 
-    <!-- PRO UPGRADE MODAL -->
-    <div class="modal-backdrop" id="upgradeModal">
+    <!-- UPGRADE MODAL -->
+    <div class="modal-overlay" id="upgradeModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 style="color:var(--pro-gold);">Upgrade to Pro</h3>
+                <h3>Unlock the Full Power of VELOX Pro</h3>
                 <button onclick="UI.closeModals()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <p style="margin-top:0; font-size:0.9rem;">Maximize your engineering efficiency.</p>
-                <ul class="benefit-list">
-                    <li><i class="fa-solid fa-check"></i> <strong>Unlimited Bulk Processing</strong> - Handle massive datasets instantly.</li>
-                    <li><i class="fa-solid fa-check"></i> <strong>AI-Powered Debugging</strong> - Intelligent error explanations.</li>
-                    <li><i class="fa-solid fa-check"></i> <strong>Ad-Free Environment</strong> - Clean, focused workspace.</li>
+                <ul class="value-list">
+                    <li>
+                        <i class="fa-solid fa-rocket"></i>
+                        <div><strong>Unlimited Bulk Processing</strong>Handle massive JSON datasets in seconds with zero latency.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-folder-open"></i>
+                        <div><strong>Multi-Format Mastery</strong>Export to Excel, SQL, YAML, XML, and CSV with a single click.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-brain"></i>
+                        <div><strong>AI-Powered Code Analysis</strong>Debug, optimize, and explain your complex JSON structures.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-cloud"></i>
+                        <div><strong>Cloud Sync & Workspaces</strong>Access your work securely from anywhere, on any device.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <div><strong>Advanced JSON Schema Validation</strong>Ensure your data integrity with enterprise-grade validation tools.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        <div><strong>JSON Diffing Engine</strong>Effortlessly compare versions and track changes in your data.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-ban"></i>
+                        <div><strong>Ad-Free Workspace</strong>Experience a clean, distraction-free environment for maximum professional productivity.</div>
+                    </li>
                 </ul>
-                <button class="btn-action" onclick="PaymentSys.initiate($5.00)">Upgrade for $5/mo</button>
+                <button class="btn-action" onclick="PaymentFlow.initiate($5.00)">Upgrade Now ($2/Wk, $5/Mo, $50/Yr)</button>
             </div>
         </div>
     </div>
 
-    <!-- SOLANA PAYMENT MODAL -->
-    <div class="modal-backdrop" id="paymentModal">
+    <!-- PAYMENT MODAL -->
+    <div class="modal-overlay" id="paymentModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Secure Payment</h3>
+                <h3>Secure Payment (Solana)</h3>
                 <button onclick="UI.closeModals()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <div style="text-align:center;">
-                    <div style="font-size:0.8rem; margin-bottom:10px; color:#888;">Send 5 USDC to Solana Mainnet</div>
-                    <div class="crypto-box">
-                        <img id="qr" src="" class="qr-img">
-                        <div class="addr-box" onclick="SolanaSys.copy()">95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W</div>
+                <div class="crypto-modal">
+                    <div style="font-size:0.8rem; color:#666; margin-bottom:10px;">Send USDC to Mainnet</div>
+                    <div class="qr-img">
+                        <img id="qr" src="" style="width:100%; height:100%;">
+                    </div>
+                    <div class="wallet-addr" onclick="PaymentFlow.copyAddress()">
+                        95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
                     </div>
                 </div>
+                
                 <div style="margin-top:16px;">
-                    <label style="font-size:0.75rem; color:#666;">Transaction Hash</label>
-                    <input type="text" id="txId" class="addr-box" style="background:#111; color:#fff; cursor:text;" placeholder="Paste signature here...">
+                    <label style="font-size:0.75rem; color:#666;">Transaction Signature</label>
+                    <input type="text" id="txHash" class="hash-input" placeholder="Paste transaction signature...">
                 </div>
-                <button class="btn-action" style="margin-top:16px;" onclick="SolanaSys.verify()">Verify & Activate</button>
+
+                <button class="btn-action" style="margin-top:16px;" onclick="PaymentFlow.verifyAndActivate()">
+                    <span id="verifyBtn">Verify & Activate Pro</span>
+                </button>
             </div>
         </div>
     </div>
 
     <script>
         /**
-         * CENTRALIZED REVENUE & AUTH CORE
+         * VELOX AUTOMATED MONETIZATION ENGINE
+         * Logic: Verify -> Update DB -> Transform UI
          */
 
-        const AppState = {
-            status: 'FREE', // FREE | PRO
-            wallet: '95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W'
-        };
-
-        const UI = {
-            closeModals() { document.querySelectorAll('.modal-backdrop').forEach(e => e.classList.remove('active')); },
+        // 1. CENTRALIZED STATE (Simulated Database)
+        const UserState = {
+            tier: 'FREE', // 'FREE' or 'PRO'
+            wallet: '95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W',
             
-            render() {
-                // THE CORE LOGIC: Toggle Ad-Free Mode based on Status
-                if(AppState.status === 'PRO') {
-                    document.body.classList.add('ad-free-mode');
-                    document.getElementById('statusBadge').textContent = 'PRO USER';
-                    document.getElementById('statusBadge').classList.add('pro');
-                } else {
-                    document.body.classList.remove('ad-free-mode');
-                    document.getElementById('statusBadge').textContent = 'FREE TIER';
-                    document.getElementById('statusBadge').classList.remove('pro');
-                }
+            init() {
+                const savedTier = localStorage.getItem('velox_tier');
+                if (savedTier) this.tier = savedTier;
+                this.render();
             },
 
+            setPro() {
+                this.tier = 'PRO';
+                localStorage.setItem('velox_tier', 'PRO');
+                this.render(); // Trigger Immediate Transformation
+            },
+
+            render() {
+                const badge = document.getElementById('tierBadge');
+                const body = document.body;
+                const crowns = document.querySelectorAll('.crown');
+                const lockedBtns = [document.getElementById('btn-excel'), document.getElementById('btn-sql')];
+
+                if (this.tier === 'PRO') {
+                    // UI Transformation
+                    badge.textContent = 'PRO USER';
+                    badge.classList.add('pro');
+                    body.classList.add('pro-active'); // Triggers CSS Ad Removal & Layout Fix
+                    crowns.forEach(el => el.style.display = 'none');
+                    lockedBtns.forEach(btn => btn.classList.remove('btn-pro')); // Remove "Locked" styling
+                } else {
+                    badge.textContent = 'FREE TIER';
+                    badge.classList.remove('pro');
+                    body.classList.remove('pro-active');
+                    crowns.forEach(el => el.style.display = 'inline-block');
+                    lockedBtns.forEach(btn => btn.classList.add('btn-pro'));
+                }
+            }
+        };
+
+        // 2. UI MANAGER
+        const UI = {
+            closeModals() { document.querySelectorAll('.modal-overlay').forEach(e => e.classList.remove('active')); },
             toast(msg) {
                 const t = document.createElement('div');
-                t.style.cssText = `position:fixed; bottom:30px; right:20px; background:#222; color:#fff; padding:10px 20px; border-left:3px solid var(--pro-gold); border-radius:4px; font-size:0.8rem; box-shadow:0 10px 20px rgba(0,0,0,0.5); z-index:200;`;
+                t.style.cssText = `position:fixed; bottom:30px; right:20px; background:#111; color:#fff; padding:10px 20px; border-left:3px solid var(--accent); border-radius:4px; font-size:0.8rem; box-shadow:0 10px 20px rgba(0,0,0,0.5); z-index:200;`;
                 t.textContent = msg; document.body.appendChild(t);
-                setTimeout(() => t.remove(), 2000);
+                setTimeout(() => t.remove(), 2500);
             }
         };
 
-        const AuthSystem = {
-            toggle() {
-                // Mock Auth for Demo
-                if(AppState.status === 'PRO') {
-                    AppState.status = 'FREE';
-                    UI.render();
+        // 3. PRO FEATURE GATEKEEPER
+        const ProManager = {
+            checkAccess(feature) {
+                if (UserState.tier === 'PRO') {
+                    UI.toast(`Accessing ${feature}...`);
                 } else {
-                    alert("Simulating Login...");
+                    document.getElementById('upgradeModal').classList.add('active');
                 }
             }
         };
 
-        const ProSystem = {
-            request(feat) {
-                if(AppState.status === 'PRO') { UI.toast(`Accessing ${feat}...`); return; }
-                document.getElementById('upgradeModal').classList.add('active');
-            }
-        };
-
-        const PaymentSys = {
+        // 4. AUTOMATED PAYMENT WORKFLOW
+        const PaymentFlow = {
             initiate(amount) {
                 UI.closeModals();
-                // QR Generation
-                document.getElementById('qr').src = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent('solana:' + AppState.wallet)}`;
+                const qrData = `solana:${UserState.wallet}`;
+                document.getElementById('qr').src = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(qrData)}`;
                 document.getElementById('paymentModal').classList.add('active');
-            }
-        };
+            },
 
-        const SolanaSys = {
-            copy() {
-                navigator.clipboard.writeText(AppState.wallet);
+            copyAddress() {
+                navigator.clipboard.writeText(UserState.wallet);
                 UI.toast("Address Copied");
             },
-            verify() {
-                const hash = document.getElementById('txId').value;
-                if(!hash) return;
 
-                // Simulate Verification & Payout Routing
-                // BACKEND HOOK: POST /api/verify-solana { hash, wallet }
+            verifyAndActivate() {
+                const hash = document.getElementById('txHash').value;
+                const btn = document.getElementById('verifyBtn');
+                
+                if (!hash) return UI.toast("Invalid Hash");
+
+                btn.textContent = "Verifying...";
+                
+                // SIMULATION: API Call to Solana RPC
+                // In production: fetch('/api/verify-solana', { method: 'POST', body: JSON.stringify({ hash }) })
                 
                 setTimeout(() => {
-                    AppState.status = 'PRO'; // ACTIVATE PRO
-                    UI.render(); // TRIGGER LAYOUT CHANGE (REMOVE ADS)
+                    // 1. Automate Status Change
+                    UserState.setPro();
+                    
+                    // 2. UI Feedback
                     UI.closeModals();
-                    UI.toast("Payment Verified! Upgraded to Pro.");
-                }, 1000);
+                    UI.toast("Payment Verified! Upgraded to PRO.");
+                    
+                    // 3. Reset
+                    document.getElementById('txHash').value = "";
+                    btn.textContent = "Verify & Activate Pro";
+                }, 1500);
             }
         };
 
+        // 5. EDITOR CORE
         const Editor = {
             init() {
-                const i = document.getElementById('input');
-                i.value = '{"project": "Velox", "tier": "Pro", "ads": "removed"}';
+                const input = document.getElementById('input');
+                input.value = '{"project": "Velox", "tier": "Pro", "ads": "removed"}';
                 this.process();
-                i.addEventListener('input', () => this.process());
-                UI.render(); // Initial check
+                input.addEventListener('input', () => this.process());
+                UserState.init(); // Initialize State & Monetization Logic
             },
             process() {
                 try {
@@ -404,7 +492,7 @@
                     document.getElementById('output').innerHTML = this.highlight(JSON.stringify(j, null, 2));
                 } catch(e) {
                     document.getElementById('jsonStatus').textContent = "ERROR";
-                    document.getElementById('jsonStatus').style.color = "#666";
+                    document.getElementById('jsonStatus').style.color = "#444";
                     document.getElementById('output').textContent = e.message;
                 }
             },
@@ -421,10 +509,26 @@
             },
             format() { document.getElementById('input').value = JSON.stringify(JSON.parse(document.getElementById('input').value), null, 2); this.process(); },
             minify() { document.getElementById('input').value = JSON.stringify(JSON.parse(document.getElementById('input').value)); this.process(); },
-            copy() { navigator.clipboard.writeText(document.getElementById('input').value); UI.toast("Copied"); }
+            copy() { navigator.clipboard.writeText(document.getElementById('input').value); UI.toast("Copied"); },
+            download() {
+                const blob = new Blob([document.getElementById('input').value], {type:'text/plain'});
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'velox.json'; a.click();
+            }
+        };
+
+        const AuthSystem = {
+            toggleLogin() {
+                if(UserState.tier === 'PRO') {
+                    alert("You are currently logged in as a PRO user.");
+                } else {
+                    alert("Guest access. Please upgrade for Pro features.");
+                    document.getElementById('upgradeModal').classList.add('active');
+                }
+            }
         };
 
         Editor.init();
+
     </script>
 </body>
 </html>
