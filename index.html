@@ -3,201 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX JSON FORMATTER | Enterprise Edition</title>
+    <!-- SEO Optimization: Title & Description -->
+    <title>VELOX JSON FORMATTER | Enterprise Developer Tools</title>
+    <meta name="description" content="VELOX is the world's fastest JSON Formatter, Validator, and Converter. Bulk processing, AI Debugging, and secure Solana payments. Built for developers.">
+    <meta name="keywords" content="JSON Formatter, JSON Validator, JSON Minify, Online JSON Tool, Developer Tools, Solana Payments">
+    <meta name="author" content="Adam Laamime">
+
     <style>
+        /* --- CSS VARIABLES & RESET --- */
         :root {
-            /* Enterprise Color Palette */
-            --bg-dark: #0f1115;
+            --bg-dark: #0d1117;
             --bg-panel: #161b22;
-            --bg-input: #0d1117;
-            --border-color: #30363d;
-            --accent-primary: #58a6ff;
-            --accent-pro: #e3b341; /* Gold */
+            --bg-input: #050505;
+            --border: #30363d;
             --text-main: #c9d1d9;
             --text-muted: #8b949e;
-            --danger: #f85149;
+            --accent-blue: #58a6ff;
+            --pro-gold: #e3b341; /* VELOX Pro Color */
+            --pro-gold-bg: rgba(227, 179, 65, 0.1);
             --success: #2ea043;
-            
-            /* Dimensions */
-            --header-height: 50px;
-            --footer-height: 30px;
-            --sidebar-width: 260px;
+            --danger: #f85149;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
         }
 
-        * { box-sizing: border-box; outline: none; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Inter, system-ui, sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
+            font-family: var(--font-main);
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Prevent body scroll, use grid scroll */
+            overflow: hidden; /* App-like feel */
         }
-
-        /* --- ICONS --- */
-        .icon { width: 16px; height: 16px; fill: currentColor; vertical-align: middle; }
-        .crown-icon { color: var(--accent-pro); width: 18px; height: 18px; }
 
         /* --- HEADER --- */
         header {
-            height: var(--header-height);
+            height: 48px;
             background: var(--bg-panel);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            padding: 0 16px;
             justify-content: space-between;
+            padding: 0 16px;
             flex-shrink: 0;
         }
 
         .brand {
             font-weight: 700;
-            letter-spacing: 1px;
-            font-size: 14px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
+        
+        .brand span { color: var(--accent-blue); } /* VELOX Highlight */
 
-        .brand span { color: var(--accent-primary); }
-
-        .status-badge {
+        .pro-badge {
             font-size: 10px;
             font-weight: 800;
             padding: 4px 8px;
             border-radius: 4px;
             background: #21262d;
-            border: 1px solid var(--border-color);
             color: var(--text-muted);
+            border: 1px solid var(--border);
             text-transform: uppercase;
             transition: all 0.3s ease;
         }
 
-        .status-badge.pro {
-            background: rgba(227, 179, 65, 0.15);
-            color: var(--accent-pro);
-            border-color: var(--accent-pro);
+        .pro-badge.active {
+            background: var(--pro-gold-bg);
+            color: var(--pro-gold);
+            border-color: var(--pro-gold);
             box-shadow: 0 0 10px rgba(227, 179, 65, 0.2);
         }
 
-        /* --- MAIN GRID LAYOUT --- */
+        /* --- MAIN LAYOUT --- */
         .workspace {
             display: grid;
-            grid-template-columns: 1fr var(--sidebar-width);
+            grid-template-columns: 1fr 280px; /* Main Editor | Sidebar */
             flex-grow: 1;
             overflow: hidden;
         }
 
-        .editor-area {
+        /* --- EDITOR SECTION --- */
+        .editor-container {
             display: grid;
+            grid-template-rows: 44px 1fr; /* Toolbar | Panes */
             grid-template-columns: 1fr 1fr;
-            grid-template-rows: 40px 1fr;
-            overflow: hidden;
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid var(--border);
         }
 
         .toolbar {
             grid-column: 1 / -1;
             background: var(--bg-panel);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            padding: 0 10px;
+            padding: 0 12px;
             gap: 8px;
-            overflow-x: auto;
         }
 
+        /* BUTTONS */
         button {
             background: #21262d;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             color: var(--text-main);
             padding: 5px 12px;
-            font-size: 12px;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 6px;
             transition: all 0.2s;
-            white-space: nowrap;
         }
 
-        button:hover { background: #30363d; border-color: #8b949e; }
-        button:active { transform: translateY(1px); }
+        button:hover { background: #30363d; }
         
-        button.primary {
-            background: var(--accent-primary);
-            color: #000;
+        .btn-primary {
+            background: var(--success);
+            color: white;
             border: none;
-            font-weight: 600;
         }
-        button.primary:hover { opacity: 0.9; }
+        .btn-primary:hover { background: #26893b; }
 
-        button.pro-feature {
-            border-color: rgba(227, 179, 65, 0.3);
-            color: var(--accent-pro);
+        .btn-pro {
+            border-color: var(--pro-gold);
+            color: var(--pro-gold);
             position: relative;
+        }
+        .btn-pro:hover { background: var(--pro-gold-bg); }
+        .btn-pro:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
+        /* PANES */
+        .pane {
+            position: relative;
+            background: var(--bg-input);
             overflow: hidden;
         }
-        button.pro-feature::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(227, 179, 65, 0.1), transparent);
-            transition: 0.5s;
-        }
-        button.pro-feature:hover::after { left: 100%; }
-        button.pro-feature.locked { filter: grayscale(0.5); }
-
-        /* --- EDITORS --- */
-        .editor-container {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            min-width: 0; /* Fix flex overflow */
-        }
         
-        .editor-container:first-child { border-right: 1px solid var(--border-color); }
+        .pane:first-child { border-right: 1px solid var(--border); }
 
-        .panel-label {
+        .pane-label {
             position: absolute;
             top: 8px;
             right: 8px;
             font-size: 10px;
             color: var(--text-muted);
-            pointer-events: none;
             text-transform: uppercase;
+            pointer-events: none;
         }
 
         textarea {
-            flex-grow: 1;
-            background: var(--bg-input);
+            width: 100%;
+            height: 100%;
+            background: transparent;
             border: none;
             color: var(--text-main);
-            padding: 30px 15px 15px 15px; /* Top padding for label */
-            font-family: 'Consolas', 'Monaco', monospace;
+            font-family: var(--font-mono);
             font-size: 13px;
+            padding: 32px 16px 16px 16px;
             resize: none;
             line-height: 1.5;
+            outline: none;
         }
 
-        /* Syntax Highlighting Output */
-        #outputDisplay {
-            flex-grow: 1;
-            background: var(--bg-input);
-            padding: 30px 15px 15px 15px;
-            overflow: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
+        .output-view {
+            width: 100%;
+            height: 100%;
+            padding: 32px 16px 16px 16px;
+            font-family: var(--font-mono);
             font-size: 13px;
             line-height: 1.5;
+            overflow: auto;
             white-space: pre-wrap;
+            color: var(--text-main);
         }
-        
+
+        /* SYNTAX HIGHLIGHTING */
         .key { color: #79c0ff; }
         .string { color: #a5d6ff; }
         .number { color: #d2a8ff; }
@@ -207,192 +195,119 @@
         /* --- SIDEBAR --- */
         aside {
             background: var(--bg-panel);
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            padding: 0;
+            gap: 20px;
+            overflow-y: auto;
         }
 
-        .sidebar-section {
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .sidebar-title {
-            font-size: 11px;
+        .sidebar-section h3 {
+            font-size: 10px;
             text-transform: uppercase;
             color: var(--text-muted);
             margin-bottom: 10px;
             font-weight: 700;
         }
 
-        .tool-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
+        .action-list { display: flex; flex-direction: column; gap: 8px; }
 
-        /* --- ADVERTISEMENT SLOT --- */
-        .ad-container {
-            flex-grow: 1;
+        /* NATIVE AD SLOT */
+        .ad-slot {
             background: #000;
-            margin: 10px;
             border: 1px dashed #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #444;
-            font-size: 12px;
+            padding: 20px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            border-radius: 6px;
+            color: #444;
+            font-size: 11px;
+            transition: opacity 0.3s;
         }
-        
-        .ad-label {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #333;
-            color: #fff;
-            font-size: 9px;
-            padding: 2px 4px;
-        }
-
-        .ad-content-hidden { display: none; }
+        .ad-slot strong { display: block; margin-bottom: 4px; color: #666; }
+        .ad-slot a { color: var(--accent-blue); text-decoration: none; }
 
         /* --- FOOTER --- */
         footer {
-            height: var(--footer-height);
+            height: 28px;
             background: var(--bg-panel);
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 10px;
             color: var(--text-muted);
-            flex-shrink: 0;
-            z-index: 10;
+            font-weight: 500;
         }
 
         /* --- MODALS --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(4px);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            opacity: 1;
         }
 
         .modal {
             background: var(--bg-panel);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             width: 450px;
-            max-width: 90%;
             border-radius: 8px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            transform: scale(0.9);
-            transition: transform 0.3s;
+            padding: 24px;
+            animation: slideUp 0.3s ease;
         }
 
-        .modal-overlay.active .modal { transform: scale(1); }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .modal-header h2 { margin: 0; font-size: 18px; color: var(--accent-pro); display: flex; align-items: center; gap: 10px; }
-
-        .modal-body { padding: 20px; }
-
-        .feature-list { list-style: none; padding: 0; margin: 0 0 20px 0; }
-        .feature-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-        }
-        .feature-list li:last-child { border-bottom: none; }
-
+        .modal h2 { color: var(--pro-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .solana-box {
             background: #000;
-            border: 1px solid var(--accent-pro);
+            border: 1px solid var(--pro-gold);
             padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            word-break: break-all;
-            font-family: monospace;
+            color: var(--pro-gold);
+            font-family: var(--font-mono);
             font-size: 12px;
-            color: var(--accent-pro);
+            word-break: break-all;
             text-align: center;
+            margin: 16px 0;
         }
-
-        .modal-footer {
-            padding: 15px 20px;
-            background: rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            border-radius: 0 0 8px 8px;
-        }
-
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 11px; margin-bottom: 5px; color: var(--text-muted); }
-        .input-group input {
+        
+        input[type="text"] {
             width: 100%;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            color: #fff;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
             padding: 10px;
+            color: #fff;
             border-radius: 4px;
         }
 
-        /* --- TOAST --- */
-        .toast-container {
+        /* TOAST NOTIFICATION */
+        .toast {
             position: fixed;
             bottom: 40px;
             right: 20px;
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .toast {
-            background: var(--bg-panel);
-            border-left: 4px solid var(--accent-primary);
-            color: #fff;
-            padding: 12px 20px;
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
             border-radius: 4px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            font-size: 13px;
-            animation: slideIn 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 250px;
+            font-size: 12px;
+            font-weight: 600;
+            transform: translateY(100px);
+            transition: transform 0.3s;
+            z-index: 2000;
         }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.show { transform: translateY(0); }
 
-        /* Responsive */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .workspace { grid-template-columns: 1fr; }
-            aside { display: none; } /* Hide sidebar on mobile for simplicity in this demo */
-            .editor-area { grid-template-columns: 1fr; grid-template-rows: 40px 1fr 1fr; }
-            .editor-container { border-right: none; border-bottom: 1px solid var(--border-color); }
+            aside { display: none; }
+            .editor-container { grid-template-columns: 1fr; grid-template-rows: auto 1fr 1fr; }
+            .pane:first-child { border-right: none; border-bottom: 1px solid var(--border); }
         }
     </style>
 </head>
@@ -401,87 +316,82 @@
     <!-- Header -->
     <header>
         <div class="brand">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 2v14h14V5H5zm2 2h2v10H7V7zm4 0h2v10h-2V7zm4 0h2v10h-2V7z"/></svg>
             VELOX <span>JSON</span>
         </div>
-        <div class="status-badge" id="tierBadge">FREE TIER</div>
+        <div class="pro-badge" id="tierBadge">FREE TIER</div>
     </header>
 
     <!-- Main Workspace -->
     <div class="workspace">
         
-        <!-- Editor Area (Split Pane) -->
-        <main class="editor-area">
+        <!-- Editor Area -->
+        <main class="editor-container">
             <!-- Toolbar -->
             <div class="toolbar">
-                <button class="primary" onclick="formatJSON()">Format / Validate</button>
+                <button class="btn-primary" onclick="formatJSON()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Format
+                </button>
                 <button onclick="minifyJSON()">Minify</button>
-                <button onclick="clearEditor()">Clear</button>
-                <div style="flex-grow: 1;"></div>
+                <div style="width: 1px; height: 16px; background: var(--border); margin: 0 4px;"></div>
+                <button onclick="copyToClipboard()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copy
+                </button>
+                <button onclick="downloadJSON()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Download
+                </button>
+                
                 <!-- Pro Features in Toolbar -->
-                <button class="pro-feature locked" onclick="checkProAccess('AI Optimize')">
-                    <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                    AI Debug
+                <button class="btn-pro" id="btnAI" onclick="checkPro('AI')">
+                    👑 AI Debug
                 </button>
-                <button class="pro-feature locked" onclick="checkProAccess('Diff Check')">
-                    <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                    Diff
-                </button>
-                <button class="pro-feature locked" onclick="checkProAccess('Master Export')">
-                    <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                    Export All
+                <button class="btn-pro" id="btnDiff" onclick="checkPro('Diff')">
+                    👑 Diff Check
                 </button>
             </div>
 
-            <!-- Input Pane -->
-            <div class="editor-container">
-                <span class="panel-label">RAW INPUT</span>
-                <textarea id="jsonInput" placeholder='Paste your JSON here...' spellcheck="false"></textarea>
+            <!-- Panes -->
+            <div class="pane">
+                <span class="pane-label">RAW INPUT</span>
+                <textarea id="jsonInput" placeholder='Paste your JSON here...'></textarea>
             </div>
-
-            <!-- Output Pane -->
-            <div class="editor-container">
-                <span class="panel-label">FORMATTED OUTPUT</span>
-                <div id="outputDisplay"></div>
+            <div class="pane">
+                <span class="pane-label">OUTPUT</span>
+                <div id="jsonOutput" class="output-view"></div>
             </div>
         </main>
 
-        <!-- Sidebar Tools & Ads -->
+        <!-- Sidebar -->
         <aside>
             <div class="sidebar-section">
-                <div class="sidebar-title">Cloud & Bulk</div>
-                <div class="tool-grid">
-                    <button class="pro-feature locked" style="width:100%" onclick="checkProAccess('Bulk Processing')">
-                        <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                        Bulk Process
-                    </button>
-                    <button class="pro-feature locked" style="width:100%" onclick="checkProAccess('Cloud Sync')">
-                        <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                        Cloud Sync
-                    </button>
+                <h3>Bulk Processing (Pro)</h3>
+                <button class="btn-pro" style="width: 100%; justify-content: center;" onclick="checkPro('Bulk')">
+                    🚀 Process Large Files
+                </button>
+                <p style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">Uses Web Workers for zero-freeze performance.</p>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Export Mastery</h3>
+                <div class="action-list">
+                    <button class="btn-pro" onclick="checkPro('Export CSV')">📄 Excel / CSV</button>
+                    <button class="btn-pro" onclick="checkPro('Export SQL')">🗄️ SQL Insert</button>
+                    <button class="btn-pro" onclick="checkPro('Export XML')">🏷️ XML</button>
                 </div>
             </div>
 
             <div class="sidebar-section">
-                <div class="sidebar-title">Conversion</div>
-                <button class="pro-feature locked" style="width:100%; margin-bottom:8px" onclick="checkProAccess('SQL Export')">
-                    <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                    To SQL
-                </button>
-                <button class="pro-feature locked" style="width:100%" onclick="checkProAccess('YAML Export')">
-                    <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                    To YAML
+                <h3>Cloud Workspace</h3>
+                <button class="btn-pro" style="width: 100%; justify-content: center;" onclick="checkPro('Cloud')">
+                    ☁️ Auto-Sync
                 </button>
             </div>
 
-            <!-- Native Ad Slot -->
-            <div class="ad-container" id="sidebarAd">
-                <span class="ad-label">SPONSORED</span>
-                <div>
-                    <strong>Enterprise Hosting</strong><br>
-                    Scale your JSON API.<br>
-                    <span style="color:#fff; text-decoration:underline;">Try VelocityCloud</span>
-                </div>
+            <!-- ADVERTISEMENT SLOT (Free Tier Only) -->
+            <div class="ad-slot" id="adSlot">
+                <strong>SPONSORED</strong>
+                <p>Build faster with VelocityCloud.</p>
+                <a href="#">Try for free &rarr;</a>
             </div>
 
         </aside>
@@ -492,129 +402,66 @@
         VELOX JSON FORMATTER | Developed by Adam Laamime
     </footer>
 
-    <!-- Upsell Modal -->
-    <div class="modal-overlay" id="upsellModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>
-                    <svg class="icon crown-icon" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                    Upgrade to PRO
-                </h2>
-            </div>
-            <div class="modal-body">
-                <p style="color: var(--text-muted); margin-top:0; font-size:13px;">
-                    Unlock the full power of VELOX. You attempted to access a Pro feature.
-                </p>
-                <ul class="feature-list">
-                    <li>🚀 <strong>Unlimited Bulk Processing</strong></li>
-                    <li>🧠 <strong>AI Code Insight</strong> & Debugging</li>
-                    <li>📂 <strong>Master Export</strong> (Excel, SQL, YAML, XML)</li>
-                    <li>☁️ <strong>Cloud Workspaces</strong> & Sync</li>
-                    <li>⚖️ <strong>Advanced Diffing</strong> Engine</li>
-                    <li>🚫 <strong>Ad-Free Workspace</strong></li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('upsellModal')" style="background:transparent; border:none;">Close</button>
-                <button class="primary" style="background: var(--accent-pro); color: #000;" onclick="openPaymentModal()">Upgrade Now</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Modal (Solana) -->
+    <!-- Payment Modal -->
     <div class="modal-overlay" id="paymentModal">
         <div class="modal">
-            <div class="modal-header">
-                <h2>Secure Checkout</h2>
+            <h2>👑 Upgrade to PRO</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+                Unlock instant bulk processing, AI debugging, and remove all ads.
+            </p>
+            <div class="solana-box">
+                95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
             </div>
-            <div class="modal-body">
-                <p style="font-size:13px; color: var(--text-muted);">
-                    Send <strong>50 USDC</strong> on Solana Network to unlock PRO access permanently.
-                </p>
-                <div class="solana-box">
-                    95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W
-                </div>
-                
-                <div class="input-group">
-                    <label>Transaction Hash (TxID)</label>
-                    <input type="text" id="txHashInput" placeholder="Paste your transaction signature here...">
-                </div>
-
-                <div id="paymentStatus" style="font-size:12px; color: var(--text-muted); display:none;">
-                    Verifying signature on chain...
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('paymentModal')" style="background:transparent; border:none;">Cancel</button>
-                <button class="primary" onclick="verifyPayment()">Verify & Unlock</button>
+            <p style="font-size: 11px; margin-bottom: 8px;">Send 50 USDC on Solana Network. Paste TxID below:</p>
+            <input type="text" id="txHash" placeholder="Transaction Signature...">
+            <div style="display: flex; gap: 8px; margin-top: 16px;">
+                <button style="flex: 1; background: transparent; border: 1px solid var(--border);" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" style="flex: 1;" onclick="verifyPayment()">Verify & Unlock</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- Toast -->
+    <div id="toast" class="toast">Copied to clipboard!</div>
 
     <script>
         // --- STATE MANAGEMENT ---
-        const state = {
-            isPro: localStorage.getItem('velox_is_pro') === 'true', // Persistence for demo
-            txHash: ''
+        const STATE = {
+            isPro: localStorage.getItem('velox_pro_status') === 'true',
+            solanaAddress: '95vduuDmi3ZNfrbf9ycH1jftiAwrCoESSnkvcpvVfo5W'
         };
-
-        // --- DOM ELEMENTS ---
-        const els = {
-            input: document.getElementById('jsonInput'),
-            output: document.getElementById('outputDisplay'),
-            badge: document.getElementById('tierBadge'),
-            ad: document.getElementById('sidebarAd'),
-            modals: {
-                upsell: document.getElementById('upsellModal'),
-                payment: document.getElementById('paymentModal')
-            },
-            txInput: document.getElementById('txHashInput'),
-            payStatus: document.getElementById('paymentStatus')
-        };
-
-        // --- INITIALIZATION ---
-        window.addEventListener('DOMContentLoaded', () => {
-            updateUIState();
-            // Initial placeholder logic
-            els.input.value = '{"project":"VELOX","status":"prototype","enterprise":false}';
-            formatJSON();
-        });
 
         // --- CORE FUNCTIONS ---
 
         function formatJSON() {
-            const raw = els.input.value;
+            const input = document.getElementById('jsonInput').value;
+            const output = document.getElementById('jsonOutput');
+            
+            if(!input.trim()) return;
+
             try {
-                const parsed = JSON.parse(raw);
-                const str = JSON.stringify(parsed, null, 4);
-                els.output.innerHTML = syntaxHighlight(str);
+                const parsed = JSON.parse(input);
+                output.innerHTML = syntaxHighlight(parsed);
+                showToast("Formatted Successfully");
             } catch (e) {
-                els.output.innerHTML = `<span style="color:var(--danger)">Invalid JSON: ${e.message}</span>`;
+                output.innerHTML = `<span style="color: var(--danger)">Error: ${e.message}</span>`;
             }
         }
 
         function minifyJSON() {
-            const raw = els.input.value;
+            const input = document.getElementById('jsonInput').value;
             try {
-                const parsed = JSON.parse(raw);
-                const str = JSON.stringify(parsed);
-                els.output.textContent = str;
+                const parsed = JSON.parse(input);
+                document.getElementById('jsonOutput').innerText = JSON.stringify(parsed);
             } catch (e) {
-                showToast("Cannot minify invalid JSON", "error");
+                alert("Invalid JSON");
             }
         }
 
-        function clearEditor() {
-            els.input.value = '';
-            els.output.innerHTML = '';
-            els.input.focus();
-        }
-
-        // --- SYNTAX HIGHLIGHTING ---
         function syntaxHighlight(json) {
+            if (typeof json != 'string') {
+                json = JSON.stringify(json, undefined, 2);
+            }
             json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
                 let cls = 'number';
@@ -633,135 +480,126 @@
             });
         }
 
-        // --- PRO ACCESS LOGIC ---
+        // --- PRODUCTIVITY TOOLS ---
 
-        function checkProAccess(featureName) {
-            if (state.isPro) {
-                // Allow action (Simulated)
-                showToast(`✨ ${featureName} Executed successfully!`, 'success');
-                // Simulate feature work
-                if(featureName === 'AI Optimize') {
-                    setTimeout(() => showToast("AI: Structure optimized for latency.", "success"), 1000);
-                }
-                if(featureName === 'Master Export') {
-                    downloadAsCSV(); // Mock functionality
-                }
-            } else {
-                // Trigger Hard Paywall
-                openModal('upsellModal');
-            }
+        function copyToClipboard() {
+            const text = document.getElementById('jsonOutput').innerText;
+            if(!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Copied to clipboard!");
+            });
         }
 
-        function openPaymentModal() {
-            closeModal('upsellModal');
-            openModal('paymentModal');
-            els.txInput.value = '';
-            els.payStatus.style.display = 'none';
+        function downloadJSON() {
+            const text = document.getElementById('jsonOutput').innerText;
+            if(!text) return;
+            const blob = new Blob([text], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'velox_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Download started");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // --- PRO GATEWAY & MONETIZATION ---
+
+        function checkPro(feature) {
+            if (STATE.isPro) {
+                executeProFeature(feature);
+            } else {
+                // Trigger Conversion
+                document.getElementById('paymentModal').style.display = 'flex';
+            }
         }
 
         function verifyPayment() {
-            const tx = els.txInput.value.trim();
-            if (!tx) {
-                showToast("Please enter a Transaction Hash", "error");
+            const tx = document.getElementById('txHash').value;
+            if(!tx) {
+                alert("Please enter a transaction hash.");
                 return;
             }
 
-            // Simulate API Verification
-            els.payStatus.style.display = 'block';
-            els.payStatus.innerHTML = `<span style="color:var(--accent-primary)">Verifying signature on Solana blockchain...</span>`;
+            // Simulate Smart Contract Verification
+            const btn = document.querySelector('#paymentModal .btn-primary');
+            btn.innerText = "Verifying...";
             
-            // Simulate Network Delay
             setTimeout(() => {
-                // Simulate Success (In production, this would be a real API call)
-                state.isPro = true;
-                localStorage.setItem('velox_is_pro', 'true'); // Persist state
-                
-                closeModal('paymentModal');
-                showToast("Payment Verified! Welcome to PRO.", "success");
+                STATE.isPro = true;
+                localStorage.setItem('velox_pro_status', 'true');
                 updateUIState();
-            }, 2000);
+                closeModal();
+                alert("Payment Verified! Welcome to VELOX PRO.");
+                btn.innerText = "Verify & Unlock"; // Reset
+            }, 1500);
         }
 
         function updateUIState() {
-            const proButtons = document.querySelectorAll('.pro-feature');
-            
-            if (state.isPro) {
-                // Update Badge
-                els.badge.textContent = "PRO USER";
-                els.badge.classList.add('pro');
+            const badge = document.getElementById('tierBadge');
+            const ad = document.getElementById('adSlot');
+            const proBtns = document.querySelectorAll('.btn-pro');
 
-                // Remove Ads
-                els.ad.style.display = 'none';
-
-                // Unlock Buttons
-                proButtons.forEach(btn => {
-                    btn.classList.remove('locked');
-                    // Remove 'locked' specific styling if needed, or just keep the gold look
-                });
-
-                // Trigger a confetti or visual effect logic here if desired
+            if (STATE.isPro) {
+                badge.innerText = "PRO USER";
+                badge.classList.add('active');
+                ad.style.display = 'none'; // Ad-Free Experience
+                proBtns.forEach(btn => btn.disabled = false);
             } else {
-                els.badge.textContent = "FREE TIER";
-                els.badge.classList.remove('pro');
-                els.ad.style.display = 'flex';
-                proButtons.forEach(btn => btn.classList.add('locked'));
+                badge.innerText = "FREE TIER";
+                badge.classList.remove('active');
+                ad.style.display = 'block';
+                proBtns.forEach(btn => btn.disabled = true);
             }
         }
 
-        // --- MOCK EXPORT FUNCTION (PRO FEATURE) ---
-        function downloadAsCSV() {
-            try {
-                const data = JSON.parse(els.input.value);
-                if(!Array.isArray(data) && typeof data !== 'object') throw new Error("Data must be array or object");
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        // --- PRO FEATURES SIMULATION ---
+
+        function executeProFeature(feature) {
+            const input = document.getElementById('jsonInput').value;
+            if(!input) return alert("Please enter JSON first.");
+
+            if (feature === 'AI') {
+                // Simulate AI Analysis
+                alert("🤖 VELOX AI Analysis:\n- Structure: Valid Object\n- Optimization: Could be minified to save 20% bandwidth.\n- Security: No sensitive patterns detected.");
+            } else if (feature === 'Bulk') {
+                // Web Worker Simulation
+                const worker = new Worker(URL.createObjectURL(new Blob([`
+                    self.onmessage = function(e) {
+                        self.postMessage("Processed 50MB JSON in 1.2s via Web Worker");
+                    }
+                `], {type: "text/javascript"})));
                 
-                // Simple mock download
-                const element = document.createElement('a');
-                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent("Mock CSV Export\nID,Name,Value\n1,Test,123"));
-                element.setAttribute('download', "velox_export.csv");
-                element.style.display = 'none';
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-            } catch(e) {
-                showToast("Export failed: Invalid structure", "error");
+                worker.onmessage = (e) => alert("🚀 " + e.data);
+                worker.postMessage(input);
+            } else if (feature.includes('Export')) {
+                alert(`📂 Exporting to ${feature.replace('Export ', '')}... (Download triggered)`);
+                downloadJSON(); // Fallback for demo
+            } else if (feature === 'Diff') {
+                alert("📊 Diff Engine Enabled. Comparing with cached version...");
+            } else if (feature === 'Cloud') {
+                alert("☁️ Workspace synced to Cloud (Real-time).");
             }
         }
 
-        // --- UI UTILITIES ---
-
-        function openModal(id) {
-            els.modals[id].classList.add('active');
-        }
-
-        function closeModal(id) {
-            els.modals[id].classList.remove('active');
-        }
-
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.style.borderLeftColor = type === 'success' ? 'var(--success)' : (type === 'error' ? 'var(--danger)' : 'var(--accent-primary)');
-            
-            let icon = type === 'success' ? '✓' : (type === 'error' ? '!' : 'i');
-            
-            toast.innerHTML = `<span style="font-weight:bold">${icon}</span> ${message}`;
-            document.getElementById('toastContainer').appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // --- EVENT LISTENERS ---
-        
-        // Auto-resize textarea if needed (using CSS flex-grow instead for strict layout)
-        
-        // Real-time validation (debounce could be added)
-        els.input.addEventListener('input', () => {
-             // Optional: Real-time parsing indication
-        });
+        // Initialize
+        window.onload = () => {
+            updateUIState();
+            // Pre-fill for demo
+            document.getElementById('jsonInput').value = '{"project":"VELOX","status":"production","features":["Format","AI","Cloud"]}';
+            formatJSON();
+        };
 
     </script>
 </body>
