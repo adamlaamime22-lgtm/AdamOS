@@ -3,668 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOX | The Core Logic System</title>
-    <!-- استدعاء خطوط وأيقونات -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>VELOX | Real System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --dark-bg: #0f172a;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-            --danger: #ef4444;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        body {
-            background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.2) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.2) 0%, transparent 20%);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- UI Components: Glassmorphism --- */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
-        }
-
-        .btn-danger {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        /* --- Screens Management --- */
-        .screen {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding: 20px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .screen.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* --- 1. Auth Screen --- */
-        .auth-card {
-            width: 400px;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-        }
-
-        .auth-options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .auth-btn {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border);
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
-
-        .auth-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* --- 2. Onboarding (Role Selection) --- */
-        .role-cards {
-            display: flex;
-            gap: 20px;
-        }
-
-        .role-card {
-            width: 150px;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: 0.3s;
-        }
-
-        .role-card:hover {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .role-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: var(--text-muted);
-        }
-
-        /* --- 3. Dashboard (Main App) --- */
-        .dashboard-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            gap: 20px;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .nav-item {
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: 0.3s;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow: hidden;
-        }
-
-        .header {
-            height: 70px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--primary);
-        }
-
-        .content-area {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        /* Tools Grid */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .tool-card {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 180px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            background: rgba(99, 102, 241, 0.15);
-        }
-
-        /* Vault Simulation */
-        .vault-box textarea {
-            width: 100%;
-            height: 150px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            color: var(--success);
-            padding: 10px;
-            border-radius: 8px;
-            resize: none;
-            margin-top: 10px;
-            font-family: monospace;
-        }
-
-        /* Notifications */
-        .notification-area {
-            position: fixed;
-            bottom: 20px;
-            left: 20px; /* RTL, so left is correct corner usually, or adjust */
-            right: auto;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            border-right: 4px solid var(--primary);
-            animation: slideIn 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 250px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
+        /* نفس التصميم السابق، سأضع الخلاصة المهمة هنا */
+        :root { --primary: #6366f1; --bg: #0f172a; --glass: rgba(30,41,59,0.8); }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 0; }
+        .glass { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; backdrop-filter: blur(10px); padding: 20px; }
+        .btn { background: var(--primary); border: none; padding: 10px 20px; color: white; border-radius: 6px; cursor: pointer; }
+        .hidden { display: none !important; }
+        .tool-box { margin-top: 20px; }
+        textarea { width: 100%; height: 150px; background: rgba(0,0,0,0.3); border: 1px solid #333; color: #0f0; padding: 10px; border-radius: 6px; font-family: monospace; }
+        .login-container { max-width: 400px; margin: 100px auto; text-align: center; }
+        .dashboard { max-width: 1200px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
+        .sidebar { height: 90vh; }
+        .nav-item { padding: 15px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
-    <!-- 1. AUTHENTICATION SCREEN -->
-    <div id="auth-screen" class="screen active">
-        <div class="glass-panel auth-card">
-            <div class="logo"><i class="fa-solid fa-bolt"></i> VELOX</div>
-            <p style="color: var(--text-muted);">بوابتك الآمنة والمتخصصة</p>
-            
-            <div class="auth-options">
-                <button class="auth-btn" onclick="handleAuth('Google')">
-                    <i class="fa-brands fa-google"></i> الدخول عبر Google
-                </button>
-                <button class="auth-btn" onclick="handleAuth('Wallet')">
-                    <i class="fa-solid fa-wallet"></i> ربط المحفظة الرقمية
-                </button>
+    <!-- صفحة الدخول -->
+    <div id="login-page" class="login-container glass">
+        <h1>VELOX</h1>
+        <input type="text" id="username" placeholder="اسم المستخدم" style="padding: 10px; width: 100%; margin: 10px 0; border-radius: 5px; border:none;">
+        <select id="role-select" style="padding: 10px; width: 100%; margin: 10px 0; border-radius: 5px; border:none;">
+            <option value="developer">مطور (Developer)</option>
+            <option value="accountant">محاسب (Accountant)</option>
+        </select>
+        <button class="btn" onclick="login()" style="width: 100%;">دخول آمن</button>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div id="dashboard-page" class="dashboard hidden">
+        <!-- القائمة الجانبية -->
+        <aside class="glass sidebar">
+            <h3>VELOX</h3>
+            <div class="nav-item active" onclick="showTool('json')">JSON Formatter</div>
+            <div class="nav-item" onclick="showTool('api')">API Tester</div>
+            <div class="nav-item" onclick="showTool('vault')">الخزنة المشفرة</div>
+            <div class="nav-item" onclick="logout()" style="margin-top: auto; color: #ef4444;">خروج</div>
+        </aside>
+
+        <!-- المحتوى -->
+        <main class="glass" style="height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <h2 id="user-greeting">مرحباً</h2>
+                <span id="user-badge" style="background: var(--primary); padding: 2px 8px; border-radius: 4px; font-size: 12px;">ROLE</span>
             </div>
-            <p style="font-size: 0.8rem; margin-top: 20px; color: var(--text-muted);">
-                * نظام الهوية المزدوج للحماية القصوى
-            </p>
-        </div>
-    </div>
 
-    <!-- 2. ONBOARDING SCREEN (Dynamic Profile) -->
-    <div id="onboarding-screen" class="screen">
-        <div style="text-align: center; max-width: 600px;">
-            <h2>مرحباً بك في VELOX</h2>
-            <p style="color: var(--text-muted); margin-bottom: 30px;">لنقم بتخصيص مساحة العمل الخاصة بك. ما هو تخصصك الأساسي؟</p>
-            
-            <div class="role-cards">
-                <div class="glass-panel role-card" onclick="setRole('developer')">
-                    <i class="fa-solid fa-code role-icon"></i>
-                    <h3>مبرمج</h3>
-                </div>
-                <div class="glass-panel role-card" onclick="setRole('accountant')">
-                    <i class="fa-solid fa-calculator role-icon"></i>
-                    <h3>محاسب</h3>
-                </div>
-                <div class="glass-panel role-card" onclick="setRole('marketer')">
-                    <i class="fa-solid fa-bullhorn role-icon"></i>
-                    <h3>مسوق</h3>
-                </div>
+            <!-- 1. أداة JSON Formatter (تعمل فعلياً) -->
+            <div id="tool-json" class="tool-box">
+                <h3>أداة تنسيق JSON (Real Tool)</h3>
+                <textarea id="json-input" placeholder="الصق كود JSON هنا..."></textarea>
+                <button class="btn" onclick="formatJSON()">تنسيق (Format)</button>
+                <button class="btn" style="background: #ef4444;" onclick="document.getElementById('json-input').value=''">مسح</button>
             </div>
-        </div>
+
+            <!-- 2. أداة API Tester (تعمل فعلياً) -->
+            <div id="tool-api" class="tool-box hidden">
+                <h3>اختبار API (Real Tool)</h3>
+                <input type="text" id="api-url" value="https://jsonplaceholder.typicode.com/todos/1" style="width: 70%; padding: 10px;">
+                <button class="btn" onclick="testAPI()">إرسال طلب (GET)</button>
+                <pre id="api-result" style="background: #000; color: #0f0; padding: 15px; margin-top: 10px; border-radius: 6px; overflow: auto;"></pre>
+            </div>
+
+            <!-- 3. الخزنة (متصلة بالسيرفر) -->
+            <div id="tool-vault" class="tool-box hidden">
+                <h3>الخزنة المشفرة (Server Encrypted)</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">البيانات يتم تشفيرها وحفظها في ملف users.json على السيرفر.</p>
+                <textarea id="vault-input" placeholder="اكتب سراً هنا..."></textarea>
+                <button class="btn" onclick="saveVault()">حفظ في السيرفر (Encrypted)</button>
+                <button class="btn" onclick="loadVault()">استرجاع من السيرفر (Decrypt)</button>
+                <p id="vault-msg" style="margin-top: 10px; color: var(--primary);"></p>
+            </div>
+        </main>
     </div>
 
-    <!-- 3. DASHBOARD SCREEN (Main App) -->
-    <div id="dashboard-screen" class="screen" style="display: none;">
-        <div class="dashboard-container">
-            
-            <!-- Sidebar -->
-            <aside class="glass-panel sidebar">
-                <div>
-                    <div class="logo" style="font-size: 1.5rem; margin-bottom: 30px;">VELOX</div>
-                    <nav>
-                        <div class="nav-item active" onclick="switchTab('workspace')">
-                            <i class="fa-solid fa-layer-group"></i> مساحة العمل
-                        </div>
-                        <div class="nav-item" onclick="switchTab('vault')">
-                            <i class="fa-solid fa-vault"></i> الخزنة المشفرة
-                        </div>
-                        <div class="nav-item" onclick="switchTab('subscription')">
-                            <i class="fa-solid fa-crown"></i> الاشتراك
-                        </div>
-                        <div class="nav-item" onclick="switchTab('settings')">
-                            <i class="fa-solid fa-gear"></i> الإعدادات
-                        </div>
-                    </nav>
-                </div>
-                
-                <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--glass-border);">
-                    <div class="nav-item" onclick="showSupportChat()">
-                        <i class="fa-solid fa-headset"></i> دعم فني (Pro)
-                    </div>
-                    <div class="nav-item" onclick="logout()" style="color: var(--danger);">
-                        <i class="fa-solid fa-right-from-bracket"></i> خروج
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="main-content">
-                <!-- Header -->
-                <header class="glass-panel header">
-                    <div>
-                        <h3 id="header-greeting">مرحباً، المستخدم</h3>
-                        <span class="badge-pro" style="background: var(--primary); font-size: 0.7rem; padding: 2px 8px; border-radius: 4px;">PRO PLAN</span>
-                    </div>
-                    <div class="user-profile">
-                        <div style="text-align: left;">
-                            <div style="font-weight: bold;" id="user-role-display">Developer</div>
-                            <div style="font-size: 0.8rem; color: var(--success);">Wallet Connected</div>
-                        </div>
-                        <img src="https://picsum.photos/seed/velox/40/40" class="avatar" alt="User">
-                    </div>
-                </header>
-
-                <!-- Dynamic Workspace -->
-                <div id="tab-workspace" class="glass-panel content-area">
-                    <h2 style="margin-bottom: 20px;">أدواتك الخاصة (<span id="workspace-title"></span>)</h2>
-                    
-                    <!-- AI Suggestion -->
-                    <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
-                        <i class="fa-solid fa-robot" style="font-size: 1.5rem; color: var(--primary);"></i>
-                        <div>
-                            <h4 style="color: var(--primary);">توصية الذكاء الاصطناعي</h4>
-                            <p style="font-size: 0.9rem; color: var(--text-muted);" id="ai-suggestion-text">بناءً على نشاطك، ننصحك بتجربة أداة تحليل الكود الجديدة.</p>
-                        </div>
-                    </div>
-
-                    <div class="tools-grid" id="tools-container">
-                        <!-- Tools injected via JS -->
-                    </div>
-                </div>
-
-                <!-- Vault Tab -->
-                <div id="tab-vault" class="glass-panel content-area" style="display: none;">
-                    <h2>الخزنة المشفرة (AES-256)</h2>
-                    <p style="color: var(--text-muted); margin-bottom: 20px;">البيانات هنا مشفرة طرفياً (Client-side) قبل الحفظ.</p>
-                    <div class="vault-box">
-                        <textarea id="vault-input" placeholder="اكتب سراً هنا... (مثال: مفاتيح API، بيانات حساسة)"></textarea>
-                        <div style="margin-top: 10px; display: flex; gap: 10px;">
-                            <button class="btn btn-primary" onclick="encryptData()"><i class="fa-solid fa-lock"></i> تشفير وحفظ</button>
-                            <button class="btn btn-danger" onclick="clearVault()"><i class="fa-solid fa-trash"></i> مسح البيانات (Privacy Mode)</button>
-                        </div>
-                        <p id="vault-status" style="margin-top: 10px; font-size: 0.8rem; color: var(--success);"></p>
-                    </div>
-                </div>
-
-                <!-- Settings Tab (Placeholder) -->
-                <div id="tab-settings" class="glass-panel content-area" style="display: none;">
-                    <h2>الإعدادات</h2>
-                    <p>حفظ التفضيلات...</p>
-                    <hr style="border-color: var(--glass-border); margin: 20px 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <span>الإشعارات الذكية</span>
-                        <i class="fa-solid fa-toggle-on" style="color: var(--success); font-size: 1.5rem;"></i>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>المزامنة السحابية التلقائية</span>
-                        <i class="fa-solid fa-toggle-on" style="color: var(--success); font-size: 1.5rem;"></i>
-                    </div>
-                </div>
-
-            </main>
-        </div>
-    </div>
-
-    <!-- Notification Container -->
-    <div class="notification-area" id="notification-area"></div>
-
-    <script>
-        // --- State Management (Data Layer) ---
-        const appState = {
-            isLoggedIn: false,
-            userRole: null, // 'developer', 'accountant', 'marketer'
-            theme: 'dark',
-            vaultData: ''
-        };
-
-        // --- Data: Tools per Role ---
-        const toolsData = {
-            developer: [
-                { name: "JSON Formatter", icon: "fa-code", desc: "تنسيق وتجميل ملفات JSON" },
-                { name: "SQL Editor", icon: "fa-database", desc: "كتابة وتنفيذ استعلامات SQL" },
-                { name: "API Tester", icon: "fa-network-wired", desc: "اختبار نقاط الربط (Endpoints)" },
-                { name: "Color Picker", icon: "fa-eye-dropper", desc: "استخراج أكواد الألوان" }
-            ],
-            accountant: [
-                { name: "Invoice Generator", icon: "fa-file-invoice-dollar", desc: "إنشاء فواتير احترافية" },
-                { name: "Tax Calculator", icon: "fa-calculator", desc: "حساب الضرائب تلقائياً" },
-                { name: "Data Export", icon: "fa-file-excel", desc: "تصدير التقارير لـ Excel" },
-                { name: "Currency Conv", icon: "fa-money-bill-transfer", desc: "تحويل العملات لحظياً" }
-            ],
-            marketer: [
-                { name: "Campaign Manager", icon: "fa-bullhorn", desc: "إدارة الحملات الإعلانية" },
-                { name: "Social Scheduler", icon: "fa-calendar-days", desc: "جدولة المنشورات" },
-                { name: "SEO Analyzer", icon: "fa-magnifying-glass-chart", desc: "تحسين محركات البحث" },
-                { name: "Email Templates", icon: "fa-envelope", desc: "قوالب رسائل تسويقية" }
-            ]
-        };
-
-        // --- Functions ---
-
-        // 1. Authentication Logic
-        function handleAuth(method) {
-            // Simulate loading
-            const btn = event.currentTarget;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> جاري الاتصال...`;
-            
-            setTimeout(() => {
-                showNotification(`تمت المصادقة عبر ${method} بنجاح`, 'success');
-                appState.isLoggedIn = true;
-                
-                // Check if user has a role saved previously (Persistence)
-                const savedRole = localStorage.getItem('velox_role');
-                if (savedRole) {
-                    appState.userRole = savedRole;
-                    loadDashboard();
-                } else {
-                    showScreen('onboarding-screen');
-                }
-            }, 1500);
-        }
-
-        // 2. Onboarding Logic
-        function setRole(role) {
-            appState.userRole = role;
-            localStorage.setItem('velox_role', role); // Persistence
-            showNotification(`تم إعداد ملفك كـ ${role}`, 'info');
-            loadDashboard();
-        }
-
-        // 3. Dashboard Loading (Contextual UI)
-        function loadDashboard() {
-            showScreen('dashboard-screen');
-            
-            // Update Header
-            document.getElementById('user-role-display').innerText = appState.userRole.toUpperCase();
-            document.getElementById('header-greeting').innerText = `مرحباً، ${getRoleName(appState.userRole)}`;
-            document.getElementById('workspace-title').innerText = getRoleName(appState.userRole);
-
-            // Update AI Suggestion
-            const suggestions = {
-                developer: "أنت تستخدم JSON Formatter بكثرة، هل جربت أداة API Validator الجديدة؟",
-                accountant: "نلاحظ أنك تصدر تقارير Excel يومياً، قمنا بأتمتة العملية لك!",
-                marketer: "الحملة الأخيرة أدت بشكل جيد، ننصحك بجدولة منشورات مماثلة."
-            };
-            document.getElementById('ai-suggestion-text').innerText = suggestions[appState.userRole];
-
-            // Render Tools
-            renderTools();
-            
-            // Load Vault Data if exists
-            const savedVault = localStorage.getItem('velox_vault');
-            if(savedVault) {
-                document.getElementById('vault-input').value = savedVault; // In real app, this would be decrypted
-                document.getElementById('vault-status').innerText = "تم استرجاع البيانات المشفرة من السحابة.";
-            }
-        }
-
-        function renderTools() {
-            const container = document.getElementById('tools-container');
-            container.innerHTML = '';
-            
-            const tools = toolsData[appState.userRole];
-            
-            tools.forEach(tool => {
-                const card = document.createElement('div');
-                card.className = 'glass-panel tool-card';
-                card.innerHTML = `
-                    <div>
-                        <i class="fa-solid ${tool.icon}" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
-                        <h4>${tool.name}</h4>
-                    </div>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">${tool.desc}</p>
-                `;
-                card.onclick = () => showNotification(`تم فتح أداة: ${tool.name}`, 'info');
-                container.appendChild(card);
-            });
-        }
-
-        // 4. Vault Logic (Encryption Simulation)
-        function encryptData() {
-            const input = document.getElementById('vault-input').value;
-            if(!input) return;
-
-            // Simulate AES-256 (Base64 for demo)
-            const encrypted = btoa(input); 
-            localStorage.setItem('velox_vault', encrypted);
-            
-            document.getElementById('vault-status').innerText = "تم تشفير البيانات (AES-256) وحفظها في الخزنة.";
-            showNotification("تم حفظ البيانات بشكل آمن", "success");
-        }
-
-        function clearVault() {
-            if(confirm("هل أنت متأكد؟ سيتم مسح جميع البيانات المحفوظة (GDPR Compliance).")) {
-                localStorage.removeItem('velox_vault');
-                document.getElementById('vault-input').value = '';
-                document.getElementById('vault-status').innerText = "";
-                showNotification("تم محو جميع البيانات الخاصة بك.", "danger");
-            }
-        }
-
-        // 5. UI Helpers
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(screenId);
-            target.classList.add('active');
-            target.style.display = 'flex'; // Force flex for centering
-        }
-
-        function switchTab(tabName) {
-            // Update Sidebar
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-
-            // Hide all tabs
-            document.querySelectorAll('.content-area').forEach(c => c.style.display = 'none');
-            
-            // Show target
-            const target = document.getElementById(`tab-${tabName}`);
-            if(target) target.style.display = 'block';
-        }
-
-        function showSupportChat() {
-            showNotification("جاري فتح الشات المخصص مع فريق الدعم...", "info");
-        }
-
-        function logout() {
-            localStorage.clear();
-            location.reload();
-        }
-
-        function getRoleName(role) {
-            if(role === 'developer') return 'المبرمج';
-            if(role === 'accountant') return 'المحاسب';
-            if(role === 'marketer') return 'المسوق';
-            return 'مستخدم';
-        }
-
-        // Custom Notification System
-        function showNotification(msg, type) {
-            const area = document.getElementById('notification-area');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            
-            let icon = 'fa-info-circle';
-            let color = 'var(--primary)';
-            if(type === 'success') { icon = 'fa-check-circle'; color = 'var(--success)'; }
-            if(type === 'danger') { icon = 'fa-exclamation-triangle'; color = 'var(--danger)'; }
-
-            toast.style.borderRightColor = color;
-            toast.innerHTML = `<i class="fa-solid ${icon}" style="color: ${color}"></i> <span>${msg}</span>`;
-            
-            area.appendChild(toast);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Check session on load
-        window.onload = () => {
-            // Hide dashboard initially, logic handles visibility
-            const savedRole = localStorage.getItem('velox_role');
-            if(savedRole) {
-                appState.userRole = savedRole;
-                appState.isLoggedIn = true;
-                loadDashboard(); // Skip login if role exists
-            }
-        };
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
